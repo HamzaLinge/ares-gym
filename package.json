@@ -17,5 +17,10 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "tailwindcss": "3.3.3"
+  },
+  "devDependencies": {
+    "prettier": "2.8.8",
+    "prettier-plugin-tailwindcss": "^0.4.1",
+    "yarn": "^2.4.3"
   }
 }
