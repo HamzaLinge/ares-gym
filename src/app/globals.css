@@ -2,7 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: 'FascinateInline-Regular';
-  src: url('/public/fonts/FascinateInline-Regular.ttf');
+@layer base {
+  @font-face {
+    font-family: "FascinateInline-Regular";
+    src: url("/fonts/FascinateInline-Regular.ttf");
+  }
+  @font-face {
+    font-family: "Nunito-Regular";
+    src: url("/fonts/Nunito-Regular.ttf");
+  }
+  @font-face {
+    font-family: "AlbertSans-Regular";
+    src: url("/fonts/AlbertSans-Regular.ttf");
+  }
+}
+
+@layer utilities {
+  /* html {
+    @apply text-[16px];
+  } */
+  h1 {
+    @apply font-fascinate-inline text-[30vw];
+  }
+  h2 {
+    @apply font-fascinate-inline text-[5vw];
+  }
+  .btn_header {
+    @apply p-4 hover:cursor-pointer hover:text-yellow-400;
+  }
+  span{
+    p
+  }
 }

@@ -13,7 +13,9 @@ module.exports = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       fontFamily: {
-        "fascinate-inline": ["FascinateInline-Regular", "sans-serif"], // after you font, add some fonts separated by commas to handle fallback.
+        "fascinate-inline": ["FascinateInline-Regular", "sans-serif"],
+        nunito: ["Nunito-Regular", "sans-serif"],
+        "albert-sans": ["AlbertSans-Regular", "sans-serif"],
       },
     },
   },
