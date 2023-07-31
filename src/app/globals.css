@@ -4,12 +4,8 @@
 
 @layer base {
   @font-face {
-    font-family: "FascinateInline-Regular";
-    src: url("/fonts/FascinateInline-Regular.ttf");
-  }
-  @font-face {
-    font-family: "Nunito-Regular";
-    src: url("/fonts/Nunito-Regular.ttf");
+    font-family: "DelaGothicOne-Regular";
+    src: url("/fonts/DelaGothicOne-Regular.ttf");
   }
   @font-face {
     font-family: "AlbertSans-Regular";
@@ -18,19 +14,10 @@
 }
 
 @layer utilities {
-  /* html {
-    @apply text-[16px];
-  } */
   h1 {
-    @apply font-fascinate-inline text-[30vw];
-  }
-  h2 {
-    @apply font-fascinate-inline text-[5vw];
+    @apply font-dela-gothic-one;
   }
   .btn_header {
-    @apply p-4 hover:cursor-pointer hover:text-yellow-400;
-  }
-  span{
-    p
+    @apply text-sm text-zinc-200 hover:cursor-pointer hover:text-yellow-400 md:text-xl;
   }
 }

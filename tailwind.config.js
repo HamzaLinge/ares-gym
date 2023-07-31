@@ -13,9 +13,17 @@ module.exports = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       fontFamily: {
-        "fascinate-inline": ["FascinateInline-Regular", "sans-serif"],
-        nunito: ["Nunito-Regular", "sans-serif"],
+        "dela-gothic-one": ["DelaGothicOne-Regular", "sans-serif"],
         "albert-sans": ["AlbertSans-Regular", "sans-serif"],
+      },
+      keyframes: {
+        "zoom-out": {
+          "0%": { transform: "scale(1.2)" },
+          "100%": { transform: "scale(1)" },
+        },
+      },
+      animation: {
+        "zoom-out": "zoom-out 5s forwards linear infinite",
       },
     },
   },
