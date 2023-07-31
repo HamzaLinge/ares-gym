@@ -7,27 +7,31 @@ const ImageTransition = () => {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
+    const activeIntervalId = setInterval(() => {
       setActiveImageIndex((prevIndex) => (prevIndex + 1) % 2);
-    }, 4000); // Change image every 5 seconds
+    }, 5000);
 
-    return () => clearInterval(intervalId);
+    return () => clearInterval(activeIntervalId);
   }, []);
 
+  useEffect(() => {
+    console.log(activeImageIndex);
+  }, [activeImageIndex]);
+
   return (
-    <div className="absolute bottom-0 left-0 right-0 top-0 -z-10 overflow-hidden">
+    <div className="absolute bottom-0 left-0 right-0 top-0 -z-10 overflow-hidden bg-black">
       <img
         src="/images/banner/img-1.jpg"
         alt="First Image"
-        className={`absolute left-0 top-0 h-full w-full animate-zoom-out brightness-50 transition-opacity duration-1000 ${
-          activeImageIndex === 0 ? "opacity-100" : "opacity-0"
+        className={`scale-120 absolute left-0 top-0 h-full w-full opacity-0 brightness-50 ${
+          activeImageIndex === 0 ? "animate-zoom-out" : ""
         }`}
       />
       <img
         src="/images/banner/img-2.jpg"
         alt="Second Image"
-        className={`absolute left-0 top-0 h-full w-full animate-zoom-out brightness-50 transition-opacity duration-1000 ${
-          activeImageIndex === 1 ? "opacity-100" : "opacity-0"
+        className={`scale-120 absolute left-0 top-0 h-full w-full opacity-0 brightness-50 ${
+          activeImageIndex === 1 ? "animate-zoom-out" : ""
         }`}
       />
     </div>

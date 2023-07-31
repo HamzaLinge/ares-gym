@@ -20,4 +20,24 @@
   .btn_header {
     @apply text-sm text-zinc-200 hover:cursor-pointer hover:text-yellow-400 md:text-xl;
   }
+
+
 }
+
+/*@keyframes crossfadeAnimation {*/
+/*  0%, 100% {*/
+/*    opacity: 0;*/
+/*  }*/
+/*  50% {*/
+/*    opacity: 1;*/
+/*  }*/
+/*}*/
+
+/*@keyframes zoomOutAnimation {*/
+/*  0% {*/
+/*    transform: scale(1.2);*/
+/*  }*/
+/*  100% {*/
+/*    transform: scale(1);*/
+/*  }*/
+/*}*/

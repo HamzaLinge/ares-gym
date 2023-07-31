@@ -18,12 +18,24 @@ module.exports = {
       },
       keyframes: {
         "zoom-out": {
+          "0%": { transform: "scale(1.2)", opacity: 0 },
+          "10%": { opacity: 1 },
+          "50%": { opacity: 1 },
+          "90%": { opacity: 1 },
+          "100%": { transform: "scale(1)", opacity: 0 },
+        },
+        crossfadeAnimation: {
+          "0%": { opacity: 0 },
+          "50%": { opacity: 1 },
+          "100%": { opacity: 0 },
+        },
+        zoomOutAnimation: {
           "0%": { transform: "scale(1.2)" },
           "100%": { transform: "scale(1)" },
         },
       },
       animation: {
-        "zoom-out": "zoom-out 5s forwards linear infinite",
+        "zoom-out": "zoom-out 5s backwards linear infinite",
       },
     },
   },
