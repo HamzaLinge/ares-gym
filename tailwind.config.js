@@ -19,9 +19,9 @@ module.exports = {
       keyframes: {
         "zoom-out": {
           "0%": { transform: "scale(1.2)", opacity: 0 },
-          "10%": { opacity: 1 },
+          "20%": { opacity: 1 },
           "50%": { opacity: 1 },
-          "90%": { opacity: 1 },
+          "80%": { opacity: 1 },
           "100%": { transform: "scale(1)", opacity: 0 },
         },
         crossfadeAnimation: {
