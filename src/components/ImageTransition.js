@@ -17,41 +17,67 @@ const ImageTransition = () => {
     copyOne[indexCurrentActiveImage] = true;
     setImageIndexes((prev) => copyOne);
 
-    // if(arrIdTimeOut.stopPreviousAnimation) clear
-
     const idTimeOutStopPreviousAnimation = setTimeout(() => {
+      console.log(imageIndexes);
       let copyTwo = [...imageIndexes];
+      console.log(
+        "Time Out Five (05) seconds -------------------------------------"
+      );
+      console.log(indexCurrentActiveImage);
       copyTwo[indexCurrentActiveImage] = false;
       setImageIndexes((prev) => copyTwo);
-    }, 5000);
-
-    const idTimeOutStartNextAnimation = setTimeout(() => {
       setActiveImageIndex((prevIndex) => (prevIndex + 1) % 2);
-      // startAnimation();
-    }, 4000);
+    }, 8000);
+
+    // const idTimeOutStartNextAnimation = setTimeout(() => {
+    //   console.log(
+    //     "Time Out Five (04) seconds -------------------------------------"
+    //   );
+    //   console.log((activeImageIndex + 1) % 2);
+    //   setActiveImageIndex((prevIndex) => (prevIndex + 1) % 2);
+    //
+    //   // startAnimation();
+    // }, 4000);
 
     setArrIdTimeOut((prev) => ({
       stopPreviousAnimation: idTimeOutStopPreviousAnimation,
-      startNextAnimation: idTimeOutStartNextAnimation,
+      // startNextAnimation: idTimeOutStartNextAnimation,
     }));
   }
 
   useEffect(() => {
-    const arrIdTimeOut = startAnimation();
-    // return () => arrIdTimeOut.map((idTimeOut) => clearTimeout(idTimeOut));
+    startAnimation();
   }, [activeImageIndex]);
+
+  useEffect(() => {
+    const idTimeOut = setTimeout(() => {
+      clearTimeout(arrIdTimeOut.startNextAnimation);
+    }, 4000);
+    return () => clearTimeout(idTimeOut);
+  }, [arrIdTimeOut.startNextAnimation]);
+
+  useEffect(() => {
+    const idTimeOut = setTimeout(() => {
+      clearTimeout(arrIdTimeOut.stopPreviousAnimation);
+    }, 8000);
+    return () => clearTimeout(idTimeOut);
+  }, [arrIdTimeOut.stopPreviousAnimation]);
 
   // useEffect(() => {
   //   const activeIntervalId = setInterval(() => {
   //     setActiveImageIndex((prevIndex) => (prevIndex + 1) % 2);
   //   }, 5000);
-
+  //
   //   return () => clearInterval(activeIntervalId);
   // }, []);
 
+  // useEffect(() => {
+  //   console.log(activeImageIndex);
+  // }, [activeImageIndex]);
+  //
   useEffect(() => {
-    console.log(activeImageIndex);
-  }, [activeImageIndex]);
+    console.log(imageIndexes);
+  }, [imageIndexes]);
 
   return (
     <div className="absolute bottom-0 left-0 right-0 top-0 -z-10 overflow-hidden bg-black">

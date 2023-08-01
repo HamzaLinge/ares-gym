@@ -35,7 +35,7 @@ module.exports = {
         },
       },
       animation: {
-        "zoom-out": "zoom-out 5s backwards linear infinite",
+        "zoom-out": "zoom-out 8s backwards linear infinite",
       },
     },
   },
