@@ -2,12 +2,16 @@
 
 import Banner from "@/components/Banner";
 import Header from "@/components/Header";
+import Insight from "@/components/Insight";
+import Plan from "@/components/Plan";
 
 export default function Home() {
   return (
-    <main className="relative flex min-h-screen w-screen flex-col items-center">
+    <main className="relative min-h-screen">
       <Header />
       <Banner />
+      <Insight />
+      <Plan />
     </main>
   );
 }
