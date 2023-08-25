@@ -1,11 +1,17 @@
 import React from "react";
-import { MdAllInclusive, MdEventAvailable } from "react-icons/md";
+import { MdEventAvailable } from "react-icons/md";
 import { ImPower } from "react-icons/im";
+import { GiInfinity } from "react-icons/gi";
+
 import CardAttribute from "@/components/Insight/Attributes/CardAttribute";
 
 function Attributes() {
   return (
-    <div className={"flex w-full items-center justify-between md:max-w-4xl"}>
+    <div
+      className={
+        "flex w-full flex-col items-center gap-y-4 sm:flex-row sm:justify-evenly md:max-w-4xl"
+      }
+    >
       <CardAttribute
         title={"7 Jours/Semaine"}
         description={
@@ -17,15 +23,15 @@ function Attributes() {
       <CardAttribute
         title={"Heures Exclusives/Inclusives"}
         description={
-          "Chacun pourra s'entriner dans les conditions qui lui seront favorables."
+          "Chacun pourra s'entrainer dans les conditions qui lui seront favorables."
         }
-        Icon={MdAllInclusive}
+        Icon={GiInfinity}
       />
 
       <CardAttribute
         title={"Compléments Alimentaires"}
         description={
-          "Votre apport en protéine et en enèrgie toujours disponible."
+          "Votre besoin en protéine et en enèrgie toujours disponible."
         }
         Icon={ImPower}
       />
