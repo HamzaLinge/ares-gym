@@ -1,10 +1,14 @@
 import React from "react";
-import MenHours from "@/components/Membership/MenHours";
+import MenOffers from "@/components/Membership/MenOffers";
+import WomenOffers from "@/components/Membership/WomenOffers";
 
-export default function Plan() {
+export default function Membership() {
   return (
-    <section className={"w-full text-white"}>
-      <MenHours />
+    <section
+      className={"flex w-full flex-col text-white lg:grid lg:grid-cols-2"}
+    >
+      <MenOffers />
+      <WomenOffers />
     </section>
   );
 }
