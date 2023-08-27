@@ -9,9 +9,15 @@ module.exports = {
     extend: {
       gridTemplateColumns: {
         16: "repeat(16, minmax(0, 1fr))",
+        32: "repeat(32, minmax(0, 1fr))",
       },
-      gridColumn: {
-        "start-16": "16",
+      gridColumnStart: {
+        15: "15",
+        16: "16",
+        17: "17",
+        21: "21",
+        23: "23",
+        33: "33",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
@@ -30,18 +36,23 @@ module.exports = {
           "80%": { opacity: 1 },
           "100%": { transform: "scale(1)", opacity: 0 },
         },
-        crossfadeAnimation: {
-          "0%": { opacity: 0 },
-          "50%": { opacity: 1 },
-          "100%": { opacity: 0 },
-        },
-        zoomOutAnimation: {
-          "0%": { transform: "scale(1.2)" },
-          "100%": { transform: "scale(1)" },
+        "display-clipboard-notification": {
+          "0%": { opacity: 0, transform: "translate(-50%, -100%)" },
+          "5%": {
+            opacity: 1,
+            transform: "translate(-50%, calc(0px - 100% - 4px))",
+          },
+          "95%": {
+            opacity: 1,
+            transform: "translate(-50%, calc(0px - 100% - 4px))",
+          },
+          "100%": { opacity: 0, transform: "translate(-50%, -100%)" },
         },
       },
       animation: {
         "zoom-out": "zoom-out 8s backwards linear infinite",
+        "display-clipboard-notification":
+          "display-clipboard-notification 4s backwards ",
       },
     },
   },

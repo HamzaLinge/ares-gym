@@ -21,8 +21,9 @@
     @apply max-w-none;
   }
   .btn_header {
-    @apply text-sm text-zinc-200 hover:cursor-pointer hover:text-yellow-400 md:text-xl;
+    @apply capitalize text-xs text-zinc-200 hover:cursor-pointer hover:text-yellow-400 md:text-base;
   }
-
-
+  .gradient-bg {
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+  }
 }

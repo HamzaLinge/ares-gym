@@ -1,9 +1,12 @@
 import React from "react";
 import { cn } from "../../../../utils";
 
-function Day({ day, unitContainerHeight }) {
+function Day({ day, containerHeight }) {
   return (
-    <p className={cn("flex items-center capitalize", unitContainerHeight)}>
+    <p
+      style={{ height: containerHeight }}
+      className={cn("flex items-center capitalize")}
+    >
       {day}
     </p>
   );

@@ -1,6 +1,11 @@
 import React from "react";
-import { GiSpartanHelmet, GiSwordwoman, GiZeusSword } from "react-icons/gi";
-import CardMembership from "@/components/Membership/CardMembership";
+import {
+  GiSpartanHelmet,
+  GiSwordwoman,
+  GiZeusSword,
+  GiSpartan,
+} from "react-icons/gi";
+import CardMembership from "@/components/Offers/CardMembership";
 
 function WomenOffers() {
   return (
@@ -10,22 +15,24 @@ function WomenOffers() {
       }
     >
       <h2 className={"mb-10 text-xl uppercase md:text-2xl"}>
-        Offres pour Femmes
+        Découvrez Nos Offres Féminité Légendaire
       </h2>
-      <div className={"relative grid w-full grow grid-rows-2 gap-y-4"}>
-        <div className={"flex w-full flex-col content-center"}>
-          <p className={"text-sm md:text-base"}>
+      <div className={"relative flex w-full grow flex-col gap-y-4"}>
+        <div className={"relative mb-10 flex w-full flex-col content-center"}>
+          <p className={" text-sm md:text-base"}>
             Sculptez votre destin physique avec nos offres de musculation
             féminines, vous invitant à relever le défi à la manière des héroïnes
             légendaires de l'Olympe.
           </p>
           <GiSwordwoman
-            className={"-rotate-30 w-auto grow text-white opacity-50"}
+            className={
+              "-rotate-30 absolute left-1/2 top-1/2 h-40 w-auto -translate-x-1/2 -translate-y-1/2 text-white opacity-25 md:translate-y-0"
+            }
           />
         </div>
         <div
           className={
-            "flex w-full items-center justify-center gap-x-2 sm:gap-x-10"
+            "flex w-full grow flex-wrap items-center justify-center gap-x-2 gap-y-4 sm:gap-x-10"
           }
         >
           <CardMembership
@@ -36,9 +43,16 @@ function WomenOffers() {
             color={"pink"}
           />
           <CardMembership
+            title={"Athéna"}
+            price={3500}
+            session={3}
+            Icon={GiSpartan}
+            color={"pink"}
+          />
+          <CardMembership
             title={"Hera"}
             price={4300}
-            session={null}
+            session={4}
             Icon={GiZeusSword}
             color={"pink"}
           />

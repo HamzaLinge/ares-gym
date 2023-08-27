@@ -3,8 +3,9 @@
 import Banner from "@/components/Banner";
 import Header from "@/components/Header";
 import Insight from "@/components/Insight";
-import Membership from "@/components/Membership";
+import Offers from "@/components/Offers";
 import Hours from "@/components/Hours";
+import Contact from "@/components/Contact";
 
 export default function Home() {
   return (
@@ -12,8 +13,9 @@ export default function Home() {
       <Header />
       <Banner />
       <Insight />
-      <Membership />
       <Hours />
+      <Offers />
+      <Contact />
     </main>
   );
 }

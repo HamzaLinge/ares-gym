@@ -5,20 +5,23 @@ import {
   GiShower,
   GiInfinity,
 } from "react-icons/gi";
+import { cn } from "../../../utils";
 
-function CardMembership({ title, price, session, Icon, color }) {
+function CardMembership({ title, price, session, Icon, color, className }) {
   return (
     <div
-      className={`relative grid h-full w-full max-w-[200px] grid-rows-3 justify-items-center rounded-lg p-1 text-black shadow-lg shadow-current ${
+      className={cn(
+        "relative grid w-full max-w-[200px] grid-rows-3 justify-items-center rounded-lg p-1 text-black shadow-lg shadow-current",
+        className,
         color === "blue" ? "bg-blue-300" : "bg-pink-300"
-      }`}
+      )}
     >
       <Icon
         className={`absolute left-0 top-0 h-7 w-7 ${
           color === "blue" ? "text-blue-900" : "text-pink-900"
         }`}
       />
-      <div className={"flex flex-col items-center justify-evenly"}>
+      <div className={"mb-0 flex flex-col items-center justify-evenly"}>
         <p
           className={`font-semibold ${
             color === "blue" ? "text-blue-900" : "text-pink-900"
@@ -34,7 +37,7 @@ function CardMembership({ title, price, session, Icon, color }) {
           {price} DA/Mois
         </p>
       </div>
-      <div className={"flex flex-col justify-evenly text-sm"}>
+      <div className={"my-4 flex flex-col justify-evenly text-sm"}>
         <p className={"flex items-center gap-x-2"}>
           <GiWeightLiftingUp className={"h-4 w-4 text-black"} />
           <span>Musculation</span>
@@ -48,11 +51,11 @@ function CardMembership({ title, price, session, Icon, color }) {
           <span>Douche</span>
         </p>
       </div>
-      <p className={"grid grid-rows-2 font-semibold"}>
-        <span className={"flex flex-col items-center justify-end"}>
+      <p className={"flex flex-col items-center justify-center font-semibold"}>
+        <span className={"flex flex-col items-center justify-center"}>
           {session ? session : <GiInfinity className={"h-4 w-4 text-black"} />}
         </span>
-        <span className={"flex flex-col items-center justify-start text-sm"}>
+        <span className={"flex flex-col items-center justify-center text-sm"}>
           Sessions/Semaine
         </span>
       </p>

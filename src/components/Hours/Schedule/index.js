@@ -6,59 +6,71 @@ import Scale from "@/components/Hours/Schedule/Scale";
 import Meta from "@/components/Hours/Schedule/Meta";
 
 function Schedule() {
-  const unitContainerHeight = "h-16";
-  const lineHeight = "h-4";
+  const containerHeight = `${50}px`;
+  const lineHeight = `${16}px`;
 
-  const schedule = [
-    { day: "Dimanche", class_nbrExclusiveWomenHours: null, boolMix: false },
-    { day: "Lundi", class_nbrExclusiveWomenHours: null, boolMix: false },
+  const schedules = [
+    {
+      day: "Dimanche",
+      mix: { start: 7, end: 14.5 },
+      women: undefined,
+      men: { start: 14.5, end: 23 },
+    },
+    {
+      day: "Lundi",
+      mix: { start: 7, end: 14.5 },
+      women: undefined,
+      men: { start: 14.5, end: 23 },
+    },
     {
       day: "Mardi",
-      class_nbrExclusiveWomenHours: "col-span-4",
-      boolMix: false,
+      mix: { start: 7, end: 14.5 },
+      women: { start: 15, end: 18 },
+      men: { start: 18, end: 23 },
     },
-    { day: "Mercredi", class_nbrExclusiveWomenHours: null, boolMix: false },
+    {
+      day: "Mercredi",
+      mix: { start: 7, end: 14.5 },
+      women: undefined,
+      men: { start: 14.5, end: 23 },
+    },
     {
       day: "Jeudi",
-      class_nbrExclusiveWomenHours: "col-span-4",
-      boolMix: false,
+      mix: { start: 7, end: 14.5 },
+      women: { start: 15, end: 18 },
+      men: { start: 18, end: 23 },
     },
     {
       day: "Vendredi",
-      class_nbrExclusiveWomenHours: "col-span-4",
-      boolMix: true,
+      mix: undefined,
+      women: { start: 14.5, end: 17 },
+      men: { start: 17, end: 23 },
     },
     {
       day: "Samedi",
-      class_nbrExclusiveWomenHours: "col-span-4",
-      boolMix: false,
+      mix: { start: 7, end: 14 },
+      women: { start: 14, end: 17 },
+      men: { start: 17, end: 23 },
     },
   ];
 
   return (
     <div
-      className={
-        "flex w-full max-w-4xl grow flex-col items-center justify-between"
-      }
+      className={"flex w-full max-w-4xl grow flex-col items-center justify-end"}
     >
-      <div className={"flex w-full gap-x-2"}>
+      <div className={"mb-8 flex w-full gap-x-2 md:mb-14"}>
         <div className={"grid-rows-7 grid text-xs"}>
-          {schedule.map(({ day }) => (
-            <Day
-              key={day}
-              day={day}
-              unitContainerHeight={unitContainerHeight}
-            />
+          {schedules.map(({ day }) => (
+            <Day key={day} day={day} containerHeight={containerHeight} />
           ))}
         </div>
         <div className={"grid-rows-7 relative grid grow"}>
-          {schedule.map(({ day, class_nbrExclusiveWomenHours, boolMix }) => (
+          {schedules.map((schedule) => (
             <LineHours
-              key={day}
-              unitContainerHeight={unitContainerHeight}
+              key={schedule.day}
+              containerHeight={containerHeight}
               lineHeight={lineHeight}
-              class_nbrExclusiveWomenHours={class_nbrExclusiveWomenHours}
-              boolMix={boolMix}
+              schedule={schedule}
             />
           ))}
 
