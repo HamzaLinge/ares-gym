@@ -10,10 +10,10 @@ function Hours() {
       }
     >
       <div className={"flex w-full flex-col gap-y-4"}>
-        <h2 className={"title-section"}>Heures d'Entrainement</h2>
+        <h2 className={"title-section"}>Heures d&apos;Entrainement</h2>
         <p className={"text-section"}>
           Domptez le temps et forgez votre légende athlétique. Découvrez nos
-          horaires d'entraînement sur mesure pour chaque catégorie – mixte,
+          horaires d&apos;entraînement sur mesure pour chaque catégorie – mixte,
           hommes et femmes – et tracez votre chemin vers la forme physique
           divine.
         </p>

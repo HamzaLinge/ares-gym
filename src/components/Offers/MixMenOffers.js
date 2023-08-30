@@ -21,10 +21,10 @@ export default function MixMenOffers() {
       <div className={"relative flex w-full grow flex-col gap-y-4"}>
         <div className={"relative mb-10 flex w-full flex-col content-center"}>
           <p className={"text-section"}>
-            Plongez dans l'univers légendaire de la remise en forme, où hommes
-            et femmes se transcendent comme les dieux et déesses de la
+            Plongez dans l&apos;univers légendaire de la remise en forme, où
+            hommes et femmes se transcendent comme les dieux et déesses de la
             mythologie grecque. Notre offre Hommes et Mixtes vous attend pour
-            sculpter des corps dignes de l'Olympe!
+            sculpter des corps dignes de l&apos;Olympe!
           </p>
           <GiGreekTemple
             className={

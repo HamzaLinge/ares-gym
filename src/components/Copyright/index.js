@@ -39,7 +39,7 @@ function Copyright() {
         onClick={openModal}
         className={"underline underline-offset-2 hover:cursor-pointer"}
       >
-        Conditions d'Utilisation et Politique de Confidentialité.
+        Conditions d&apos;Utilisation et Politique de Confidentialité.
       </p>
 
       <dialog
@@ -58,16 +58,16 @@ function Copyright() {
             title={"Utilisation du Contenu"}
             content={
               "Le contenu, les images et le logo de ce site web sont la propriété intellectuelle " +
-              "d'Ares Gym et sont protégés par le droit d'auteur. " +
+              "d&apos;Ares Gym et sont protégés par le droit d&apos;auteur. " +
               "Toute reproduction ou utilisation non autorisée de tout contenu sans consentement écrit préalable est interdite."
             }
           />
           <Part
-            title={"Conditions d'Utilisation"}
+            title={"Conditions d&apos;Utilisation"}
             content={
               "Le contenu fourni sur ce site web est à titre informatif général uniquement. " +
               "Il est susceptible de changer sans préavis. " +
-              "Ares Gym ne fait aucune déclaration ni garantie d'aucune sorte, expresse ou implicite, concernant l'exactitude, " +
+              "Ares Gym ne fait aucune déclaration ni garantie d&apos;aucune sorte, expresse ou implicite, concernant l&apos;exactitude, " +
               "la fiabilité ou la disponibilité du contenu du site web. " +
               "Toute confiance que vous placez dans de telles informations est à vos propres risques."
             }
@@ -83,7 +83,7 @@ function Copyright() {
             title={"Contact"}
             content={
               "Si vous avez des questions ou des préoccupations concernant le contenu de ce site web, " +
-              "veuillez nous contacter à l'adresse HamzaLinge@gmail.com."
+              "veuillez nous contacter à l&apos;adresse HamzaLinge@gmail.com."
             }
           />
           <Part

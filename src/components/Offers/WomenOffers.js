@@ -22,7 +22,7 @@ function WomenOffers() {
           <p className={"text-section"}>
             Sculptez votre destin physique avec nos offres de musculation
             féminines, vous invitant à relever le défi à la manière des héroïnes
-            légendaires de l'Olympe.
+            légendaires de l&apos;Olympe.
           </p>
           <GiSwordwoman
             className={

@@ -27,15 +27,17 @@ function About() {
       >
         Salut à tous, <br />
         <br />
-        C'est Hamza, le créateur d'Ares Gym. Ma passion pour la musculation m'a
-        poussé à créer cet espace où chacun peut devenir une légende. Né le 27
-        mai 2000, l'ouverture d'Ares Gym était bien plus qu'une entreprise –
-        c'était une aventure pour réaliser un rêve profondément ancré.
+        C&apos;est Hamza, le créateur d&apos;Ares Gym. Ma passion pour la
+        musculation m&apos;a poussé à créer cet espace où chacun peut devenir
+        une légende. Né le 27 mai 2000, l&apos;ouverture d&apos;Ares Gym était
+        bien plus qu&apos;une entreprise – c&apos;était une aventure pour
+        réaliser un rêve profondément ancré.
         <br />
         <br />
-        Chaque haltère soulevé, chaque goutte de sueur versée, porte l'énergie
-        des héros anciens. Rejoignez cette histoire, sculptez votre propre
-        légende physique et plongez dans l'esprit mythique d'Ares Gym.
+        Chaque haltère soulevé, chaque goutte de sueur versée, porte
+        l&apos;énergie des héros anciens. Rejoignez cette histoire, sculptez
+        votre propre légende physique et plongez dans l&apos;esprit mythique
+        d&apos;Ares Gym.
         <br />
         <br />
         Avec détermination,
