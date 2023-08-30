@@ -27,6 +27,12 @@ module.exports = {
       fontFamily: {
         "dela-gothic-one": ["DelaGothicOne-Regular", "sans-serif"],
         "albert-sans": ["AlbertSans-Regular", "sans-serif"],
+        inter: ["Inter-Regular", "sans-serif"],
+        "inter-bold": ["Inter-Bold", "sans-serif"],
+        "inter-extrabold": ["Inter-ExtraBold", "sans-serif"],
+        "inter-light": ["Inter-Light", "sans-serif"],
+        "inter-extralight": ["Inter-ExtraLight", "sans-serif"],
+        "inter-semibold": ["Inter-SemiBold", "sans-serif"],
       },
       keyframes: {
         "zoom-out": {
@@ -56,5 +62,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar")({ nocompatible: true })],
 };

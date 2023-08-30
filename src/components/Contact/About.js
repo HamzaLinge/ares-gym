@@ -5,7 +5,7 @@ function About() {
   return (
     <div
       className={cn(
-        "flex w-full flex-col items-center gap-8 p-10 text-zinc-50 lg:flex-row lg:px-20"
+        "flex w-full flex-col items-center gap-8 text-zinc-50 lg:flex-row"
       )}
     >
       <div
@@ -22,7 +22,7 @@ function About() {
 
       <p
         className={
-          "text-center text-sm font-light lg:grow lg:text-start lg:text-base"
+          "text-center font-inter-extralight text-sm lg:grow lg:text-start lg:text-base"
         }
       >
         Salut à tous, <br />

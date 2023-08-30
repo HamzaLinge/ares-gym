@@ -2,9 +2,12 @@ import React from "react";
 
 import LineColor from "@/components/Hours/Schedule/Meta/LineColor";
 
-function Meta({ lineHeight }) {
+import { cn } from "../../../../../utils";
+
+function Meta({ lineHeight, className }) {
+  console.log("Meta's className: " + className);
   return (
-    <div className={"flex flex-col gap-y-2"}>
+    <div className={cn("flex flex-col gap-y-2", className)}>
       <LineColor
         lineHeight={lineHeight}
         color={"bg-black"}

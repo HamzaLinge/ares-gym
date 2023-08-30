@@ -6,6 +6,7 @@ import Insight from "@/components/Insight";
 import Offers from "@/components/Offers";
 import Hours from "@/components/Hours";
 import Contact from "@/components/Contact";
+import Copyright from "@/components/Copyright";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <Hours />
       <Offers />
       <Contact />
+      <Copyright />
     </main>
   );
 }

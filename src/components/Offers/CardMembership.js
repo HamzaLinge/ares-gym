@@ -23,21 +23,23 @@ function CardMembership({ title, price, session, Icon, color, className }) {
       />
       <div className={"mb-0 flex flex-col items-center justify-evenly"}>
         <p
-          className={`font-semibold ${
+          className={`font-inter-semibold ${
             color === "blue" ? "text-blue-900" : "text-pink-900"
           }`}
         >
           {title}
         </p>
         <p
-          className={`rounded-full ${
+          className={`rounded-full font-inter ${
             color === "blue" ? "bg-blue-900" : "bg-pink-900"
           }  p-2 text-white`}
         >
           {price} DA/Mois
         </p>
       </div>
-      <div className={"my-4 flex flex-col justify-evenly text-sm"}>
+      <div
+        className={"my-4 flex flex-col justify-evenly font-inter-light text-sm"}
+      >
         <p className={"flex items-center gap-x-2"}>
           <GiWeightLiftingUp className={"h-4 w-4 text-black"} />
           <span>Musculation</span>
@@ -51,7 +53,11 @@ function CardMembership({ title, price, session, Icon, color, className }) {
           <span>Douche</span>
         </p>
       </div>
-      <p className={"flex flex-col items-center justify-center font-semibold"}>
+      <p
+        className={
+          "flex flex-col items-center justify-center font-inter font-semibold"
+        }
+      >
         <span className={"flex flex-col items-center justify-center"}>
           {session ? session : <GiInfinity className={"h-4 w-4 text-black"} />}
         </span>

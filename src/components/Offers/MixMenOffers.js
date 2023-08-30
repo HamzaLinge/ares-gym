@@ -12,15 +12,15 @@ export default function MixMenOffers() {
   return (
     <section
       className={
-        "flex min-h-screen w-full flex-col bg-blue-900 px-4 py-10 md:px-10"
+        "flex min-h-screen w-full flex-col bg-blue-900 px-5 py-10 md:px-10"
       }
     >
-      <h2 className={"mb-10 text-xl uppercase md:text-2xl"}>
+      <h2 className={"title-section mb-10"}>
         Explorez Nos Forfaits Hommes et Mixte
       </h2>
       <div className={"relative flex w-full grow flex-col gap-y-4"}>
         <div className={"relative mb-10 flex w-full flex-col content-center"}>
-          <p className={"text-sm md:text-base"}>
+          <p className={"text-section"}>
             Plongez dans l'univers légendaire de la remise en forme, où hommes
             et femmes se transcendent comme les dieux et déesses de la
             mythologie grecque. Notre offre Hommes et Mixtes vous attend pour
@@ -34,7 +34,7 @@ export default function MixMenOffers() {
         </div>
         <div
           className={
-            "flex w-full grow flex-wrap items-center justify-center gap-x-2 gap-y-4 sm:gap-x-10"
+            "flex w-full grow flex-wrap items-center justify-center gap-5 sm:gap-10"
           }
         >
           <CardMembership

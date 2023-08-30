@@ -4,7 +4,7 @@ import WomenOffers from "@/components/Offers/WomenOffers";
 
 export default function Offers() {
   return (
-    <section id={"offers"} className={"flex w-full flex-col text-white  "}>
+    <section id={"offers"} className={"flex w-full flex-col text-white"}>
       <MixMenOffers />
       <WomenOffers />
     </section>

@@ -1,25 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { FaWhatsappSquare } from "react-icons/fa";
+import { BiSolidPhoneCall } from "react-icons/bi";
 
-import { cn } from "../../../../utils";
+import { cn, isMobileDevice } from "../../../../utils";
 
-function WhatsappLink() {
+function CallLink() {
   const [clipboardNotification, setClipboardNotification] = useState(false);
 
-  const phoneNumber = "+213792366368";
-  const encodedNumber = encodeURIComponent(phoneNumber);
-  const whatsappLink = `https://wa.me/${encodedNumber}`;
+  const phoneNumber = "+213558406223";
 
   function handleClick() {
-    const isWhatsAppAppInstalled = /WhatsApp/.test(navigator.userAgent);
-
-    if (isWhatsAppAppInstalled) {
-      window.location.href = whatsappLink;
-    } else {
-      navigator.clipboard.writeText(phoneNumber).then(() => {
-        setClipboardNotification(true);
-      });
-    }
+    navigator.clipboard.writeText(phoneNumber).then(() => {
+      setClipboardNotification(true);
+    });
   }
 
   useEffect(() => {
@@ -28,12 +20,26 @@ function WhatsappLink() {
     return () => clearTimeout(idTimeout);
   }, [clipboardNotification]);
 
+  if (isMobileDevice()) {
+    return (
+      <a href={`tel:${phoneNumber}`}>
+        <BiSolidPhoneCall
+          className={"h-24 w-24 text-[#25D366] hover:cursor-pointer"}
+        />
+        <p className={"text-xs font-light capitalize text-zinc-50"}>
+          Appeler Maintenant
+        </p>
+      </a>
+    );
+  }
+
   return (
-    <div className={"relative flex flex-col items-center justify-center"}>
-      <FaWhatsappSquare
-        className={"h-14 w-14 text-[#25D366] hover:cursor-pointer"}
+    <div className={"relative flex flex-col items-center"}>
+      <BiSolidPhoneCall
+        className={"h-24 w-24 text-[#25D366] hover:cursor-pointer"}
         onClick={handleClick}
       />
+      <p className={"text-xs font-light text-zinc-50"}>Copier le Numéro</p>
       <p
         className={cn(
           "absolute left-1/2 top-0 -z-10 -translate-x-1/2 -translate-y-[calc(100%_+_4px)] whitespace-nowrap rounded-lg bg-zinc-200 p-2 text-xs font-semibold text-green-900 opacity-0",
@@ -41,7 +47,7 @@ function WhatsappLink() {
           { "z-0": clipboardNotification }
         )}
       >
-        <span>Numéro WhatsApp Copié !</span>
+        <span>Numéro Copié !</span>
         <span
           id={"clipboardNotification"}
           style={{ clipPath: "polygon(0 0, 50% 50%, 100% 0)" }}
@@ -54,4 +60,4 @@ function WhatsappLink() {
   );
 }
 
-export default WhatsappLink;
+export default CallLink;

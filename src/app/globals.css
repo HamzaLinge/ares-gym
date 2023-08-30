@@ -11,19 +11,43 @@
     font-family: "AlbertSans-Regular";
     src: url("/fonts/AlbertSans-Regular.ttf");
   }
+  @font-face {
+    font-family: "Inter-Regular";
+    src: url("/fonts/Inter-Regular.ttf");
+  }
+  @font-face {
+    font-family: "Inter-Bold";
+    src: url("/fonts/Inter-Bold.ttf");
+  }
+  @font-face {
+    font-family: "Inter-Light";
+    src: url("/fonts/Inter-Light.ttf");
+  }
+  @font-face {
+    font-family: "Inter-ExtraBold";
+    src: url("/fonts/Inter-ExtraBold.ttf");
+  }
+  @font-face {
+    font-family: "Inter-ExtraLight";
+    src: url("/fonts/Inter-ExtraLight.ttf");
+  }
+  @font-face {
+    font-family: "Inter-SemiBold";
+    src: url("/fonts/Inter-SemiBold.ttf");
+  }
 }
 
 @layer utilities {
-  h1 {
-    @apply font-dela-gothic-one;
-  }
   img{
     @apply max-w-none;
   }
   .btn_header {
-    @apply capitalize text-xs text-zinc-200 hover:cursor-pointer hover:text-yellow-400 md:text-base;
+    @apply capitalize text-xs text-zinc-200 hover:cursor-pointer font-inter hover:text-yellow-400 sm:text-base;
   }
-  .gradient-bg {
-    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+  .title-section {
+    @apply font-inter text-xl uppercase md:text-2xl ;
+  }
+  .text-section {
+    @apply font-inter-light text-sm md:text-base ;
   }
 }

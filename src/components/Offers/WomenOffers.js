@@ -11,15 +11,15 @@ function WomenOffers() {
   return (
     <section
       className={
-        "flex min-h-screen w-full flex-col bg-pink-900 px-4 py-10 md:px-10"
+        "flex min-h-screen w-full flex-col bg-pink-900 px-5 py-10 md:px-10"
       }
     >
-      <h2 className={"mb-10 text-xl uppercase md:text-2xl"}>
+      <h2 className={"title-section mb-10"}>
         Découvrez Nos Offres Féminité Légendaire
       </h2>
       <div className={"relative flex w-full grow flex-col gap-y-4"}>
         <div className={"relative mb-10 flex w-full flex-col content-center"}>
-          <p className={" text-sm md:text-base"}>
+          <p className={"text-section"}>
             Sculptez votre destin physique avec nos offres de musculation
             féminines, vous invitant à relever le défi à la manière des héroïnes
             légendaires de l'Olympe.
@@ -32,13 +32,13 @@ function WomenOffers() {
         </div>
         <div
           className={
-            "flex w-full grow flex-wrap items-center justify-center gap-x-2 gap-y-4 sm:gap-x-10"
+            "flex w-full grow flex-wrap items-center justify-center gap-5 sm:gap-10"
           }
         >
           <CardMembership
             title={"Spartiate"}
             price={3000}
-            session={3}
+            session={2}
             Icon={GiSpartanHelmet}
             color={"pink"}
           />

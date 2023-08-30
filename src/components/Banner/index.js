@@ -10,7 +10,7 @@ function Banner() {
     >
       <h1
         className={
-          "mx-5 mb-20 grid grid-cols-2 gap-1 self-start text-[5vw] text-yellow-400 md:mx-5 md:text-[4vw]"
+          "mx-5 mb-20 grid grid-cols-2 gap-1 self-start font-dela-gothic-one text-[5vw] text-yellow-400 md:mx-5 md:text-[4vw]"
         }
       >
         <span className={"col-span-2 md:col-span-1"}>Libérez le Guerrier</span>

@@ -11,3 +11,7 @@ export function getGridColumnValue(hour) {
   if (hour < base) return "auto";
   return String((hour - base) * 2 + 1);
 }
+
+export function isMobileDevice() {
+  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+}

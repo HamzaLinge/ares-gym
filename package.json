@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-google-maps/api": "^2.19.2",
     "autoprefixer": "10.4.14",
     "clsx": "^2.0.0",
     "eslint": "8.45.0",
@@ -22,5 +23,7 @@
     "tailwind-merge": "^1.14.0",
     "tailwindcss": "3.3.3"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "tailwind-scrollbar": "^3.0.5"
+  }
 }

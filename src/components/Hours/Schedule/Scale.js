@@ -43,7 +43,7 @@ function Scale() {
       >
         <span
           className={
-            "absolute bottom-0 hidden translate-y-full flex-col md:left-1/2 md:flex md:-translate-x-1/2"
+            "absolute bottom-0 hidden translate-y-full flex-col items-center md:left-1/2 md:flex md:-translate-x-1/2"
           }
         >
           <span>14h</span>
