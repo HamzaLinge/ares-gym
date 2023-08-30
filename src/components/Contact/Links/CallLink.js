@@ -4,6 +4,7 @@ import { BiSolidPhoneCall } from "react-icons/bi";
 import { cn, isMobileDevice } from "../../../../utils";
 
 function CallLink() {
+  const [pageLoaded, setPageLoaded] = useState(false);
   const [clipboardNotification, setClipboardNotification] = useState(false);
 
   const phoneNumber = "+213558406223";
@@ -19,6 +20,12 @@ function CallLink() {
     const idTimeout = setTimeout(() => setClipboardNotification(false), 4000);
     return () => clearTimeout(idTimeout);
   }, [clipboardNotification]);
+
+  useEffect(() => {
+    setPageLoaded(true);
+  }, []);
+
+  if (!pageLoaded) return undefined;
 
   if (isMobileDevice()) {
     return (
