@@ -5,7 +5,6 @@ import LineColor from "@/components/Hours/Schedule/Meta/LineColor";
 import { cn } from "../../../../../utils";
 
 function Meta({ lineHeight, className }) {
-  console.log("Meta's className: " + className);
   return (
     <div className={cn("flex flex-col gap-y-2", className)}>
       <LineColor
