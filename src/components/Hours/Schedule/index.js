@@ -56,7 +56,9 @@ function Schedule() {
 
   return (
     <div
-      className={"flex w-full max-w-4xl grow flex-col items-center justify-end"}
+      className={
+        "flex w-full max-w-4xl grow flex-col items-center justify-center"
+      }
     >
       <div className={"mb-8 flex w-full gap-x-2 font-inter-light md:mb-14"}>
         <div className={"grid-rows-7 grid text-xs"}>
