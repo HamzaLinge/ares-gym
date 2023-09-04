@@ -1,0 +1,24 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu latest
+    steps:
+      - name: Deploy the Static App
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.IP_ADDRESS }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{secrets.SSH_KEY}}
+          script: |
+            cd tmp
+            git clone https://github.com/HamzaLinge/ares-gym.git
+            cd ares-gym
+            yarn install
+            yarn build
+            mv -f out /var/www/ares-gym
