@@ -17,13 +17,13 @@ jobs:
           key: ${{secrets.SSH_KEY}}
           script: |
             cd tmp
-            rm -rf ares-gym
+            sudo rm -rf ares-gym
             git clone https://github.com/HamzaLinge/ares-gym.git
             cd ares-gym
             yarn install
             yarn build
-            mv -f out /var/www
-            rm -rf /var/www/ares-gym
-            mv -f /var/www/out /var/www/ares-gym
+            sudo mv -f out /var/www
+            sudo rm -rf /var/www/ares-gym
+            sudo mv -f /var/www/out /var/www/ares-gym
             cd ../ 
-            rm -rf ares-gym
+            sudo rm -rf ares-gym
