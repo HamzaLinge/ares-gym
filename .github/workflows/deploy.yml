@@ -22,6 +22,8 @@ jobs:
             cd ares-gym
             yarn install
             yarn build
-            mv -f out /var/www/ares-gym
+            mv -f out /var/www
+            rm -rf /var/www/ares-gym
+            mv -f /var/www/out /var/www/ares-gym
             cd ../ 
             rm -rf ares-gym
