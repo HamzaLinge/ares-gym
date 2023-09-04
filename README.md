@@ -11,8 +11,12 @@ Welcome to the Ares Gym - Mostaganem, Algeria Weightlifting Showcase Website rep
 ### About Ares Gym
 Ares Gym, located in Mostaganem, Algeria, specializes in weightlifting and fitness training. The website aims to provide information about the gym, its weightlifting programs, services, and more. Please note that the code for this website is protected by the rights author, and unauthorized use or distribution is prohibited.
 
+
 ## Code License
-The code in this repository is protected by the ARES GYM CUSTOM LICENSE - PERSONAL USE ONLY. Please review the [LICENSE.md](LICENSE.txt) file for the detailed terms and conditions regarding the use and distribution of this code.
+The code in this repository is protected by the ARES GYM CUSTOM LICENSE - PERSONAL USE ONLY. Please review the [LICENSE.md](LICENSE.md) file for the detailed terms and conditions regarding the use and distribution of this code.
+
+In summary, you are allowed to use and modify the code for personal, non-commercial purposes. Any commercial or lucrative use is strictly prohibited.
+
 
 ## Future Enhancements
 We plan to continue enhancing the Ares Gym - Mostaganem, Algeria Weightlifting Showcase Website in the future. Some potential future improvements and functionalities include:
