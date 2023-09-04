@@ -15,7 +15,7 @@ function Banner() {
       >
         <span className={"col-span-2 md:col-span-1"}>Libérez le Guerrier</span>
         <span>qui Sommeille</span>
-        <span>en Vous. ;)</span>
+        <span>en Vous.</span>
       </h1>
       <ImageTransition />
     </section>
