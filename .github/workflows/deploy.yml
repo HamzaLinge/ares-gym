@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu latest
+    runs-on: ubuntu-latest
     steps:
       - name: Deploy the Static App
         uses: appleboy/ssh-action@v0.1.10
