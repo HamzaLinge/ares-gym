@@ -90,7 +90,7 @@ function Copyright() {
             title={"Dernière Mise à Jour"}
             content={
               "Cet avis de copyright et cette politique sont susceptibles de changer sans préavis.\n" +
-              "Dernière mise à jour : 30/08/2023"
+              "Dernière mise à jour : 04/09/2023"
             }
           />
           <p
