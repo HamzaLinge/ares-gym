@@ -40,3 +40,5 @@ next-env.d.ts
 #Node
 yarn.lock
 package-lock.json
+/backend/node_modules/
+/backend/dist/
