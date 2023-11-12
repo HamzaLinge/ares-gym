@@ -3,13 +3,14 @@ import {
   GendersWeightliftingPlan,
   TGenderWeightliftingPlan,
 } from "../types/common.types";
+import { IWeightliftingAsset } from "./WeightliftingAsset";
 
 export interface IWeightliftingPlan extends Document {
   title: string;
-  price: string;
+  price: number;
   gender: TGenderWeightliftingPlan;
   sessionsPerWeek: number;
-  assets: Types.ObjectId[];
+  assets: Types.ObjectId[] | IWeightliftingAsset[];
 }
 
 type TWeightliftingPlanModel = Model<IWeightliftingPlan>;
@@ -19,8 +20,8 @@ const weightliftingPlanSchema = new Schema<
   TWeightliftingPlanModel
 >(
   {
-    title: { type: String, required: true },
-    price: { type: String, required: true }, // Unit: DA (Algerian Dinars)
+    title: { type: String, required: true, unique: true },
+    price: { type: Number, required: true }, // Unit: DA (Algerian Dinars)
     gender: {
       type: String,
       enum: Object.values(GendersWeightliftingPlan),
@@ -28,7 +29,7 @@ const weightliftingPlanSchema = new Schema<
     },
     sessionsPerWeek: { type: Number, required: true },
     assets: {
-      type: [{ type: Schema.Types.ObjectId, ref: "WeightliftingAssets" }],
+      type: [{ type: Schema.Types.ObjectId, ref: "weightliftingAssets" }],
       required: true,
       default: [],
     },

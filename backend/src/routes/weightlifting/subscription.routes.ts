@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { validate } from "../../middlewares/validators/validate";
+import { validate } from "../../middlewares/rules/validate";
 import {
   weightlifting_subscription_permission_cancel,
   weightlifting_subscription_permission_create,
@@ -8,7 +8,7 @@ import {
 import {
   weightlifting_subscription_rules_cancel,
   weightlifting_subscription_rules_create,
-} from "../../middlewares/validators/weightlifting/subscription.rules";
+} from "../../middlewares/rules/weightlifting/subscription.rules";
 import {
   weightlifting_subscription_controller_cancel,
   weightlifting_subscription_controller_create,

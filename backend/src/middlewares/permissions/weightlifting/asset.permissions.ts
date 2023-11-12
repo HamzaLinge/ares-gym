@@ -1,35 +1,29 @@
 import { NextFunction, Request, Response } from "express";
 
-import { Roles } from "../../../types/common.types";
+import { CustomError, Roles } from "../../../types/common.types";
+import { IRequest_weightlifting_asset_delete } from "../../../types/weightlifting/asset.types";
 
 export async function weightlifting_asset_create_permission(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
-  try {
-    const user = req.user;
-    if (!user)
-      return res.status(404).send({
-        success: false,
-        message:
-          "There is no user found to check the permission for this request",
-      });
-    if (user.role === Roles.admin) return next();
-    return res.status(401).send({
-      success: false,
-      message: "You do not have the permission to create a weightlifting asset",
-    });
-  } catch (errPermission) {
-    console.log(
-      `Something went wrong during checking permissions for create weightlifting asset => ${errPermission}`
+  const user = req.user;
+  if (!user)
+    next(
+      new CustomError(
+        "There is no user found to check the permission for this request",
+        404
+      )
     );
-    return res.status(500).send({
-      success: false,
-      message:
-        "Something went wrong during checking permissions for create weightlifting asset",
-    });
-  }
+  else if (user.role === Roles.admin) return next();
+  else
+    next(
+      new CustomError(
+        "You do not have the permission to create a weightlifting asset",
+        401
+      )
+    );
 }
 
 export async function weightlifting_asset_get_permission(
@@ -37,27 +31,66 @@ export async function weightlifting_asset_get_permission(
   res: Response,
   next: NextFunction
 ) {
-  try {
-    const user = req.user;
-    if (!user)
-      return res.status(404).send({
-        success: false,
-        message:
-          "There is no user found to check the permission for this request",
-      });
-    if (user.role === Roles.admin) return next();
-    return res.status(401).send({
-      success: false,
-      message: "You do not have the permission to get weightlifting asset",
-    });
-  } catch (errPermission) {
-    console.log(
-      `Something went wrong during checking permissions for get weightlifting asset => ${errPermission}`
+  const user = req.user;
+  if (!user)
+    next(
+      new CustomError(
+        "There is no user found to check the permission for this request",
+        404
+      )
     );
-    return res.status(500).send({
-      success: false,
-      message:
-        "Something went wrong during checking permissions for get weightlifting asset",
-    });
-  }
+  else if (user.role === Roles.admin) return next();
+  else
+    next(
+      new CustomError(
+        "You do not have the permission to get weightlifting asset",
+        401
+      )
+    );
+}
+
+export async function weightlifting_asset_put_permission(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const user = req.user;
+  if (!user)
+    next(
+      new CustomError(
+        "There is no user found to check the permission for this request",
+        404
+      )
+    );
+  else if (user.role === Roles.admin) return next();
+  else
+    next(
+      new CustomError(
+        "You do not have the permission to put weightlifting asset",
+        401
+      )
+    );
+}
+
+export async function weightlifting_asset_delete_permission(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const user = req.user;
+  if (!user)
+    next(
+      new CustomError(
+        "There is no user found to check the permission for this request",
+        404
+      )
+    );
+  else if (user.role === Roles.admin) return next();
+  else
+    next(
+      new CustomError(
+        "You do not have the permission to delete weightlifting asset",
+        401
+      )
+    );
 }

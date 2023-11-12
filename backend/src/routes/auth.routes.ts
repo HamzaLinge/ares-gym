@@ -2,12 +2,12 @@ import { Router } from "express";
 
 import { checkEmail, login, register } from "../controllers/auth.controllers";
 
-import { validate } from "../middlewares/validators/validate";
+import { validate } from "../middlewares/rules/validate";
 import {
   rules_check_email,
   rules_login,
   rules_register,
-} from "../middlewares/validators/auth.rules";
+} from "../middlewares/rules/auth.rules";
 
 const router = Router();
 

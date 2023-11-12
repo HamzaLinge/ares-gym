@@ -18,6 +18,7 @@ import { jwtAuthConfig } from "./middlewares/authentications/jwt/jwtAuthConfig";
 
 import { authRouter } from "./routes/auth.routes";
 import weightliftingRouter from "./routes/weightlifting";
+import centralizedErrors from "./middlewares/centralizedErrors";
 
 const app: Application = express();
 const port = process.env.PORT || 3000;
@@ -50,6 +51,10 @@ async function server() {
     // Weightlifting Routes
     app.use("/weightlifting", weightliftingRouter);
 
+    /*
+     CENTRALIZED ERRORS Middleware
+     */
+    app.use(centralizedErrors);
     /*
      LISTENING -------------------------------------------------------------------------------------------------------
      */
