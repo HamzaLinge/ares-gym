@@ -43,4 +43,4 @@ yarn.lock
 package-lock.json
 /backend/node_modules/
 /backend/dist/
-/backend/.env.local
+/backend/.env.development

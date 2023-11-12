@@ -4,7 +4,11 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import passport from "passport";
 
-configDotEnv();
+const envFile =
+  process.env.NODE_ENV === "production"
+    ? ".env.production"
+    : ".env.development";
+configDotEnv({ path: envFile });
 
 import connectToDatabase from "./config/database";
 

@@ -4,10 +4,10 @@
   "author": "Baghdad HAMDOUD",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon src/index.ts",
-    "start": "ts-node src/index.ts",
+    "dev": "cross-env NODE_ENV=development nodemon src/index.ts",
+    "start": "NODE_ENV=production ts-node src/index.ts",
     "build": "tsc",
-    "serve": "node dist/index.js"
+    "serve": "NODE_ENV=production node dist/index.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -33,6 +33,7 @@
     "@types/passport-facebook": "^3.0.3",
     "@types/passport-google-oauth20": "^2.0.13",
     "@types/passport-jwt": "^3.0.12",
+    "cross-env": "^7.0.3",
     "nodemon": "^3.0.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
