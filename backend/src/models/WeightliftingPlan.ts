@@ -1,8 +1,9 @@
-import { Model, Schema, Types, model, Document } from "mongoose";
+import { Model, Schema, Types, model, Document, PopulatedDoc } from "mongoose";
 import {
   GendersWeightliftingPlan,
   TGenderWeightliftingPlan,
 } from "../types/common.types";
+
 import { IWeightliftingAsset } from "./WeightliftingAsset";
 
 export interface IWeightliftingPlan extends Document {
@@ -10,7 +11,8 @@ export interface IWeightliftingPlan extends Document {
   price: number;
   gender: TGenderWeightliftingPlan;
   sessionsPerWeek: number;
-  assets: Types.ObjectId[] | IWeightliftingAsset[];
+  // assets: Types.ObjectId[] | IWeightliftingAsset[];
+  assets: PopulatedDoc<Document<Types.ObjectId[]> & IWeightliftingAsset[]>;
 }
 
 type TWeightliftingPlanModel = Model<IWeightliftingPlan>;

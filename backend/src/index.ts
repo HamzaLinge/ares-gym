@@ -17,7 +17,9 @@ import { jwtAuthConfig } from "./middlewares/authentications/jwt/jwtAuthConfig";
 // import facebookAuthConfig from "./middlewares/authentications/facebook-auth";
 
 import { authRouter } from "./routes/auth.routes";
+import discountRouter from "./routes/discount.routes";
 import weightliftingRouter from "./routes/weightlifting";
+import fileRouter from "./routes/file.routes";
 import centralizedErrors from "./middlewares/centralizedErrors";
 
 const app: Application = express();
@@ -48,8 +50,12 @@ async function server() {
      */
     // Auth Routes
     app.use("/authentication", authRouter); // Add this line to mount the Task API routes
+    // Discount Routes
+    app.use("/discount", discountRouter);
     // Weightlifting Routes
     app.use("/weightlifting", weightliftingRouter);
+    // Files Routes
+    app.use("/files", fileRouter);
 
     /*
      CENTRALIZED ERRORS Middleware

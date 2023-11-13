@@ -1,13 +1,20 @@
-import { Document, model, Model, Schema, Types } from "mongoose";
+import { Document, model, Model, Schema, Types, PopulatedDoc } from "mongoose";
+
+import { IUser } from "./User";
+import { IWeightliftingPlan } from "./WeightliftingPlan";
+import { IDiscount } from "./Discount";
 
 export interface ISubscription extends Document {
-  idUser: Types.ObjectId;
-  idWeightliftingPlan: Types.ObjectId;
+  user: PopulatedDoc<Document<Types.ObjectId> & IUser>;
+  weightliftingPlan: PopulatedDoc<
+    Document<Types.ObjectId> & IWeightliftingPlan
+  >;
   dateBegin: Date;
   monthNumber: number;
   discount?: {
-    idDiscount: Types.ObjectId;
-    scan: string;
+    data: PopulatedDoc<Document<Types.ObjectId> & IDiscount>;
+    file?: string;
+    validated: boolean;
   };
   status: {
     confirmed: boolean;
@@ -19,8 +26,8 @@ type TSubscriptionModel = Model<ISubscription>;
 
 const subscriptionSchema = new Schema<ISubscription, TSubscriptionModel>(
   {
-    idUser: { type: Schema.Types.ObjectId, ref: "users", required: true },
-    idWeightliftingPlan: {
+    user: { type: Schema.Types.ObjectId, ref: "users", required: true },
+    weightliftingPlan: {
       type: Schema.Types.ObjectId,
       ref: "weightliftingPlans",
       required: true,
@@ -29,12 +36,13 @@ const subscriptionSchema = new Schema<ISubscription, TSubscriptionModel>(
     monthNumber: { type: Number, required: true },
     discount: {
       type: {
-        idDiscount: {
+        data: {
           type: Schema.Types.ObjectId,
           ref: "discounts",
           required: true,
         },
-        scan: { type: String, required: true },
+        file: { type: String, required: false },
+        validated: { type: Boolean, required: true, default: false },
       },
       required: false,
     },

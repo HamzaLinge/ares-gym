@@ -1,4 +1,4 @@
-import { body, query } from "express-validator";
+import { body, param, query } from "express-validator";
 
 export const weightlifting_asset_create_rules = [
   body("title")
@@ -34,8 +34,7 @@ export const weightlifting_asset_put_rules = [
 ];
 
 export const weightlifting_asset_delete_rules = [
-  query("idWeightliftingAsset")
-    .optional({ values: "falsy" })
+  param("idWeightliftingAsset")
     .isMongoId()
     .withMessage("idWeightliftingAsset must be a valid MongoDB ObjectId"),
 ];

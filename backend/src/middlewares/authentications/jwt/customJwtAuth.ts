@@ -8,6 +8,7 @@ import { Request, Response, NextFunction } from "express";
 import passport from "passport";
 
 import { IUser } from "../../../models/User";
+import { CustomError } from "../../../types/common.types";
 
 export function customJwtAuth(req: Request, res: Response, next: NextFunction) {
   passport.authenticate(
@@ -15,18 +16,20 @@ export function customJwtAuth(req: Request, res: Response, next: NextFunction) {
     { session: false },
     (err: Error | null, user: IUser | undefined | false, info: any) => {
       if (err) {
-        return res.status(500).send({
-          success: false,
-          message: "Something went wrong during the JWT authentication",
-        });
+        next(
+          new CustomError(
+            "Something went wrong during the JWT authentication",
+            500
+          )
+        );
+      } else {
+        if (!user) {
+          next(new CustomError(info?.message || "Unauthorized", 401));
+        } else {
+          req.user = user;
+          next();
+        }
       }
-      if (!user) {
-        return res
-          .status(401)
-          .send({ success: false, message: info?.message || "Unauthorized" });
-      }
-      req.user = user;
-      return next();
     }
   )(req, res, next);
 }
