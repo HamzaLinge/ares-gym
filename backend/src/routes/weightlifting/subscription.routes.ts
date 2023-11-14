@@ -1,37 +1,27 @@
 import { Router } from "express";
-
+import { weightlifting_subscription_post_rules } from "../../middlewares/rules/weightlifting/subscription.rules";
 import { validate } from "../../middlewares/rules/validate";
+import { asyncHandler } from "../../middlewares/asyncHandler";
+import { weightlifting_subscription_post_permission } from "../../middlewares/permissions/weightlifting/subscription.permissions";
+import { weightlifting_subscription_post_controller } from "../../controllers/weightlifting/subscription.controllers";
 import {
-  weightlifting_subscription_permission_cancel,
-  weightlifting_subscription_permission_create,
-} from "../../middlewares/permissions/weightlifting/subscription.permissions";
-import {
-  weightlifting_subscription_rules_cancel,
-  weightlifting_subscription_rules_create,
-} from "../../middlewares/rules/weightlifting/subscription.rules";
-import {
-  weightlifting_subscription_controller_cancel,
-  weightlifting_subscription_controller_create,
-} from "../../controllers/weightlifting/subscription.controllers";
+  fileUploadMiddleware,
+  processFileUpload,
+} from "../../middlewares/fileUpload";
 
 const router = Router();
 
-// router.post(
-//   "/create",
-//   weightlifting_subscription_permission_create,
-//   ...weightlifting_subscription_rules_create,
-//   validate,
-//   weightlifting_subscription_controller_create
-// );
-// router.get("/all");
-// router.get("/:id");
-// router.put("/:id");
-// router.delete(
-//   "/:id",
-//   ...weightlifting_subscription_rules_cancel,
-//   validate,
-//   weightlifting_subscription_permission_cancel,
-//   weightlifting_subscription_controller_cancel
-// );
+router.post(
+  "",
+  fileUploadMiddleware,
+  processFileUpload,
+  ...weightlifting_subscription_post_rules,
+  validate,
+  asyncHandler(weightlifting_subscription_post_permission),
+  asyncHandler(weightlifting_subscription_post_controller)
+);
+router.get("");
+router.put("");
+router.delete("/:idSubscription");
 
 export default router;

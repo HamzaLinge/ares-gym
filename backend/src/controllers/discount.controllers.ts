@@ -14,6 +14,7 @@ import {
 } from "../types/discount.types";
 import { GridFSBucket } from "mongodb";
 import mongoose from "mongoose";
+import SubscriptionModel, { ISubscription } from "../models/Subscription";
 
 export async function discount_post_controller(
   req: Request<any, any, IRequest_discount_post>,
@@ -112,9 +113,21 @@ export async function discount_delete_controller(
       new CustomError("There is no discount found to delete for this id", 404)
     );
   } else {
-    await DiscountModel.findOneAndDelete({ _id: req.params.idDiscount });
-    res
-      .status(200)
-      .send({ message: `The "${exists.title}" discount successfully deleted` });
+    const subscriptions: ISubscription[] = await SubscriptionModel.find({
+      discount: { data: req.params.idDiscount },
+    });
+    if (subscriptions.length > 0) {
+      next(
+        new CustomError(
+          "There is at least one subscription lied to this discount",
+          409
+        )
+      );
+    } else {
+      await DiscountModel.findOneAndDelete({ _id: req.params.idDiscount });
+      res.status(200).send({
+        message: `The "${exists.title}" discount successfully deleted`,
+      });
+    }
   }
 }

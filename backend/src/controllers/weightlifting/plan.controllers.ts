@@ -16,6 +16,7 @@ import {
   IResponse_weightlifting_plan_put,
   TResponse_weightlifting_plan_get,
 } from "../../types/weightlifting/plan.types";
+import SubscriptionModel, { ISubscription } from "../../models/Subscription";
 
 export async function weightlifting_plan_post_controller(
   req: Request<any, any, IRequest_weightlifting_plan_post>,
@@ -130,11 +131,23 @@ export async function weightlifting_plan_delete_controller(
       )
     );
   } else {
-    await WeightliftingPlanModel.findOneAndDelete({
-      _id: req.params.idWeightliftingPlan,
+    const subscriptions: ISubscription[] = await SubscriptionModel.find({
+      weightliftingPlan: req.params.idWeightliftingPlan,
     });
-    res.status(200).send({
-      message: `The "${exists.title}" weightlifting plan successfully deleted`,
-    });
+    if (subscriptions.length > 0) {
+      next(
+        new CustomError(
+          "There is at least one subscription lied with this weightlifting plan",
+          409
+        )
+      );
+    } else {
+      await WeightliftingPlanModel.findOneAndDelete({
+        _id: req.params.idWeightliftingPlan,
+      });
+      res.status(200).send({
+        message: `The "${exists.title}" weightlifting plan successfully deleted`,
+      });
+    }
   }
 }

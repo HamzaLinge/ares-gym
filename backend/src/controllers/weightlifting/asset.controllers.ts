@@ -14,6 +14,9 @@ import {
   IResponse_weightlifting_asset_put,
 } from "../../types/weightlifting/asset.types";
 import { CustomError } from "../../types/common.types";
+import WeightliftingPlanModel, {
+  IWeightliftingPlan,
+} from "../../models/WeightliftingPlan";
 
 export async function weightlifting_asset_create_controller(
   req: Request<any, any, IRequest_weightlifting_asset_create>,
@@ -105,11 +108,24 @@ export async function weightlifting_asset_delete_controller(
   if (!existedAsset) {
     next(new CustomError("No weightlifting asset found to delete", 404));
   } else {
-    await WeightliftingAssetModel.findOneAndDelete({
-      _id: req.params.idWeightliftingAsset,
-    });
-    res.status(200).send({
-      message: `The "${existedAsset.title}" weightlifting asset successfully deleted`,
-    });
+    const weightliftingPlans: IWeightliftingPlan[] =
+      await WeightliftingPlanModel.find({
+        assets: req.params.idWeightliftingAsset,
+      });
+    if (weightliftingPlans.length > 0) {
+      next(
+        new CustomError(
+          "There is at least on weightlifting plan lied with this asset",
+          409
+        )
+      );
+    } else {
+      await WeightliftingAssetModel.findOneAndDelete({
+        _id: req.params.idWeightliftingAsset,
+      });
+      res.status(200).send({
+        message: `The "${existedAsset.title}" weightlifting asset successfully deleted`,
+      });
+    }
   }
 }

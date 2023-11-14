@@ -11,7 +11,6 @@ export interface IWeightliftingPlan extends Document {
   price: number;
   gender: TGenderWeightliftingPlan;
   sessionsPerWeek: number;
-  // assets: Types.ObjectId[] | IWeightliftingAsset[];
   assets: PopulatedDoc<Document<Types.ObjectId[]> & IWeightliftingAsset[]>;
 }
 

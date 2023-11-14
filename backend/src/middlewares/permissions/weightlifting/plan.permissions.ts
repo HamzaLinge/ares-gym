@@ -14,7 +14,7 @@ export async function weightlifting_plan_post_permission(
         404
       )
     );
-  else if (user.role === Roles.admin) return next();
+  else if (user.role === Roles.admin) next();
   else
     next(
       new CustomError(
@@ -53,7 +53,7 @@ export async function weightlifting_plan_put_permission(
         404
       )
     );
-  else if (user.role === Roles.admin) return next();
+  else if (user.role === Roles.admin) next();
   else
     next(
       new CustomError(
@@ -76,7 +76,7 @@ export async function weightlifting_plan_delete_permission(
         404
       )
     );
-  else if (user.role === Roles.admin) return next();
+  else if (user.role === Roles.admin) next();
   else
     next(
       new CustomError(

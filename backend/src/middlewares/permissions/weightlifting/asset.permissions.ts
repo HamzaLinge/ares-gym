@@ -15,7 +15,7 @@ export async function weightlifting_asset_create_permission(
         404
       )
     );
-  else if (user.role === Roles.admin) return next();
+  else if (user.role === Roles.admin) next();
   else
     next(
       new CustomError(
@@ -38,7 +38,7 @@ export async function weightlifting_asset_get_permission(
         404
       )
     );
-  else if (user.role === Roles.admin) return next();
+  else if (user.role === Roles.admin) next();
   else
     next(
       new CustomError(
@@ -61,7 +61,7 @@ export async function weightlifting_asset_put_permission(
         404
       )
     );
-  else if (user.role === Roles.admin) return next();
+  else if (user.role === Roles.admin) next();
   else
     next(
       new CustomError(
@@ -84,7 +84,7 @@ export async function weightlifting_asset_delete_permission(
         404
       )
     );
-  else if (user.role === Roles.admin) return next();
+  else if (user.role === Roles.admin) next();
   else
     next(
       new CustomError(

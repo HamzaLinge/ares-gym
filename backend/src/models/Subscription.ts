@@ -1,8 +1,22 @@
-import { Document, model, Model, Schema, Types, PopulatedDoc } from "mongoose";
+import {
+  Document,
+  model,
+  Model,
+  Schema,
+  Types,
+  PopulatedDoc,
+  HydratedDocument,
+} from "mongoose";
 
 import { IUser } from "./User";
 import { IWeightliftingPlan } from "./WeightliftingPlan";
 import { IDiscount } from "./Discount";
+
+/**
+    fields for "admin" only :
+    - discount.validated
+    - status
+ */
 
 export interface ISubscription extends Document {
   user: PopulatedDoc<Document<Types.ObjectId> & IUser>;
@@ -32,7 +46,10 @@ const subscriptionSchema = new Schema<ISubscription, TSubscriptionModel>(
       ref: "weightliftingPlans",
       required: true,
     },
-    dateBegin: { type: Date, required: true },
+    dateBegin: {
+      type: Date,
+      required: true,
+    },
     monthNumber: { type: Number, required: true },
     discount: {
       type: {

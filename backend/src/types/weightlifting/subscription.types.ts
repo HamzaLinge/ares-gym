@@ -1,29 +1,34 @@
-import { Schema } from "mongoose";
-import { IResponse } from "../common.types";
+import mongoose from "mongoose";
+import { ISubscription } from "../../models/Subscription";
 
-/*
- /weightlifting/subscription/create route
+/**
+ /weightlifting/subscription/post route
  */
-export interface IRequest_weightlifting_subscription_create {
-  idUser: Schema.Types.ObjectId;
-  idWeightliftingPlan: Schema.Types.ObjectId;
+export interface IRequest_weightlifting_subscription_post {
+  user?: mongoose.Types.ObjectId;
+  weightliftingPlan: mongoose.Types.ObjectId;
   dateBegin: Date;
   monthNumber: number;
   discount?: {
-    idDiscount: Schema.Types.ObjectId;
-    scan: string;
+    data: mongoose.Types.ObjectId;
   };
 }
-export interface IResponse_weightlifting_subscription_create extends IResponse {
-  message: string;
+export interface IResponse_weightlifting_subscription_post {
+  subscription: ISubscription;
 }
 
-/*
- /weightlifting/subscription/cancel route
+/**
+ /weightlifting/subscription/put route
  */
-export interface IRequest_weightlifting_subscription_cancel {
-  idSubscription: string;
+export interface IRequest_weightlifting_subscription_get {
+  idSubscription?: string;
 }
-export interface IResponse_weightlifting_subscription_cancel extends IResponse {
-  message: string;
+interface IResponse_weightlifting_subscription_getOne {
+  subscription: ISubscription;
 }
+interface IResponse_weightlifting_subscription_getAll {
+  subscriptions: ISubscription[];
+}
+export type IResponse_weightlifting_subscription_get =
+  | IResponse_weightlifting_subscription_getOne
+  | IResponse_weightlifting_subscription_getAll;
