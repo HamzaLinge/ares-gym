@@ -13,6 +13,7 @@
     "resolveJsonModule": true, // If you're using JSON imports, enable this
     "noImplicitAny": true, // Ensure no implicit 'any' types
     "strictNullChecks": true, // Enable strict null checks for better type safety
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   },
   "include": ["src/**/*.ts"], // Adjust to include all your TypeScript files
   "exclude": ["node_modules", "**/*.spec.ts"] // Exclude node_modules and test files

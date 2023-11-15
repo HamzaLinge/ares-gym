@@ -1,9 +1,30 @@
 import { Router } from "express";
-import { weightlifting_subscription_post_rules } from "../../middlewares/rules/weightlifting/subscription.rules";
+import {
+  weightlifting_subscription_delete_rules,
+  weightlifting_subscription_get_admin_rules,
+  weightlifting_subscription_get_subscriber_rules,
+  weightlifting_subscription_post_rules,
+  weightlifting_subscription_put_admin_rules,
+  weightlifting_subscription_put_subscriber_rules,
+} from "../../middlewares/rules/weightlifting/subscription.rules";
 import { validate } from "../../middlewares/rules/validate";
 import { asyncHandler } from "../../middlewares/asyncHandler";
-import { weightlifting_subscription_post_permission } from "../../middlewares/permissions/weightlifting/subscription.permissions";
-import { weightlifting_subscription_post_controller } from "../../controllers/weightlifting/subscription.controllers";
+import {
+  weightlifting_subscription_delete_permission,
+  weightlifting_subscription_get_admin_permission,
+  weightlifting_subscription_get_subscriber_permission,
+  weightlifting_subscription_post_permission,
+  weightlifting_subscription_put_admin_permission,
+  weightlifting_subscription_put_subscriber_permission,
+} from "../../middlewares/permissions/weightlifting/subscription.permissions";
+import {
+  weightlifting_subscription_delete_controller,
+  weightlifting_subscription_get_admin_controller,
+  weightlifting_subscription_get_subscriber_controller,
+  weightlifting_subscription_post_controller,
+  weightlifting_subscription_put_admin_controller,
+  weightlifting_subscription_put_subscriber_controller,
+} from "../../controllers/weightlifting/subscription.controllers";
 import {
   fileUploadMiddleware,
   processFileUpload,
@@ -20,8 +41,49 @@ router.post(
   asyncHandler(weightlifting_subscription_post_permission),
   asyncHandler(weightlifting_subscription_post_controller)
 );
-router.get("");
-router.put("");
-router.delete("/:idSubscription");
+
+router.get(
+  "/subscriber",
+  weightlifting_subscription_get_subscriber_rules,
+  validate,
+  asyncHandler(weightlifting_subscription_get_subscriber_permission),
+  asyncHandler(weightlifting_subscription_get_subscriber_controller)
+);
+
+router.get(
+  "/admin",
+  weightlifting_subscription_get_admin_rules,
+  validate,
+  asyncHandler(weightlifting_subscription_get_admin_permission),
+  asyncHandler(weightlifting_subscription_get_admin_controller)
+);
+
+router.put(
+  "/subscriber",
+  fileUploadMiddleware,
+  processFileUpload,
+  ...weightlifting_subscription_put_subscriber_rules,
+  validate,
+  asyncHandler(weightlifting_subscription_put_subscriber_permission),
+  asyncHandler(weightlifting_subscription_put_subscriber_controller)
+);
+
+router.put(
+  "/admin",
+  fileUploadMiddleware,
+  processFileUpload,
+  ...weightlifting_subscription_put_admin_rules,
+  validate,
+  asyncHandler(weightlifting_subscription_put_admin_permission),
+  asyncHandler(weightlifting_subscription_put_admin_controller)
+);
+
+router.delete(
+  "/:idSubscription",
+  weightlifting_subscription_delete_rules,
+  validate,
+  asyncHandler(weightlifting_subscription_delete_permission),
+  asyncHandler(weightlifting_subscription_delete_controller)
+);
 
 export default router;

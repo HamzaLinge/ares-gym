@@ -14,7 +14,7 @@ export function customJwtAuth(req: Request, res: Response, next: NextFunction) {
   passport.authenticate(
     "jwt",
     { session: false },
-    (err: Error | null, user: IUser | undefined | false, info: any) => {
+    (err: Error | null, user: IUser | false | undefined, info: any) => {
       if (err) {
         next(
           new CustomError(
@@ -26,7 +26,7 @@ export function customJwtAuth(req: Request, res: Response, next: NextFunction) {
         if (!user) {
           next(new CustomError(info?.message || "Unauthorized", 401));
         } else {
-          req.user = user;
+          req.user = user as IUser;
           next();
         }
       }

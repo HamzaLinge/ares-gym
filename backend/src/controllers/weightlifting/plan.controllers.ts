@@ -17,6 +17,7 @@ import {
   TResponse_weightlifting_plan_get,
 } from "../../types/weightlifting/plan.types";
 import SubscriptionModel, { ISubscription } from "../../models/Subscription";
+import WeightliftingAsset from "../../models/WeightliftingAsset";
 
 export async function weightlifting_plan_post_controller(
   req: Request<any, any, IRequest_weightlifting_plan_post>,
