@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import multer from "multer";
 
 import { CustomError } from "../types/common.types";
+import { deleteFile } from "../utils/deleteFile";
 
 const centralizedErrors: ErrorRequestHandler = (
   err: CustomError | Error,
@@ -14,16 +15,15 @@ const centralizedErrors: ErrorRequestHandler = (
   // The "stack" property is a standard that is already included into Error class
   console.error(err.stack);
 
-  // Delete the uploaded file if there is an error
+  // Delete the uploaded file of files if there is an error
   if (req.fileId) {
-    const gridFSBucket = new GridFSBucket(mongoose.connection.db);
-    gridFSBucket
-      .delete(new mongoose.Types.ObjectId(req.fileId))
-      .catch((deleteErr) => {
-        console.error("Error deleting file from GridFS:", deleteErr);
-      });
+    deleteFile(req.fileId);
+  }
+  if (req.fileIdArr) {
+    req.fileIdArr.forEach((fileId) => deleteFile(fileId));
   }
 
+  // Return the size limit error for files
   if (err instanceof multer.MulterError && err.code === "LIMIT_FILE_SIZE") {
     return res
       .status(400)

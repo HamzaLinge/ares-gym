@@ -22,8 +22,8 @@ import {
 } from "../controllers/discount.controllers";
 import { customJwtAuth } from "../middlewares/authentications/jwt/customJwtAuth";
 import {
-  fileUploadMiddleware,
-  processFileUpload,
+  singleFileMiddleware,
+  processSingleFileUpload,
 } from "../middlewares/fileUpload";
 
 const router = Router();
@@ -32,8 +32,8 @@ router.use(customJwtAuth);
 
 router.post(
   "",
-  fileUploadMiddleware,
-  processFileUpload,
+  singleFileMiddleware,
+  processSingleFileUpload,
   ...discount_post_rules,
   validate,
   asyncHandler(discount_post_permission),
@@ -48,8 +48,8 @@ router.get(
 );
 router.put(
   "",
-  fileUploadMiddleware,
-  processFileUpload,
+  singleFileMiddleware,
+  processSingleFileUpload,
   ...discount_put_rules,
   validate,
   asyncHandler(discount_put_permission),

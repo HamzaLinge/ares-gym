@@ -1,5 +1,8 @@
-import { IUser } from "../models/User";
+import { Document, PopulatedDoc, Types } from "mongoose";
 import { ValidationError } from "express-validator";
+
+import { IUser } from "../models/User";
+import { IProtein } from "../models/Protein";
 
 // Define the interface for CustomError class
 interface ICustomError {
@@ -33,7 +36,10 @@ declare global {
 }
 declare module "express-serve-static-core" {
   interface Request {
-    fileId?: string; // Add fileUrl as an optional string property
+    file?: Express.Multer.File;
+    files?: Express.Multer.File[];
+    fileId?: string | undefined; // Add fileUrl as an optional string property
+    fileIdArr?: string[] | undefined; // Add fileUrl Array as an optional string[] property
   }
 }
 
@@ -89,6 +95,12 @@ export enum TargetsDiscount {
   coaching = "coaching",
 }
 export type TTargetDiscount = TargetsDiscount;
+
+// PROTEIN Property for Discount --------------------------------------------------------------------------------
+export type ProteinProperty = {
+  data: PopulatedDoc<Document<Types.ObjectId> & IProtein>;
+  quantity: number;
+};
 
 // RESPONSE Interface ---------------------------------------------------------------------------------------
 export interface IResponse {

@@ -26,16 +26,16 @@ import {
   weightlifting_subscription_put_subscriber_controller,
 } from "../../controllers/weightlifting/subscription.controllers";
 import {
-  fileUploadMiddleware,
-  processFileUpload,
+  singleFileMiddleware,
+  processSingleFileUpload,
 } from "../../middlewares/fileUpload";
 
 const router = Router();
 
 router.post(
   "",
-  fileUploadMiddleware,
-  processFileUpload,
+  singleFileMiddleware,
+  processSingleFileUpload,
   ...weightlifting_subscription_post_rules,
   validate,
   asyncHandler(weightlifting_subscription_post_permission),
@@ -60,8 +60,8 @@ router.get(
 
 router.put(
   "/subscriber",
-  fileUploadMiddleware,
-  processFileUpload,
+  singleFileMiddleware,
+  processSingleFileUpload,
   ...weightlifting_subscription_put_subscriber_rules,
   validate,
   asyncHandler(weightlifting_subscription_put_subscriber_permission),
@@ -70,8 +70,8 @@ router.put(
 
 router.put(
   "/admin",
-  fileUploadMiddleware,
-  processFileUpload,
+  singleFileMiddleware,
+  processSingleFileUpload,
   ...weightlifting_subscription_put_admin_rules,
   validate,
   asyncHandler(weightlifting_subscription_put_admin_permission),

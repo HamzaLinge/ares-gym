@@ -2,6 +2,11 @@ import { capitalize } from "./capitalize";
 
 export const errorMessageValidator = {
   notEmpty: (name: string): string => `${capitalize(name)} must be provided`,
+  string: (name: string): string => `${capitalize(name)} must be a string type`,
+  int: (name: string, min?: number, max?: number): string =>
+    `${capitalize(name)} must be a number type${
+      min ? `, and upper then ${min}` : ""
+    }${max ? `, and lower then ${max}` : ""}`,
   mongoID: (name: string): string =>
     `${capitalize(name)} must be a valid MongoDB ID`,
   validDate: (name: string): string =>

@@ -1,4 +1,6 @@
 import { NextFunction, Request, Response } from "express";
+import { GridFSBucket } from "mongodb";
+import mongoose from "mongoose";
 
 import DiscountModel, { IDiscount } from "../models/Discount";
 import { CustomError } from "../types/common.types";
@@ -12,8 +14,6 @@ import {
   IResponse_discount_put,
   TResponse_discount_get,
 } from "../types/discount.types";
-import { GridFSBucket } from "mongodb";
-import mongoose from "mongoose";
 import SubscriptionModel, { ISubscription } from "../models/Subscription";
 
 export async function discount_post_controller(
@@ -51,7 +51,7 @@ export async function discount_get_controller(
   } else {
     const discounts: IDiscount[] = await DiscountModel.find();
     if (discounts.length === 0) {
-      next(new CustomError("There is are discounts found", 404));
+      next(new CustomError("There are no discounts found", 404));
     } else {
       res.status(200).send({ discounts });
     }

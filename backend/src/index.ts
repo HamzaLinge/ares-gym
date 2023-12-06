@@ -20,6 +20,7 @@ import { authRouter } from "./routes/auth.routes";
 import discountRouter from "./routes/discount.routes";
 import weightliftingRouter from "./routes/weightlifting";
 import fileRouter from "./routes/file.routes";
+import shoppingRouter from "./routes/shopping";
 import centralizedErrors from "./middlewares/centralizedErrors";
 
 const app: Application = express();
@@ -50,12 +51,14 @@ async function server() {
      */
     // Auth Routes
     app.use("/authentication", authRouter); // Add this line to mount the Task API routes
+    // Files Routes
+    app.use("/files", fileRouter);
     // Discount Routes
     app.use("/discount", discountRouter);
     // Weightlifting Routes
     app.use("/weightlifting", weightliftingRouter);
-    // Files Routes
-    app.use("/files", fileRouter);
+    // Shopping Routes
+    app.use("/shopping", shoppingRouter);
 
     /*
      CENTRALIZED ERRORS Middleware

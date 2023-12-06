@@ -1,24 +1,29 @@
-import { Schema, model, models } from "mongoose";
+import { Document, Schema, model, Model, models } from "mongoose";
 
-interface IProtein {
+export interface IProtein extends Document {
   name: string;
   type: string;
   price: number;
   stock: number;
-  pictures: string[];
+  thumbnails: string[];
   description: string;
 }
 
-const proteinSchema = new Schema<IProtein>(
+type TProtein = Model<IProtein>;
+
+const proteinSchema = new Schema<IProtein, TProtein>(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true },
     type: { type: String, required: true },
     price: { type: Number, required: true },
-    stock: { type: Number, required: true },
-    pictures: { type: [String], required: true, default: [] },
+    stock: { type: Number, required: true, default: 0 },
+    thumbnails: { type: [String], required: false, default: [] },
     description: { type: String, required: true },
   },
   { timestamps: true }
 );
 
-export default models.Proteins || model<IProtein>("Proteins", proteinSchema);
+const ProteinModel =
+  models.proteins || model<IProtein, TProtein>("proteins", proteinSchema);
+
+export default ProteinModel;

@@ -1,28 +1,62 @@
-import { Schema, models, model, Types } from "mongoose";
+import {
+  Document,
+  model,
+  Model,
+  models,
+  PopulatedDoc,
+  Schema,
+  Types,
+} from "mongoose";
 
-interface ICommand {
-  idSubscriber: Types.ObjectId;
-  idProtein: Types.ObjectId;
-  datePayment?: Date;
-  quantity: number;
+import { IUser } from "./User";
+import { IDiscount } from "./Discount";
+import { ProteinProperty } from "../types/common.types";
+
+export interface ICommand extends Document {
+  user: PopulatedDoc<Document<Types.ObjectId> & IUser>;
+  protein: ProteinProperty[];
   discount?: {
-    idDiscount: Types.ObjectId;
-    scan?: string;
+    data: PopulatedDoc<Document<Types.ObjectId> & IDiscount>;
+    file?: string;
+    validated: boolean;
   };
+  datePayment?: Date;
+  note?: string;
 }
 
-const commandSchema = new Schema<ICommand>({
-  idSubscriber: { type: Types.ObjectId, ref: "Subscribers", required: true },
-  idProtein: { type: Types.ObjectId, ref: "Proteins", required: true },
-  datePayment: { type: Date, required: false },
-  quantity: { type: Number, required: true },
-  discount: {
-    type: {
-      idDiscount: { type: Types.ObjectId, required: true },
-      scan: { type: String, required: false },
-    },
-    required: false,
-  },
-});
+type TCommand = Model<ICommand>;
 
-export default models.Commands || model<ICommand>("Commands", commandSchema);
+const commandSchema = new Schema<ICommand, TCommand>(
+  {
+    user: { type: Schema.Types.ObjectId, ref: "users", required: true },
+    protein: {
+      type: [
+        {
+          data: {
+            type: Schema.Types.ObjectId,
+            ref: "proteins",
+            required: true,
+          },
+          quantity: { type: Number, required: true, min: 1 },
+        },
+      ],
+      required: true,
+    },
+    discount: {
+      type: {
+        data: { type: Types.ObjectId, required: true },
+        file: { type: String, required: false },
+        validated: { type: Boolean, required: true, default: false },
+      },
+      required: false,
+    },
+    datePayment: { type: Date, required: false },
+    note: { type: String, required: false },
+  },
+  { timestamps: true }
+);
+
+const CommandModel =
+  models.commands || model<ICommand, TCommand>("commands", commandSchema);
+
+export default CommandModel;
