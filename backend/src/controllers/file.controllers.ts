@@ -10,7 +10,7 @@ export const file_get_controller = (
   res: Response,
   next: NextFunction
 ) => {
-  const idFile = req.params.idFile;
+  const idFile = req.params.fileId;
   const gridFSBucket = new GridFSBucket(mongoose.connection.db);
 
   const downloadStream = gridFSBucket.openDownloadStream(

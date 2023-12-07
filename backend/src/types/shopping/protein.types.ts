@@ -32,10 +32,12 @@ export type IResponse_protein_get =
   | IResponse_protein_getOAll;
 
 /**
- PUT: /shopping/protein
+ PUT: /shopping/protein/:idProtein and /shopping/protein/files/:idProtein
  */
-export interface IRequest_protein_put {
-  idProtein: string;
+export interface IRequest_shopping_protein_put_params {
+  idProtein?: string;
+}
+export interface IRequest_shopping_protein_put_body {
   name?: string;
   type?: string;
   price?: number;
@@ -47,11 +49,22 @@ export interface IResponse_protein_put {
 }
 
 /**
- DELETE: /shopping/protein
+ DELETE: /shopping/protein/:idProtein
  */
 export interface IRequest_shopping_protein_delete {
   idProtein?: string;
 }
 export interface IResponse_shopping_protein_delete {
   message: string;
+}
+
+/**
+ DELETE: /shopping/protein/file/:idProtein/:idThumbnail
+ */
+export interface IRequest_shopping_protein_delete_file {
+  idProtein?: string;
+  idThumbnail?: string;
+}
+export interface IResponse_shopping_protein_delete_file {
+  idThumbnail: string;
 }

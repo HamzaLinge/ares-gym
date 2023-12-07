@@ -10,7 +10,40 @@
 
 import { Request, Response, NextFunction, RequestHandler } from "express";
 
+// export const asyncHandler =
+//   (fn: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
+//     Promise.resolve(fn(req, res, next)).catch(next);
+//   };
+
+// export const asyncHandler =
+//   <T = any>(
+//     fn: (req: Request<T>, res: Response, next: NextFunction) => Promise<void>
+//   ) =>
+//   (req: Request<T>, res: Response, next: NextFunction) => {
+//     Promise.resolve(fn(req, res, next)).catch(next);
+//   };
+
+// export const asyncHandler =
+//   <TRequest extends Request, TResponse extends Response>(
+//     fn: (req: TRequest, res: TResponse, next: NextFunction) => Promise<void>
+//   ) =>
+//   (req: Request, res: Response, next: NextFunction) => {
+//     Promise.resolve(fn(req as TRequest, res as TResponse, next)).catch(next);
+//   };
+
+type AsyncHandlerFunction<
+  TReq extends Request = Request,
+  TRes extends Response = Response
+> = (req: TReq, res: TRes, next: NextFunction) => Promise<void>;
+
 export const asyncHandler =
-  (fn: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
-    Promise.resolve(fn(req, res, next)).catch(next);
+  <TReq extends Request = Request, TRes extends Response = Response>(
+    fn: AsyncHandlerFunction<TReq, TRes>
+  ) =>
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await fn(req as TReq, res as TRes, next);
+    } catch (error) {
+      next(error);
+    }
   };

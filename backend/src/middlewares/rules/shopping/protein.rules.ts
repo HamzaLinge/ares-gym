@@ -1,54 +1,61 @@
-import { body, param, query } from "express-validator";
+import { body, check, param, query } from "express-validator";
 import { errorMessageValidator } from "../../../utils/errorMessageValidator";
 import ProteinModel from "../../../models/Protein";
 
 export const shopping_protein_post_rules = [
   body("name")
     .notEmpty()
-    .withMessage(errorMessageValidator.notEmpty("title"))
+    .withMessage(errorMessageValidator.isNotEmpty("title"))
     .isString()
-    .withMessage(errorMessageValidator.string("title")),
+    .withMessage(errorMessageValidator.isString("title"))
+    .isLength({ min: 3 })
+    .withMessage(errorMessageValidator.isLengthMin("name", 3)),
   body("type")
     .notEmpty()
-    .withMessage(errorMessageValidator.notEmpty("type"))
+    .withMessage(errorMessageValidator.isNotEmpty("type"))
     .isString()
-    .withMessage(errorMessageValidator.string("type")),
+    .withMessage(errorMessageValidator.isString("type")),
   body("price")
     .notEmpty()
-    .withMessage(errorMessageValidator.notEmpty("price"))
+    .withMessage(errorMessageValidator.isNotEmpty("price"))
+    .isInt()
+    .withMessage(errorMessageValidator.isInt("price"))
     .isInt({ min: 0 })
-    .withMessage(errorMessageValidator.int("price", 0)),
+    .withMessage(errorMessageValidator.isIntMin("price", 0)),
   body("stock")
-    .notEmpty()
-    .withMessage(errorMessageValidator.notEmpty("stock"))
+    .optional({ values: "falsy" })
+    .isInt()
+    .withMessage(errorMessageValidator.isInt("stock"))
     .isInt({ min: 0 })
-    .withMessage(errorMessageValidator.int("stock", 0)),
+    .withMessage(errorMessageValidator.isIntMin("stock", 0)),
   body("description")
     .notEmpty()
-    .withMessage(errorMessageValidator.notEmpty("description"))
+    .withMessage(errorMessageValidator.isNotEmpty("description"))
     .isString()
-    .withMessage(errorMessageValidator.string("description")),
+    .withMessage(errorMessageValidator.isString("description")),
 ];
 
 export const shopping_protein_get_rules = [
-  param("idProtein")
+  query("idProtein")
     .optional({ values: "falsy" })
     .isMongoId()
-    .withMessage(errorMessageValidator.mongoID("id protein"))
+    .withMessage(errorMessageValidator.isMongoId("id protein"))
     .custom((value, { req }) => {
-      if (value && req.params?.name) {
+      if (value && req.query?.name) {
         throw new Error(
           "Only one of idProtein or name should be provided, not both"
         );
       }
       return true;
     }),
-  param("name")
+  query("name")
     .optional({ values: "falsy" })
     .isString()
-    .withMessage(errorMessageValidator.string("name"))
+    .withMessage(errorMessageValidator.isString("name"))
+    .isLength({ min: 3 })
+    .withMessage(errorMessageValidator.isLengthMin("name", 3))
     .custom((value, { req }) => {
-      if (value && req.params?.idProtein) {
+      if (value && req.query?.idProtein) {
         throw new Error(
           "Only one of idProtein or name should be provided, not both"
         );
@@ -58,37 +65,67 @@ export const shopping_protein_get_rules = [
 ];
 
 export const shopping_protein_put_rules = [
-  body("idProtein")
+  param("idProtein")
     .notEmpty()
-    .withMessage(errorMessageValidator.notEmpty("id protein"))
+    .withMessage(errorMessageValidator.isNotEmpty("id protein"))
     .isMongoId()
-    .withMessage(errorMessageValidator.mongoID("id protein")),
+    .withMessage(errorMessageValidator.isMongoId("id protein")),
   body("name")
     .optional({ values: "falsy" })
     .isString()
-    .withMessage(errorMessageValidator.string("title")),
+    .withMessage(errorMessageValidator.isString("title")),
   body("type")
     .optional({ values: "falsy" })
     .isString()
-    .withMessage(errorMessageValidator.string("type")),
+    .withMessage(errorMessageValidator.isString("type")),
   body("price")
     .optional({ values: "falsy" })
+    .isInt()
+    .withMessage(errorMessageValidator.isInt("price"))
     .isInt({ min: 0 })
-    .withMessage(errorMessageValidator.int("price", 0)),
+    .withMessage(errorMessageValidator.isIntMin("price", 0)),
   body("stock")
     .optional({ values: "falsy" })
+    .isInt()
+    .withMessage(errorMessageValidator.isInt("stock"))
     .isInt({ min: 0 })
-    .withMessage(errorMessageValidator.int("stock", 0)),
+    .withMessage(errorMessageValidator.isIntMin("stock", 0)),
   body("description")
     .optional({ values: "falsy" })
     .isString()
-    .withMessage(errorMessageValidator.string("description")),
+    .withMessage(errorMessageValidator.isString("description")),
+];
+
+export const shopping_protein_put_files_rules = [
+  param("idProtein")
+    .notEmpty()
+    .withMessage(errorMessageValidator.isNotEmpty("id protein"))
+    .isMongoId()
+    .withMessage(errorMessageValidator.isMongoId("id protein")),
+  check("files").custom((value, { req }) => {
+    if (!req.files || req.files.length === 0) {
+      throw new Error(errorMessageValidator.isFilesUploaded());
+    }
+    return true;
+  }),
 ];
 
 export const shopping_protein_delete_rules = [
-  query("idProtein")
+  param("idProtein")
     .notEmpty()
-    .withMessage(errorMessageValidator.notEmpty("id protein"))
+    .withMessage(errorMessageValidator.isNotEmpty("id protein"))
     .isMongoId()
-    .withMessage(errorMessageValidator.mongoID("id protein")),
+    .withMessage(errorMessageValidator.isMongoId("id protein")),
+];
+export const shopping_protein_delete_file_rules = [
+  param("idProtein")
+    .notEmpty()
+    .withMessage(errorMessageValidator.isNotEmpty("id protein"))
+    .isMongoId()
+    .withMessage(errorMessageValidator.isMongoId("id protein")),
+  param("idThumbnail")
+    .notEmpty()
+    .withMessage(errorMessageValidator.isNotEmpty("id thumbnail"))
+    .isMongoId()
+    .withMessage(errorMessageValidator.isMongoId("id thumbnail")),
 ];

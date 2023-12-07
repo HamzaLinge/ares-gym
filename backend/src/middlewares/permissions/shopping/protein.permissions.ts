@@ -65,6 +65,30 @@ export async function shopping_protein_put_permission(
   }
 }
 
+export async function shopping_protein_put_files_permission(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const user = req.user;
+  if (!user) {
+    next(
+      new CustomError(
+        "There is no user found to check the permission for this request",
+        404
+      )
+    );
+  } else if (user.role === Roles.admin) next();
+  else {
+    next(
+      new CustomError(
+        "You do not have the permission to upload protein files",
+        401
+      )
+    );
+  }
+}
+
 export async function shopping_protein_delete_permission(
   req: Request,
   res: Response,
@@ -82,6 +106,30 @@ export async function shopping_protein_delete_permission(
   else {
     next(
       new CustomError("You do not have the permission to delete protein", 401)
+    );
+  }
+}
+
+export async function shopping_protein_delete_file_permission(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const user = req.user;
+  if (!user) {
+    next(
+      new CustomError(
+        "There is no user found to check the permission for this request",
+        404
+      )
+    );
+  } else if (user.role === Roles.admin) next();
+  else {
+    next(
+      new CustomError(
+        "You do not have the permission to delete protein file",
+        401
+      )
     );
   }
 }

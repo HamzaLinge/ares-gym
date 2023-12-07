@@ -1,19 +1,22 @@
 import { capitalize } from "./capitalize";
 
 export const errorMessageValidator = {
-  notEmpty: (name: string): string => `${capitalize(name)} must be provided`,
-  string: (name: string): string => `${capitalize(name)} must be a string type`,
-  int: (name: string, min?: number, max?: number): string =>
-    `${capitalize(name)} must be a number type${
-      min ? `, and upper then ${min}` : ""
-    }${max ? `, and lower then ${max}` : ""}`,
-  mongoID: (name: string): string =>
+  isNotEmpty: (name: string): string => `${capitalize(name)} must be provided`,
+  isString: (name: string): string =>
+    `${capitalize(name)} must be a string type`,
+  isInt: (name: string): string => `${capitalize(name)} must be a number`,
+  isIntMin: (name: string, min: number): string =>
+    `${capitalize(name)} must be a upper then ${min}`,
+  isMongoId: (name: string): string =>
     `${capitalize(name)} must be a valid MongoDB ID`,
-  validDate: (name: string): string =>
+  isValidDate: (name: string): string =>
     `${capitalize(name)} must be a valid date (eg: YYYY-MM-DD)`,
   docNotFound: (name: string): string =>
     `There is no ${capitalize(name)} found for this ID`,
-  range: (name: string, start: number, end: number): string =>
+  isRange: (name: string, start: number, end: number): string =>
     `${capitalize(name)} must be between ${start} and ${end}`,
-  bool: (name: string): string => `${name} must be true or false`,
+  isBool: (name: string): string => `${capitalize(name)} must be true or false`,
+  isLengthMin: (name: string, minEqual: number): string =>
+    `${capitalize(name)} length must exceed ${minEqual - 1}`,
+  isFilesUploaded: () => "You need to upload files",
 };

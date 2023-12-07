@@ -3,12 +3,15 @@ import { NextFunction, Request, Response } from "express";
 import {
   IRequest_protein_get,
   IRequest_protein_post,
-  IRequest_protein_put,
+  IRequest_shopping_protein_put_body,
   IRequest_shopping_protein_delete,
   IResponse_protein_get,
   IResponse_protein_post,
   IResponse_protein_put,
   IResponse_shopping_protein_delete,
+  IRequest_shopping_protein_put_params,
+  IRequest_shopping_protein_delete_file,
+  IResponse_shopping_protein_delete_file,
 } from "../../types/shopping/protein.types";
 import ProteinModel, { IProtein } from "../../models/Protein";
 import { CustomError } from "../../types/common.types";
@@ -62,23 +65,23 @@ export async function shopping_protein_get_controller(
 }
 
 export async function shopping_protein_put_controller(
-  req: Request<any, any, IRequest_protein_put>,
+  req: Request<
+    IRequest_shopping_protein_put_params,
+    any,
+    IRequest_shopping_protein_put_body
+  >,
   res: Response<IResponse_protein_put>,
   next: NextFunction
 ) {
   const proteinExists: IProtein | null = await ProteinModel.findById(
-    req.body.idProtein
+    req.params.idProtein
   );
   if (!proteinExists) {
     next(new CustomError("There is no protein found for this Id to edit", 404));
   } else {
-    let newInputProtein: any = { ...req.body };
-    if (req.fileIdArr) {
-      newInputProtein.thumbnails = req.fileIdArr;
-      proteinExists.thumbnails.forEach((fileId) => deleteFile(fileId));
-    }
+    let newInputProtein = { ...req.body };
     const updatedProtein: IProtein | null = await ProteinModel.findOneAndUpdate(
-      { _id: req.body.idProtein },
+      { _id: req.params.idProtein },
       newInputProtein,
       { new: true }
     );
@@ -86,6 +89,35 @@ export async function shopping_protein_put_controller(
       next(new CustomError("Updated protein not found", 404));
     } else {
       res.status(200).send({ protein: updatedProtein });
+    }
+  }
+}
+
+export async function shopping_protein_put_files_controller(
+  req: Request<IRequest_shopping_protein_put_params>,
+  res: Response<IResponse_protein_put>,
+  next: NextFunction
+) {
+  const proteinExists: IProtein | null = await ProteinModel.findById(
+    req.params.idProtein
+  );
+  if (!proteinExists) {
+    next(new CustomError("There is no protein found for this Id to edit", 404));
+  } else {
+    let newThumbnails: string[] = [];
+    if (req.fileIdArr) {
+      newThumbnails = newThumbnails.concat(req.fileIdArr);
+    }
+    const updatedProteinThumbnails: IProtein | null =
+      await ProteinModel.findOneAndUpdate(
+        { _id: req.params.idProtein },
+        { $push: { thumbnails: { $each: newThumbnails } } },
+        { new: true }
+      );
+    if (updatedProteinThumbnails) {
+      res.status(200).send({ protein: updatedProteinThumbnails });
+    } else {
+      next(new CustomError("Updated protein not found", 404));
     }
   }
 }
@@ -101,11 +133,30 @@ export async function shopping_protein_delete_controller(
   if (!proteinExists) {
     next(new CustomError("There is no protein found to delete", 404));
   } else {
-    // I should handle the commands which are in progress
+    // I should handle the commands that are in progress
     proteinExists.thumbnails.forEach((fileId) => deleteFile(fileId));
     await ProteinModel.findOneAndDelete({ _id: req.params.idProtein });
     res.status(200).send({
       message: `You successfully deleted ${proteinExists.name} protein`,
     });
+  }
+}
+
+export async function shopping_protein_delete_file_controller(
+  req: Request<IRequest_shopping_protein_delete_file>,
+  res: Response<IResponse_shopping_protein_delete_file>,
+  next: NextFunction
+) {
+  const proteinExists: IProtein | null = await ProteinModel.findById(
+    req.params.idProtein
+  );
+  if (!proteinExists) {
+    next(new CustomError("There is no protein found to delete", 404));
+  } else {
+    await ProteinModel.findOneAndUpdate(
+      { _id: req.params.idProtein },
+      { $pull: { thumbnails: req.params.idThumbnail } }
+    );
+    res.status(200).send({ idThumbnail: req.params.idThumbnail || "none" });
   }
 }

@@ -8,7 +8,7 @@ export const weightlifting_subscription_post_rules = [
   body("user")
     .optional({ values: "falsy" })
     .isMongoId()
-    .withMessage(errorMessageValidator.mongoID("user"))
+    .withMessage(errorMessageValidator.isMongoId("user"))
     .custom((idUser) => {
       return SubscriptionModel.findById(idUser).then((user) => {
         if (!user) {
@@ -18,7 +18,7 @@ export const weightlifting_subscription_post_rules = [
     }),
   body("weightliftingPlan")
     .isMongoId()
-    .withMessage(errorMessageValidator.mongoID("weightlifting plan"))
+    .withMessage(errorMessageValidator.isMongoId("weightlifting plan"))
     .custom((idWeightliftingPlan) => {
       return WeightliftingPlanModel.findById(idWeightliftingPlan).then(
         (weightliftingPlan) => {
@@ -32,14 +32,14 @@ export const weightlifting_subscription_post_rules = [
     }),
   body("dateBegin")
     .isISO8601()
-    .withMessage(errorMessageValidator.validDate("date begin")),
+    .withMessage(errorMessageValidator.isValidDate("date begin")),
   body("monthNumber")
     .isInt({ min: 1, max: 12 })
-    .withMessage(errorMessageValidator.range("month number", 1, 12)),
+    .withMessage(errorMessageValidator.isRange("month number", 1, 12)),
   body("discount.data")
     .optional({ values: "falsy" })
     .isMongoId()
-    .withMessage(errorMessageValidator.mongoID("id discount")),
+    .withMessage(errorMessageValidator.isMongoId("id discount")),
 ];
 
 export const weightlifting_subscription_get_rules = [
@@ -57,7 +57,7 @@ export const weightlifting_subscription_get_subscriber_rules = [
   query("idSubscription")
     .optional({ values: "falsy" })
     .isMongoId()
-    .withMessage(errorMessageValidator.mongoID("id subscription"))
+    .withMessage(errorMessageValidator.isMongoId("id subscription"))
     .custom((idSubscription) => {
       return SubscriptionModel.findOne({ _id: idSubscription }).then(
         (subscription) => {
@@ -72,17 +72,17 @@ export const weightlifting_subscription_get_subscriber_rules = [
   query("validatedDiscount")
     .optional({ values: "falsy" })
     .isBoolean()
-    .withMessage(errorMessageValidator.bool("validated discount")),
+    .withMessage(errorMessageValidator.isBool("validated discount")),
   query("confirmedSubscription")
     .optional({ values: "falsy" })
     .isBoolean()
-    .withMessage(errorMessageValidator.bool("confirmed status")),
+    .withMessage(errorMessageValidator.isBool("confirmed status")),
 ];
 
 export const weightlifting_subscription_get_admin_rules = [
   query("idUser")
     .isMongoId()
-    .withMessage(errorMessageValidator.mongoID("id user"))
+    .withMessage(errorMessageValidator.isMongoId("id user"))
     .custom((idUser) => {
       return SubscriptionModel.findById(idUser).then((user) => {
         if (!user) {
@@ -93,7 +93,7 @@ export const weightlifting_subscription_get_admin_rules = [
   query("idSubscription")
     .optional({ values: "falsy" })
     .isMongoId()
-    .withMessage(errorMessageValidator.mongoID("id subscription"))
+    .withMessage(errorMessageValidator.isMongoId("id subscription"))
     .custom((idSubscription) => {
       return SubscriptionModel.findOne({ _id: idSubscription }).then(
         (subscription) => {
@@ -108,17 +108,17 @@ export const weightlifting_subscription_get_admin_rules = [
   query("validatedDiscount")
     .optional({ values: "falsy" })
     .isBoolean()
-    .withMessage(errorMessageValidator.bool("validated discount")),
+    .withMessage(errorMessageValidator.isBool("validated discount")),
   query("confirmedSubscription")
     .optional({ values: "falsy" })
     .isBoolean()
-    .withMessage(errorMessageValidator.bool("confirmed status")),
+    .withMessage(errorMessageValidator.isBool("confirmed status")),
 ];
 
 export const weightlifting_subscription_put_subscriber_rules = [
   body("idSubscription")
     .isMongoId()
-    .withMessage(errorMessageValidator.mongoID("id subscription"))
+    .withMessage(errorMessageValidator.isMongoId("id subscription"))
     .custom((idSubscription) => {
       return SubscriptionModel.findOne({ _id: idSubscription }).then(
         (subscription) => {
@@ -133,7 +133,7 @@ export const weightlifting_subscription_put_subscriber_rules = [
   body("weightliftingPlan")
     .optional({ values: "falsy" })
     .isMongoId()
-    .withMessage(errorMessageValidator.mongoID("weightlifting plan"))
+    .withMessage(errorMessageValidator.isMongoId("weightlifting plan"))
     .custom((idWeightliftingPlan) => {
       return WeightliftingPlanModel.findById(idWeightliftingPlan).then(
         (weightliftingPlan) => {
@@ -148,15 +148,15 @@ export const weightlifting_subscription_put_subscriber_rules = [
   body("dateBegin")
     .optional({ values: "falsy" })
     .isISO8601()
-    .withMessage(errorMessageValidator.validDate("date begin")),
+    .withMessage(errorMessageValidator.isValidDate("date begin")),
   body("monthNumber")
     .optional({ values: "falsy" })
     .isInt({ min: 1, max: 12 })
-    .withMessage(errorMessageValidator.range("month number", 1, 12)),
+    .withMessage(errorMessageValidator.isRange("month number", 1, 12)),
   body("discount.data")
     .optional({ values: "falsy" })
     .isMongoId()
-    .withMessage(errorMessageValidator.mongoID("id discount"))
+    .withMessage(errorMessageValidator.isMongoId("id discount"))
     .custom((idDiscount) => {
       return DiscountModel.findById(idDiscount).then((discount) => {
         if (!discount) {
@@ -169,7 +169,7 @@ export const weightlifting_subscription_put_subscriber_rules = [
 export const weightlifting_subscription_put_admin_rules = [
   body("idUser")
     .isMongoId()
-    .withMessage(errorMessageValidator.mongoID("id user"))
+    .withMessage(errorMessageValidator.isMongoId("id user"))
     .custom((idUser) => {
       return SubscriptionModel.findById(idUser).then((user) => {
         if (!user) {
@@ -192,7 +192,7 @@ export const weightlifting_subscription_put_admin_rules = [
   body("weightliftingPlan")
     .optional({ values: "falsy" })
     .isMongoId()
-    .withMessage(errorMessageValidator.mongoID("weightlifting plan"))
+    .withMessage(errorMessageValidator.isMongoId("weightlifting plan"))
     .custom((idWeightliftingPlan) => {
       return WeightliftingPlanModel.findById(idWeightliftingPlan).then(
         (weightliftingPlan) => {
@@ -207,15 +207,15 @@ export const weightlifting_subscription_put_admin_rules = [
   body("dateBegin")
     .optional({ values: "falsy" })
     .isISO8601()
-    .withMessage(errorMessageValidator.validDate("date begin")),
+    .withMessage(errorMessageValidator.isValidDate("date begin")),
   body("monthNumber")
     .optional({ values: "falsy" })
     .isInt({ min: 1, max: 12 })
-    .withMessage(errorMessageValidator.range("Month Number", 1, 12)),
+    .withMessage(errorMessageValidator.isRange("Month Number", 1, 12)),
   body("discount.data")
     .optional({ values: "falsy" })
     .isMongoId()
-    .withMessage(errorMessageValidator.mongoID("id discount"))
+    .withMessage(errorMessageValidator.isMongoId("id discount"))
     .custom((idDiscount) => {
       return DiscountModel.findById(idDiscount).then((discount) => {
         if (!discount) {
@@ -226,16 +226,16 @@ export const weightlifting_subscription_put_admin_rules = [
   body("discount.validated")
     .optional({ values: "falsy" })
     .isBoolean()
-    .withMessage(errorMessageValidator.bool("validated discount")),
+    .withMessage(errorMessageValidator.isBool("validated discount")),
   body("status.confirmed")
     .isBoolean()
-    .withMessage(errorMessageValidator.bool("confirmed status")),
+    .withMessage(errorMessageValidator.isBool("confirmed status")),
 ];
 
 export const weightlifting_subscription_delete_rules = [
   param("idSubscription")
     .isMongoId()
-    .withMessage(errorMessageValidator.mongoID("id subscription"))
+    .withMessage(errorMessageValidator.isMongoId("id subscription"))
     .custom((idSubscription) => {
       return SubscriptionModel.findById(idSubscription).then((subscription) => {
         if (!subscription) {

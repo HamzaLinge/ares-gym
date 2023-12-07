@@ -9,11 +9,11 @@ const router = Router();
 
 router.use(customJwtAuth);
 
-router.get(
-  "/:idFile",
-  file_get_rules,
-  validate,
-  asyncHandler(file_get_controller)
-);
+// router.get(
+//   "/:idFile",
+//   file_get_rules,
+//   validate,
+//   asyncHandler(file_get_controller)
+// );
 
 export default router;
