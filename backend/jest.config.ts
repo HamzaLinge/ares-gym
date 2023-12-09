@@ -1,17 +1,15 @@
-// jest.config.ts
 import type { Config } from "@jest/types";
 
 const config: Config.InitialOptions = {
+  roots: ["<rootDir>/src"],
   preset: "ts-jest",
   testEnvironment: "node",
-  modulePathIgnorePatterns: ["src/dist/", "node_modules/"],
-  // globals: {
-  //   "ts-jest": {
-  //     tsconfig: "tsconfig.json",
-  //   },
-  // },
-  testMatch: ["<rootDir>/src/__tests__/**/*.test.ts"],
-  // setupFiles: ["./jest.setup.ts"],
+  testPathIgnorePatterns: ["src/dist/", "node_modules/"],
+  transform: {
+    "^.+\\.(ts|tsx)$": "ts-jest",
+  },
+  testMatch: ["**/?(*.)+(spec|test).+(ts)"],
+  setupFilesAfterEnv: ["./jest.setup.ts"],
 };
 
 export default config;
