@@ -1,11 +1,11 @@
 import { Router } from "express";
 
 import {
-  shopping_protein_delete_file_rules,
+  shopping_protein_file_delete_rules,
   shopping_protein_delete_rules,
   shopping_protein_get_rules,
   shopping_protein_post_rules,
-  shopping_protein_put_files_rules,
+  shopping_protein_files_put_rules,
   shopping_protein_put_rules,
 } from "../../middlewares/rules/shopping/protein.rules";
 import { validate } from "../../middlewares/rules/validate";
@@ -60,7 +60,7 @@ router.put(
   "/files/:idProtein",
   multipleFileMiddleware,
   processMultipleFileUpload,
-  ...shopping_protein_put_files_rules,
+  ...shopping_protein_files_put_rules,
   validate,
   asyncHandler(shopping_protein_put_files_permission),
   asyncHandler(shopping_protein_put_files_controller)
@@ -74,7 +74,7 @@ router.delete(
 );
 router.delete(
   "/file/:idProtein/:idThumbnail",
-  shopping_protein_delete_file_rules,
+  shopping_protein_file_delete_rules,
   validate,
   asyncHandler(shopping_protein_delete_file_permission),
   asyncHandler(shopping_protein_delete_file_controller)

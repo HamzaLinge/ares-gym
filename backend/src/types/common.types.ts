@@ -3,6 +3,7 @@ import { ValidationError } from "express-validator";
 
 import { IUser } from "../models/User";
 import { IProtein } from "../models/Protein";
+import { IDiscount } from "../models/Discount";
 
 // Define the interface for CustomError class
 interface ICustomError {
@@ -96,8 +97,8 @@ export enum TargetsDiscount {
 }
 export type TTargetDiscount = TargetsDiscount;
 
-// PROTEIN Property for Discount --------------------------------------------------------------------------------
-export type ProteinProperty = {
+// PROTEIN Property for Command --------------------------------------------------------------------------------
+export type ProteinObject = {
   data: PopulatedDoc<Document<Types.ObjectId> & IProtein>;
   quantity: number;
 };

@@ -1,7 +1,7 @@
 import { capitalize } from "./capitalize";
 
 export const errorMessageValidator = {
-  isNotEmpty: (name: string): string => `${capitalize(name)} must be provided`,
+  notEmpty: (name: string): string => `${capitalize(name)} must be provided`,
   isString: (name: string): string =>
     `${capitalize(name)} must be a string type`,
   isInt: (name: string): string => `${capitalize(name)} must be a number`,
@@ -19,4 +19,6 @@ export const errorMessageValidator = {
   isLengthMin: (name: string, minEqual: number): string =>
     `${capitalize(name)} length must exceed ${minEqual - 1}`,
   isFilesUploaded: () => "You need to upload files",
+  isArray: (name: string): string => `${capitalize(name)} must be an array`,
+  isObject: (name: string): string => `${capitalize(name)} must be an object`,
 };

@@ -1,23 +1,22 @@
 import { body, check, param, query } from "express-validator";
 import { errorMessageValidator } from "../../../utils/errorMessageValidator";
-import ProteinModel from "../../../models/Protein";
 
 export const shopping_protein_post_rules = [
   body("name")
     .notEmpty()
-    .withMessage(errorMessageValidator.isNotEmpty("title"))
+    .withMessage(errorMessageValidator.notEmpty("title"))
     .isString()
     .withMessage(errorMessageValidator.isString("title"))
     .isLength({ min: 3 })
     .withMessage(errorMessageValidator.isLengthMin("name", 3)),
   body("type")
     .notEmpty()
-    .withMessage(errorMessageValidator.isNotEmpty("type"))
+    .withMessage(errorMessageValidator.notEmpty("type"))
     .isString()
     .withMessage(errorMessageValidator.isString("type")),
   body("price")
     .notEmpty()
-    .withMessage(errorMessageValidator.isNotEmpty("price"))
+    .withMessage(errorMessageValidator.notEmpty("price"))
     .isInt()
     .withMessage(errorMessageValidator.isInt("price"))
     .isInt({ min: 0 })
@@ -30,7 +29,7 @@ export const shopping_protein_post_rules = [
     .withMessage(errorMessageValidator.isIntMin("stock", 0)),
   body("description")
     .notEmpty()
-    .withMessage(errorMessageValidator.isNotEmpty("description"))
+    .withMessage(errorMessageValidator.notEmpty("description"))
     .isString()
     .withMessage(errorMessageValidator.isString("description")),
 ];
@@ -67,7 +66,7 @@ export const shopping_protein_get_rules = [
 export const shopping_protein_put_rules = [
   param("idProtein")
     .notEmpty()
-    .withMessage(errorMessageValidator.isNotEmpty("id protein"))
+    .withMessage(errorMessageValidator.notEmpty("id protein"))
     .isMongoId()
     .withMessage(errorMessageValidator.isMongoId("id protein")),
   body("name")
@@ -96,10 +95,10 @@ export const shopping_protein_put_rules = [
     .withMessage(errorMessageValidator.isString("description")),
 ];
 
-export const shopping_protein_put_files_rules = [
+export const shopping_protein_files_put_rules = [
   param("idProtein")
     .notEmpty()
-    .withMessage(errorMessageValidator.isNotEmpty("id protein"))
+    .withMessage(errorMessageValidator.notEmpty("id protein"))
     .isMongoId()
     .withMessage(errorMessageValidator.isMongoId("id protein")),
   check("files").custom((value, { req }) => {
@@ -113,19 +112,19 @@ export const shopping_protein_put_files_rules = [
 export const shopping_protein_delete_rules = [
   param("idProtein")
     .notEmpty()
-    .withMessage(errorMessageValidator.isNotEmpty("id protein"))
+    .withMessage(errorMessageValidator.notEmpty("id protein"))
     .isMongoId()
     .withMessage(errorMessageValidator.isMongoId("id protein")),
 ];
-export const shopping_protein_delete_file_rules = [
+export const shopping_protein_file_delete_rules = [
   param("idProtein")
     .notEmpty()
-    .withMessage(errorMessageValidator.isNotEmpty("id protein"))
+    .withMessage(errorMessageValidator.notEmpty("id protein"))
     .isMongoId()
     .withMessage(errorMessageValidator.isMongoId("id protein")),
   param("idThumbnail")
     .notEmpty()
-    .withMessage(errorMessageValidator.isNotEmpty("id thumbnail"))
+    .withMessage(errorMessageValidator.notEmpty("id thumbnail"))
     .isMongoId()
     .withMessage(errorMessageValidator.isMongoId("id thumbnail")),
 ];

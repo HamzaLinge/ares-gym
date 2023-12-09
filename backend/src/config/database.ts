@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-async function connectToDatabase() {
+export async function openDatabaseConnection() {
   try {
     const mongodbURL = (
       process.env.NODE_ENV === "production"
@@ -14,4 +14,11 @@ async function connectToDatabase() {
   }
 }
 
-export default connectToDatabase;
+export async function closeDatabaseConnection() {
+  try {
+    await mongoose.disconnect();
+    console.log("Database connection closed");
+  } catch (error) {
+    throw new Error(`Error disconnecting from Mongoose: ${error}`);
+  }
+}

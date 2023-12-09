@@ -1,26 +1,21 @@
-import {
-  Document,
-  model,
-  Model,
-  models,
-  PopulatedDoc,
-  Schema,
-  Types,
-} from "mongoose";
+import { Document, model, Model, PopulatedDoc, Schema, Types } from "mongoose";
 
 import { IUser } from "./User";
 import { IDiscount } from "./Discount";
-import { ProteinProperty } from "../types/common.types";
+import { ProteinObject } from "../types/common.types";
 
 export interface ICommand extends Document {
   user: PopulatedDoc<Document<Types.ObjectId> & IUser>;
-  protein: ProteinProperty[];
+  proteins: ProteinObject[];
   discount?: {
     data: PopulatedDoc<Document<Types.ObjectId> & IDiscount>;
-    file?: string;
+    files?: string[];
     validated: boolean;
   };
-  datePayment?: Date;
+  status: {
+    datePayment?: Date;
+    confirmed: boolean;
+  };
   note?: string;
 }
 
@@ -29,7 +24,7 @@ type TCommand = Model<ICommand>;
 const commandSchema = new Schema<ICommand, TCommand>(
   {
     user: { type: Schema.Types.ObjectId, ref: "users", required: true },
-    protein: {
+    proteins: {
       type: [
         {
           data: {
@@ -45,18 +40,23 @@ const commandSchema = new Schema<ICommand, TCommand>(
     discount: {
       type: {
         data: { type: Types.ObjectId, required: true },
-        file: { type: String, required: false },
+        file: { type: [String], required: false },
         validated: { type: Boolean, required: true, default: false },
       },
       required: false,
     },
-    datePayment: { type: Date, required: false },
+    status: {
+      type: {
+        datePayment: { type: Date, required: false },
+        confirmed: { type: Boolean, required: true, default: false },
+      },
+      required: true,
+    },
     note: { type: String, required: false },
   },
   { timestamps: true }
 );
 
-const CommandModel =
-  models.commands || model<ICommand, TCommand>("commands", commandSchema);
+const CommandModel = model<ICommand, TCommand>("commands", commandSchema);
 
 export default CommandModel;

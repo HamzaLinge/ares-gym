@@ -1,6 +1,4 @@
 import { ErrorRequestHandler } from "express";
-import { GridFSBucket } from "mongodb";
-import mongoose from "mongoose";
 import multer from "multer";
 
 import { CustomError } from "../types/common.types";
@@ -13,7 +11,7 @@ const centralizedErrors: ErrorRequestHandler = (
   next
 ) => {
   // The "stack" property is a standard that is already included into Error class
-  console.error(err.stack);
+  // console.error(err.stack);
 
   // Delete the uploaded file of files if there is an error
   if (req.fileId) {

@@ -1,4 +1,4 @@
-import { Document, Schema, model, Model, models } from "mongoose";
+import { Document, model, Model, Schema } from "mongoose";
 
 export interface IProtein extends Document {
   name: string;
@@ -23,7 +23,6 @@ const proteinSchema = new Schema<IProtein, TProtein>(
   { timestamps: true }
 );
 
-const ProteinModel =
-  models.proteins || model<IProtein, TProtein>("proteins", proteinSchema);
+const ProteinModel = model<IProtein, TProtein>("proteins", proteinSchema);
 
 export default ProteinModel;
