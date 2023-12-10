@@ -6,10 +6,10 @@ export const errorMessageValidator = {
     `${capitalize(name)} must be a string type`,
   isInt: (name: string): string => `${capitalize(name)} must be a number`,
   isIntMin: (name: string, min: number): string =>
-    `${capitalize(name)} must be a upper then ${min}`,
+    `${capitalize(name)} must be upper then ${min}`,
   isMongoId: (name: string): string =>
     `${capitalize(name)} must be a valid MongoDB ID`,
-  isValidDate: (name: string): string =>
+  isDate: (name: string): string =>
     `${capitalize(name)} must be a valid date (eg: YYYY-MM-DD)`,
   docNotFound: (name: string): string =>
     `There is no ${capitalize(name)} found for this ID`,
@@ -19,6 +19,8 @@ export const errorMessageValidator = {
   isLengthMin: (name: string, minEqual: number): string =>
     `${capitalize(name)} length must exceed ${minEqual - 1}`,
   isFilesUploaded: () => "You need to upload files",
+  isFileUploaded: () => "You need to upload a file",
   isArray: (name: string): string => `${capitalize(name)} must be an array`,
   isObject: (name: string): string => `${capitalize(name)} must be an object`,
+  isNumeric: (name: string): string => `${capitalize(name)} must be a number`,
 };

@@ -1,45 +1,48 @@
-import { TTargetDiscount } from "../../types/common.types";
 import { IDiscount } from "../../models/Discount";
 
 /**
- /discount/post route
+ POST /discount/
  */
 export interface IRequest_discount_post {
   title: string;
   percentage: number;
-  targets: TTargetDiscount[];
   dateBegin?: Date;
   dateEnd: Date;
   description: string;
 }
+
 export interface IResponse_discount_post {
   discount: IDiscount;
 }
 
 /**
- /discount/get route
+ GET /discount/
  */
 export interface IRequest_discount_get {
   idDiscount?: string;
 }
+
 interface IResponse_discount_getOne {
   discount: IDiscount;
 }
+
 interface IResponse_discount_getAll {
   discounts: IDiscount[];
 }
+
 export type TResponse_discount_get =
   | IResponse_discount_getOne
   | IResponse_discount_getAll;
 
 /**
- /discount/put route
+ PUT /discount/:idDiscount
  */
-export interface IRequest_discount_put {
-  idDiscount: string;
+export interface IRequest_discount_put_params {
+  idDiscount?: string;
+}
+export interface IRequest_discount_put_body {
   title?: string;
-  percentage?: number;
-  targets?: TTargetDiscount[];
+  percentage?: number; // Be aware, it can cause inconsistent data between Discount and Command
   dateBegin?: Date;
   dateEnd?: Date;
   description?: string;
@@ -49,11 +52,33 @@ export interface IResponse_discount_put {
 }
 
 /**
- /discount/delete route
+ PUT /discount/:idDiscount
+ */
+export interface IRequest_discount_file_put_params {
+  idDiscount?: string;
+}
+export interface IResponse_discount_file_put {
+  discount: IDiscount;
+}
+
+/**
+ DELETE /discount/:idDiscount
  */
 export interface IRequest_discount_delete {
   idDiscount?: string;
 }
+
 export interface IResponse_discount_delete {
+  message: string;
+}
+
+/**
+ DELETE /discount/file/:idDiscount
+ */
+export interface IRequest_discount_file_delete {
+  idDiscount?: string;
+}
+
+export interface IResponse_discount_file_delete {
   message: string;
 }

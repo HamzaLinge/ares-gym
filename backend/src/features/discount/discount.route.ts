@@ -3,12 +3,16 @@ import { Router } from "express";
 import { asyncHandler } from "../../middlewares/asyncHandler";
 import {
   discount_delete_permission,
+  discount_file_delete_permission,
+  discount_file_put_permission,
   discount_get_permission,
   discount_post_permission,
   discount_put_permission,
 } from "./discount.permission";
 import {
   discount_delete_rules,
+  discount_file_delete_rules,
+  discount_file_put_rules,
   discount_get_rules,
   discount_post_rules,
   discount_put_rules,
@@ -16,6 +20,8 @@ import {
 import { validateRules } from "../../middlewares/validateRules";
 import {
   discount_delete_controller,
+  discount_file_delete_controller,
+  discount_file_put_controller,
   discount_get_controller,
   discount_post_controller,
   discount_put_controller,
@@ -47,13 +53,20 @@ router.get(
   asyncHandler(discount_get_controller)
 );
 router.put(
-  "",
-  singleFileMiddleware,
-  processSingleFileUpload,
+  "/:idDiscount",
   ...discount_put_rules,
   validateRules,
   asyncHandler(discount_put_permission),
   asyncHandler(discount_put_controller)
+);
+router.put(
+  "/file/:idDiscount",
+  singleFileMiddleware,
+  processSingleFileUpload,
+  ...discount_file_put_rules,
+  validateRules,
+  asyncHandler(discount_file_put_permission),
+  asyncHandler(discount_file_put_controller)
 );
 router.delete(
   "/:idDiscount",
@@ -61,6 +74,13 @@ router.delete(
   validateRules,
   asyncHandler(discount_delete_permission),
   asyncHandler(discount_delete_controller)
+);
+router.delete(
+  "/file/:idDiscount",
+  discount_file_delete_rules,
+  validateRules,
+  asyncHandler(discount_file_delete_permission),
+  asyncHandler(discount_file_delete_controller)
 );
 
 export default router;

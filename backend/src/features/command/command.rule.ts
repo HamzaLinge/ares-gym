@@ -1,7 +1,7 @@
 import { body, check, param, query } from "express-validator";
 import { errorMessageValidator } from "../../utils/errorMessageValidator";
 
-export const shopping_command_post_rules = [
+export const command_post_rules = [
   body("proteins")
     .isArray()
     .withMessage(errorMessageValidator.isArray("proteins")),
@@ -27,7 +27,7 @@ export const shopping_command_post_rules = [
     .withMessage(errorMessageValidator.isString("note")),
 ];
 
-export const shopping_command_get_rules = [
+export const command_get_rules = [
   query("idCommand")
     .optional({ values: "falsy" })
     .isMongoId()
@@ -38,7 +38,7 @@ export const shopping_command_get_rules = [
     .withMessage(errorMessageValidator.isBool("confirmed")),
 ];
 
-export const shopping_command_put_rules = [
+export const command_put_rules = [
   param("idCommand")
     .notEmpty()
     .withMessage(errorMessageValidator.notEmpty("id command"))
@@ -76,7 +76,7 @@ export const shopping_command_put_rules = [
   body("status.datePayment")
     .optional({ values: "falsy" })
     .isISO8601()
-    .withMessage(errorMessageValidator.isValidDate("status date payment")),
+    .withMessage(errorMessageValidator.isDate("status date payment")),
   body("status.confirmed")
     .optional({ values: "falsy" })
     .isBoolean()
@@ -88,7 +88,7 @@ export const shopping_command_put_rules = [
     .withMessage(errorMessageValidator.isString("note")),
 ];
 
-export const shopping_command_confirm_put_rules = [
+export const command_confirm_put_rules = [
   param("idCommand")
     .notEmpty()
     .withMessage(errorMessageValidator.notEmpty("id command"))
@@ -96,7 +96,7 @@ export const shopping_command_confirm_put_rules = [
     .withMessage(errorMessageValidator.isMongoId("id command")),
 ];
 
-export const shopping_command_discount_files_put_rules = [
+export const command_discount_files_put_rules = [
   param("idCommand")
     .notEmpty()
     .withMessage(errorMessageValidator.notEmpty("id command"))
@@ -111,7 +111,7 @@ export const shopping_command_discount_files_put_rules = [
   }),
 ];
 
-export const shopping_command_delete_rules = [
+export const command_delete_rules = [
   param("idCommand")
     .notEmpty()
     .withMessage(errorMessageValidator.notEmpty("id command"))
@@ -119,7 +119,7 @@ export const shopping_command_delete_rules = [
     .withMessage(errorMessageValidator.isMongoId("id command")),
 ];
 
-export const shopping_command_discount_file_delete_rules = [
+export const command_discount_file_delete_rules = [
   param("idCommand")
     .notEmpty()
     .withMessage(errorMessageValidator.notEmpty("id command"))

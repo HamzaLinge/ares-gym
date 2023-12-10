@@ -1,21 +1,21 @@
 import { NextFunction, Request, Response } from "express";
 
 import {
-  IRequest_shopping_command_confirm_put,
-  IRequest_shopping_command_delete,
-  IRequest_shopping_command_discount_files_put,
-  IRequest_shopping_command_get,
-  IRequest_shopping_command_post,
-  IRequest_shopping_command_put_body,
-  IRequest_shopping_command_put_params,
-  IResponse_shopping_command_confirm_put,
-  IResponse_shopping_command_delete,
-  IResponse_shopping_command_get,
-  IResponse_shopping_command_post,
-  IResponse_shopping_command_put,
-  IResponse_shopping_command_discount_files_put,
-  IRequest_shopping_command_discount_file_delete,
-  IResponse_shopping_command_discount_file_delete,
+  IRequest_command_confirm_put,
+  IRequest_command_delete,
+  IRequest_command_discount_files_put,
+  IRequest_command_get,
+  IRequest_command_post,
+  IRequest_command_put_body,
+  IRequest_command_put_params,
+  IResponse_command_confirm_put,
+  IResponse_command_delete,
+  IResponse_command_get,
+  IResponse_command_post,
+  IResponse_command_put,
+  IResponse_command_discount_files_put,
+  IRequest_command_discount_file_delete,
+  IResponse_command_discount_file_delete,
 } from "./command.type";
 import { CustomError } from "../../types/common.types";
 import { deleteFile } from "../../utils/deleteFile";
@@ -24,9 +24,9 @@ import { IDiscount } from "../../models/Discount";
 import ProteinModel, { IProtein } from "../../models/Protein";
 import { capitalize } from "../../utils/capitalize";
 
-export async function shopping_command_post_controller(
-  req: Request<any, any, IRequest_shopping_command_post>,
-  res: Response<IResponse_shopping_command_post>,
+export async function command_post_controller(
+  req: Request<any, any, IRequest_command_post>,
+  res: Response<IResponse_command_post>,
   next: NextFunction
 ) {
   let inputCommand: any = {};
@@ -48,7 +48,7 @@ export async function shopping_command_post_controller(
       if (!protein) {
         next(
           new CustomError(
-            `There is no Protein found for id: ${req.body.proteins[i].data}`,
+            `There is no Protein found to command for id: ${req.body.proteins[i].data}`,
             404
           )
         );
@@ -67,9 +67,9 @@ export async function shopping_command_post_controller(
   }
 }
 
-export async function shopping_command_get_controller(
-  req: Request<any, any, any, IRequest_shopping_command_get>,
-  res: Response<IResponse_shopping_command_get>,
+export async function command_get_controller(
+  req: Request<any, any, any, IRequest_command_get>,
+  res: Response<IResponse_command_get>,
   next: NextFunction
 ) {
   let commandFilter: any = {};
@@ -105,13 +105,9 @@ export async function shopping_command_get_controller(
   }
 }
 
-export async function shopping_command_put_controller(
-  req: Request<
-    IRequest_shopping_command_put_params,
-    any,
-    IRequest_shopping_command_put_body
-  >,
-  res: Response<IResponse_shopping_command_put>,
+export async function command_put_controller(
+  req: Request<IRequest_command_put_params, any, IRequest_command_put_body>,
+  res: Response<IResponse_command_put>,
   next: NextFunction
 ) {
   const commandExists: ICommand | null = await CommandModel.findById(
@@ -155,9 +151,9 @@ export async function shopping_command_put_controller(
   }
 }
 
-export async function shopping_command_confirm_put_controller(
-  req: Request<IRequest_shopping_command_confirm_put>,
-  res: Response<IResponse_shopping_command_confirm_put>,
+export async function command_confirm_put_controller(
+  req: Request<IRequest_command_confirm_put>,
+  res: Response<IResponse_command_confirm_put>,
   next: NextFunction
 ) {
   const command: ICommand | null = await CommandModel.findById(
@@ -180,9 +176,9 @@ export async function shopping_command_confirm_put_controller(
   }
 }
 
-export async function shopping_command_discount_files_put_controller(
-  req: Request<IRequest_shopping_command_discount_files_put>,
-  res: Response<IResponse_shopping_command_discount_files_put>,
+export async function command_discount_files_put_controller(
+  req: Request<IRequest_command_discount_files_put>,
+  res: Response<IResponse_command_discount_files_put>,
   next: NextFunction
 ) {
   const commandExists: ICommand | null = await CommandModel.findById(
@@ -204,9 +200,9 @@ export async function shopping_command_discount_files_put_controller(
   }
 }
 
-export async function shopping_command_delete_controller(
-  req: Request<IRequest_shopping_command_delete>,
-  res: Response<IResponse_shopping_command_delete>,
+export async function command_delete_controller(
+  req: Request<IRequest_command_delete>,
+  res: Response<IResponse_command_delete>,
   next: NextFunction
 ) {
   const commandExists: ICommand | null = await CommandModel.findById(
@@ -221,9 +217,9 @@ export async function shopping_command_delete_controller(
   }
 }
 
-export async function shopping_command_discount_file_delete_controller(
-  req: Request<IRequest_shopping_command_discount_file_delete>,
-  res: Response<IResponse_shopping_command_discount_file_delete>,
+export async function command_discount_file_delete_controller(
+  req: Request<IRequest_command_discount_file_delete>,
+  res: Response<IResponse_command_discount_file_delete>,
   next: NextFunction
 ) {
   let params: { idCommand: string; idDiscountFile: string } = {

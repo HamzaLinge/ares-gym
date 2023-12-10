@@ -40,7 +40,7 @@ const commandSchema = new Schema<ICommand, TCommand>(
     discount: {
       type: {
         data: { type: Types.ObjectId, required: true },
-        file: { type: [String], required: false },
+        files: { type: [String], required: false },
         validated: { type: Boolean, required: true, default: false },
       },
       required: false,

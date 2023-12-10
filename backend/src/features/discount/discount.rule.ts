@@ -1,50 +1,47 @@
-import { body, param, query } from "express-validator";
-import { TargetsDiscount } from "../../types/common.types";
+import { body, check, param, query } from "express-validator";
+import { errorMessageValidator } from "../../utils/errorMessageValidator";
 
 export const discount_post_rules = [
   body("title")
+    .notEmpty()
+    .withMessage(errorMessageValidator.notEmpty("title"))
     .isString()
-    .withMessage("Title must be a string")
-    .not()
-    .isEmpty()
-    .withMessage("Title is required")
+    .withMessage(errorMessageValidator.isString("title"))
     .toLowerCase(),
+
   body("percentage")
+    .notEmpty()
+    .withMessage(errorMessageValidator.notEmpty("percentage"))
     .isNumeric()
-    .withMessage("Percentage must be a number")
-    .custom((value) => value >= 0 && value <= 100)
-    .withMessage("Percentage must be between 0 and 100"),
-  body("targets")
-    .isArray()
-    .withMessage("Targets must be an array")
-    .isIn(Object.values(TargetsDiscount))
-    .withMessage(
-      `Targets must be one of these values: ${Object.values(
-        TargetsDiscount
-      ).join(", ")}`
-    ),
+    .withMessage(errorMessageValidator.isNumeric("percentage"))
+    .custom((value: number) => value >= 0 && value <= 100)
+    .withMessage(errorMessageValidator.isRange("percentage", 0, 100)),
+
   body("dateBegin")
     .optional({ values: "falsy" })
     .isISO8601()
-    .withMessage("DateBegin must be a valid date format (ISO 8601)"),
+    .withMessage(errorMessageValidator.isDate("date begin")),
+
   body("dateEnd")
+    .notEmpty()
+    .withMessage(errorMessageValidator.notEmpty("date end"))
     .isISO8601()
-    .withMessage("DateEnd must be a valid date format (ISO 8601)")
+    .withMessage(errorMessageValidator.isDate("date end"))
     .custom((value, { req }) => {
       if (
         req.body.dateBegin &&
         new Date(value) <= new Date(req.body.dateBegin)
       ) {
-        throw new Error("DateEnd must be after DateBegin");
+        throw new Error("Date End must be after Date Begin");
       }
       return true;
     }),
+
   body("description")
+    .notEmpty()
+    .withMessage(errorMessageValidator.notEmpty("description"))
     .isString()
-    .withMessage("Description must be a string")
-    .not()
-    .isEmpty()
-    .withMessage("Description is required")
+    .withMessage(errorMessageValidator.isString("description"))
     .toLowerCase(),
 ];
 
@@ -52,66 +49,77 @@ export const discount_get_rules = [
   query("idDiscount")
     .optional({ values: "falsy" })
     .isMongoId()
-    .withMessage("idDiscount must be a valid MongoID"),
+    .withMessage(errorMessageValidator.isMongoId("id discount")),
 ];
 
 export const discount_put_rules = [
-  body("idDiscount")
+  param("idDiscount")
     .notEmpty()
-    .withMessage("idDiscount is required")
+    .withMessage(errorMessageValidator.notEmpty("id discount"))
     .isMongoId()
-    .withMessage("idDiscount must be a valid MongoID"),
+    .withMessage(errorMessageValidator.isMongoId("id discount")),
+
   body("title")
     .optional({ values: "falsy" })
     .isString()
-    .withMessage("Title must be a string")
-    .notEmpty()
-    .withMessage("Title is required")
+    .withMessage(errorMessageValidator.isString("title"))
     .toLowerCase(),
   body("percentage")
     .optional({ values: "falsy" })
     .isNumeric()
-    .withMessage("Percentage must be a number")
+    .withMessage(errorMessageValidator.isNumeric("percentage"))
     .custom((value) => value >= 0 && value <= 100)
-    .withMessage("Percentage must be between 0 and 100"),
-  body("targets")
-    .optional({ values: "falsy" })
-    .isArray()
-    .withMessage("Targets must be an array")
-    .isIn(Object.values(TargetsDiscount))
-    .withMessage(
-      `Targets must be one of these values: ${Object.values(
-        TargetsDiscount
-      ).join(", ")}`
-    ),
+    .withMessage(errorMessageValidator.isRange("percentage", 0, 100)),
   body("dateBegin")
     .optional({ values: "falsy" })
     .isISO8601()
-    .withMessage("DateBegin must be a valid date format (ISO 8601)"),
+    .withMessage(errorMessageValidator.isDate("date begin")),
   body("dateEnd")
     .optional({ values: "falsy" })
     .isISO8601()
-    .withMessage("DateEnd must be a valid date format (ISO 8601)")
+    .withMessage(errorMessageValidator.isDate("date end"))
     .custom((value, { req }) => {
       if (
         req.body.dateBegin &&
         new Date(value) <= new Date(req.body.dateBegin)
       ) {
-        throw new Error("DateEnd must be after DateBegin");
+        throw new Error("Date End must be after Date Begin");
       }
       return true;
     }),
   body("description")
     .optional({ values: "falsy" })
     .isString()
-    .withMessage("Description must be a string")
-    .notEmpty()
-    .withMessage("Description is required")
+    .withMessage(errorMessageValidator.isString("description"))
     .toLowerCase(),
+];
+
+export const discount_file_put_rules = [
+  param("idDiscount")
+    .notEmpty()
+    .withMessage(errorMessageValidator.notEmpty("id discount"))
+    .isMongoId()
+    .withMessage(errorMessageValidator.isMongoId("id discount")),
+  check("file").custom((value, { req }) => {
+    if (!req.file) {
+      throw new Error(errorMessageValidator.isFileUploaded());
+    }
+    return true;
+  }),
 ];
 
 export const discount_delete_rules = [
   param("idDiscount")
+    .notEmpty()
+    .withMessage(errorMessageValidator.notEmpty("id discount"))
     .isMongoId()
-    .withMessage("idDiscount must be a valid MongoID"),
+    .withMessage(errorMessageValidator.isMongoId("id discount")),
+];
+
+export const discount_file_delete_rules = [
+  param("idDiscount")
+    .notEmpty()
+    .withMessage(errorMessageValidator.notEmpty("id discount"))
+    .isMongoId()
+    .withMessage(errorMessageValidator.isMongoId("id discount")),
 ];

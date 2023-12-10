@@ -3,31 +3,31 @@ import { Router } from "express";
 import { asyncHandler } from "../../middlewares/asyncHandler";
 import { validateRules } from "../../middlewares/validateRules";
 import {
-  shopping_command_confirm_put_rules,
-  shopping_command_delete_rules,
-  shopping_command_discount_file_delete_rules,
-  shopping_command_discount_files_put_rules,
-  shopping_command_get_rules,
-  shopping_command_post_rules,
-  shopping_command_put_rules,
+  command_confirm_put_rules,
+  command_delete_rules,
+  command_discount_file_delete_rules,
+  command_discount_files_put_rules,
+  command_get_rules,
+  command_post_rules,
+  command_put_rules,
 } from "./command.rule";
 import {
-  shopping_command_confirm_put_permission,
-  shopping_command_delete_permission,
-  shopping_command_discount_file_delete_permission,
-  shopping_command_discount_files_put_permission,
-  shopping_command_get_permission,
-  shopping_command_post_permission,
-  shopping_command_put_permission,
+  command_confirm_put_permission,
+  command_delete_permission,
+  command_discount_file_delete_permission,
+  command_discount_files_put_permission,
+  command_get_permission,
+  command_post_permission,
+  command_put_permission,
 } from "./command.permission";
 import {
-  shopping_command_confirm_put_controller,
-  shopping_command_delete_controller,
-  shopping_command_discount_file_delete_controller,
-  shopping_command_discount_files_put_controller,
-  shopping_command_get_controller,
-  shopping_command_post_controller,
-  shopping_command_put_controller,
+  command_confirm_put_controller,
+  command_delete_controller,
+  command_discount_file_delete_controller,
+  command_discount_files_put_controller,
+  command_get_controller,
+  command_post_controller,
+  command_put_controller,
 } from "./command.controller";
 import {
   multipleFileMiddleware,
@@ -43,54 +43,54 @@ router.post(
   "",
   multipleFileMiddleware,
   processMultipleFileUpload,
-  ...shopping_command_post_rules,
+  ...command_post_rules,
   validateRules,
-  asyncHandler(shopping_command_post_permission),
-  asyncHandler(shopping_command_post_controller)
+  asyncHandler(command_post_permission),
+  asyncHandler(command_post_controller)
 );
 router.get(
   "",
-  shopping_command_get_rules,
+  command_get_rules,
   validateRules,
-  asyncHandler(shopping_command_get_permission),
-  asyncHandler(shopping_command_get_controller)
+  asyncHandler(command_get_permission),
+  asyncHandler(command_get_controller)
 );
 router.put(
   "/:idCommand",
-  shopping_command_put_rules,
+  command_put_rules,
   validateRules,
-  asyncHandler(shopping_command_put_permission),
-  asyncHandler(shopping_command_put_controller)
+  asyncHandler(command_put_permission),
+  asyncHandler(command_put_controller)
 );
 router.put(
   "/confirm/:idCommand",
-  shopping_command_confirm_put_rules,
+  command_confirm_put_rules,
   validateRules,
-  asyncHandler(shopping_command_confirm_put_permission),
-  asyncHandler(shopping_command_confirm_put_controller)
+  asyncHandler(command_confirm_put_permission),
+  asyncHandler(command_confirm_put_controller)
 );
 router.put(
   "/discount/files/:idCommand",
   multipleFileMiddleware,
   processMultipleFileUpload,
-  ...shopping_command_discount_files_put_rules,
+  ...command_discount_files_put_rules,
   validateRules,
-  asyncHandler(shopping_command_discount_files_put_permission),
-  asyncHandler(shopping_command_discount_files_put_controller)
+  asyncHandler(command_discount_files_put_permission),
+  asyncHandler(command_discount_files_put_controller)
 );
 router.delete(
   "/:idCommand",
-  shopping_command_delete_rules,
+  command_delete_rules,
   validateRules,
-  asyncHandler(shopping_command_delete_permission),
-  asyncHandler(shopping_command_delete_controller)
+  asyncHandler(command_delete_permission),
+  asyncHandler(command_delete_controller)
 );
 router.delete(
   "/discount/file/:idCommand/:idDiscountFile",
-  shopping_command_discount_file_delete_rules,
+  command_discount_file_delete_rules,
   validateRules,
-  asyncHandler(shopping_command_discount_file_delete_permission),
-  asyncHandler(shopping_command_discount_file_delete_controller)
+  asyncHandler(command_discount_file_delete_permission),
+  asyncHandler(command_discount_file_delete_controller)
 );
 
 export default router;

@@ -2,15 +2,15 @@ import { NextFunction, Request, Response } from "express";
 
 import { CustomError, Roles } from "../../types/common.types";
 import {
-  IRequest_shopping_command_delete,
-  IRequest_shopping_command_discount_file_delete,
-  IRequest_shopping_command_discount_files_put,
-  IRequest_shopping_command_put_body,
-  IRequest_shopping_command_put_params,
+  IRequest_command_delete,
+  IRequest_command_discount_file_delete,
+  IRequest_command_discount_files_put,
+  IRequest_command_put_body,
+  IRequest_command_put_params,
 } from "./command.type";
 import CommandModel, { ICommand } from "../../models/Commands";
 
-export async function shopping_command_post_permission(
+export async function command_post_permission(
   req: Request,
   res: Response,
   next: NextFunction
@@ -28,7 +28,7 @@ export async function shopping_command_post_permission(
   }
 }
 
-export async function shopping_command_get_permission(
+export async function command_get_permission(
   req: Request,
   res: Response,
   next: NextFunction
@@ -46,12 +46,8 @@ export async function shopping_command_get_permission(
   }
 }
 
-export async function shopping_command_put_permission(
-  req: Request<
-    IRequest_shopping_command_put_params,
-    any,
-    IRequest_shopping_command_put_body
-  >,
+export async function command_put_permission(
+  req: Request<IRequest_command_put_params, any, IRequest_command_put_body>,
   res: Response,
   next: NextFunction
 ) {
@@ -84,7 +80,7 @@ export async function shopping_command_put_permission(
   }
 }
 
-export async function shopping_command_confirm_put_permission(
+export async function command_confirm_put_permission(
   req: Request,
   res: Response,
   next: NextFunction
@@ -106,8 +102,8 @@ export async function shopping_command_confirm_put_permission(
   }
 }
 
-export async function shopping_command_discount_files_put_permission(
-  req: Request<IRequest_shopping_command_discount_files_put>,
+export async function command_discount_files_put_permission(
+  req: Request<IRequest_command_discount_files_put>,
   res: Response,
   next: NextFunction
 ) {
@@ -140,8 +136,8 @@ export async function shopping_command_discount_files_put_permission(
   }
 }
 
-export async function shopping_command_delete_permission(
-  req: Request<IRequest_shopping_command_delete>,
+export async function command_delete_permission(
+  req: Request<IRequest_command_delete>,
   res: Response,
   next: NextFunction
 ) {
@@ -174,8 +170,8 @@ export async function shopping_command_delete_permission(
   }
 }
 
-export async function shopping_command_discount_file_delete_permission(
-  req: Request<IRequest_shopping_command_discount_file_delete>,
+export async function command_discount_file_delete_permission(
+  req: Request<IRequest_command_discount_file_delete>,
   res: Response,
   next: NextFunction
 ) {

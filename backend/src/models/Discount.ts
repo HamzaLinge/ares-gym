@@ -1,11 +1,8 @@
-import { Document, Schema, Model, model, Types } from "mongoose";
-
-import { TargetsDiscount, TTargetDiscount } from "../types/common.types";
+import { Document, Model, model, Schema } from "mongoose";
 
 export interface IDiscount extends Document {
   title: string;
   percentage: number;
-  targets: TTargetDiscount[];
   dateBegin: Date;
   dateEnd: Date;
   description: string;
@@ -17,11 +14,15 @@ type TDiscountModel = Model<IDiscount>;
 const discountSchema = new Schema<IDiscount, TDiscountModel>(
   {
     title: { type: String, required: true, unique: true },
-    percentage: { type: Number, required: true },
-    targets: {
-      type: [String],
-      enum: Object.values(TargetsDiscount),
+    percentage: {
+      type: Number,
       required: true,
+      validate: {
+        validator: (value: number) => {
+          return value >= 0 && value <= 100;
+        },
+        message: "Percentage must be between 0 and 100",
+      },
     },
     dateBegin: { type: Date, required: true, default: Date.now },
     dateEnd: {

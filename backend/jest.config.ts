@@ -8,7 +8,7 @@ const config: Config.InitialOptions = {
   transform: {
     "^.+\\.(ts|tsx)$": "ts-jest",
   },
-  testMatch: ["**/?(*.)+(spec|test).+(ts)"],
+  testMatch: ["<rootDir>/src/**/*.test.(ts|tsx)"],
   setupFilesAfterEnv: ["./jest.setup.ts"],
 };
 

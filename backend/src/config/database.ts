@@ -2,13 +2,13 @@ import mongoose from "mongoose";
 
 export async function openDatabaseConnection() {
   try {
-    const mongodbURL = (
-      process.env.NODE_ENV === "production"
-        ? process.env.MONGODB_URL_ATLAS
-        : process.env.MONGODB_URL_LOCAL
-    ) as string;
+    const mongodbURL = process.env.MONGODB_URI as string;
     await mongoose.connect(mongodbURL);
-    console.log("Successful connecting to the database");
+    console.log(
+      `Successfully connected to Database${
+        process.env.NODE_ENV === "test" ? " Test" : ""
+      }`
+    );
   } catch (error) {
     throw new Error(`Error connecting to Mongoose: ${error}`);
   }
@@ -16,8 +16,15 @@ export async function openDatabaseConnection() {
 
 export async function closeDatabaseConnection() {
   try {
+    if (process.env.NODE_ENV === "test") {
+      // await mongoose.connection.dropDatabase();
+    }
     await mongoose.disconnect();
-    console.log("Database connection closed");
+    console.log(
+      `Successfully closed Database${
+        process.env.NODE_ENV === "test" ? " Test" : ""
+      }`
+    );
   } catch (error) {
     throw new Error(`Error disconnecting from Mongoose: ${error}`);
   }
