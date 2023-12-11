@@ -1,5 +1,5 @@
 import { body } from "express-validator";
-import { GendersUser, Roles } from "../../types/common.types";
+import { GendersUser, Roles } from "../../types/common.type";
 
 export const rules_check_email = [
   body("email")

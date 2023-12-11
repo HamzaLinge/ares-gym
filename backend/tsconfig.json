@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es6",   // Updated to a more recent ECMAScript version for broader features
     "module": "commonjs", // CommonJS modules, standard in Node.js
-    "lib": ["es6", "dom"], // Updated lib version, include 'dom' for compatibility
+    "lib": ["es2017", "dom"], // Updated lib version, include 'dom' for compatibility
     "moduleResolution": "node", // Node.js style module resolution
     "outDir": "./dist", // Adjust as per your output directory
     "rootDir": "./src", // Set the root directory, adjust as per your source directory

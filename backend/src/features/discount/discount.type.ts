@@ -20,6 +20,7 @@ export interface IResponse_discount_post {
  */
 export interface IRequest_discount_get {
   idDiscount?: string;
+  title?: string;
 }
 
 interface IResponse_discount_getOne {

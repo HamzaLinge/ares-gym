@@ -14,7 +14,7 @@ import {
   IResponse_shopping_protein_delete_file,
 } from "./protein.type";
 import ProteinModel, { IProtein } from "../../models/Protein";
-import { CustomError } from "../../types/common.types";
+import { CustomError } from "../../types/common.type";
 import { deleteFile } from "../../utils/deleteFile";
 
 export async function shopping_protein_post_controller(

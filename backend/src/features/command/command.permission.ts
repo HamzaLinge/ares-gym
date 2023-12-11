@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-import { CustomError, Roles } from "../../types/common.types";
+import { CustomError, Roles } from "../../types/common.type";
 import {
   IRequest_command_delete,
   IRequest_command_discount_file_delete,

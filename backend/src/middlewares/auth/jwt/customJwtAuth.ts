@@ -8,7 +8,7 @@ import { Request, Response, NextFunction } from "express";
 import passport from "passport";
 
 import { IUser } from "../../../models/User";
-import { CustomError } from "../../../types/common.types";
+import { CustomError } from "../../../types/common.type";
 
 export function customJwtAuth(req: Request, res: Response, next: NextFunction) {
   passport.authenticate(

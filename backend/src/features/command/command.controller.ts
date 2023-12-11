@@ -17,7 +17,7 @@ import {
   IRequest_command_discount_file_delete,
   IResponse_command_discount_file_delete,
 } from "./command.type";
-import { CustomError } from "../../types/common.types";
+import { CustomError } from "../../types/common.type";
 import { deleteFile } from "../../utils/deleteFile";
 import CommandModel, { ICommand } from "../../models/Commands";
 import { IDiscount } from "../../models/Discount";

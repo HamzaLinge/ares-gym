@@ -1,7 +1,7 @@
 import { ErrorRequestHandler } from "express";
 import multer from "multer";
 
-import { CustomError } from "../types/common.types";
+import { CustomError } from "../types/common.type";
 import { deleteFile } from "../utils/deleteFile";
 
 const centralizedErrors: ErrorRequestHandler = (
@@ -38,6 +38,7 @@ const centralizedErrors: ErrorRequestHandler = (
     responsePayload.errors = err.errors;
   }
 
+  // console.error(responsePayload);
   res.status(statusCode).json(responsePayload);
 };
 

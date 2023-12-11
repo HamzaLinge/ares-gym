@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { GridFSBucket } from "mongodb";
 import mongoose from "mongoose";
 
-import { CustomError } from "../../types/common.types";
+import { CustomError } from "../../types/common.type";
 import { IRequest_file_get } from "./file.type";
 
 export const file_get_controller = (

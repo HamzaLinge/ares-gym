@@ -7,7 +7,7 @@ import {
   CredentialsProviders,
   Roles,
   TUserData,
-} from "../../types/common.types";
+} from "../../types/common.type";
 import {
   ICheckEmailRequest,
   ICheckEmailResponse,

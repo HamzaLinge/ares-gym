@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-import { CustomError, Roles } from "../../types/common.types";
+import { CustomError, Roles } from "../../types/common.type";
 
 export async function shopping_protein_post_permission(
   req: Request,

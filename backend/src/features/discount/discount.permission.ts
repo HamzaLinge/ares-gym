@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-import { CustomError, Roles } from "../../types/common.types";
+import { CustomError, Roles } from "../../types/common.type";
 
 export async function discount_post_permission(
   req: Request,

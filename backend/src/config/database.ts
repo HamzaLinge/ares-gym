@@ -16,9 +16,6 @@ export async function openDatabaseConnection() {
 
 export async function closeDatabaseConnection() {
   try {
-    if (process.env.NODE_ENV === "test") {
-      // await mongoose.connection.dropDatabase();
-    }
     await mongoose.disconnect();
     console.log(
       `Successfully closed Database${

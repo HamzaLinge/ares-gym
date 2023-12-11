@@ -6,16 +6,15 @@ export const discount_post_rules = [
     .notEmpty()
     .withMessage(errorMessageValidator.notEmpty("title"))
     .isString()
-    .withMessage(errorMessageValidator.isString("title"))
-    .toLowerCase(),
+    .withMessage(errorMessageValidator.isString("title")),
 
   body("percentage")
     .notEmpty()
     .withMessage(errorMessageValidator.notEmpty("percentage"))
     .isNumeric()
     .withMessage(errorMessageValidator.isNumeric("percentage"))
-    .custom((value: number) => value >= 0 && value <= 100)
-    .withMessage(errorMessageValidator.isRange("percentage", 0, 100)),
+    .custom((value: number) => value >= 1 && value <= 100)
+    .withMessage(errorMessageValidator.isRange("percentage", 1, 100)),
 
   body("dateBegin")
     .optional({ values: "falsy" })
@@ -28,11 +27,13 @@ export const discount_post_rules = [
     .isISO8601()
     .withMessage(errorMessageValidator.isDate("date end"))
     .custom((value, { req }) => {
-      if (
-        req.body.dateBegin &&
-        new Date(value) <= new Date(req.body.dateBegin)
-      ) {
-        throw new Error("Date End must be after Date Begin");
+      const dateBegin = req.body.dateBegin
+        ? new Date(req.body.dateBegin)
+        : new Date();
+      dateBegin.setDate(dateBegin.getDate() + 1);
+      const dateEnd = new Date(value);
+      if (dateEnd < dateBegin) {
+        throw new Error("Date End must exceed Date Begin by at least one day");
       }
       return true;
     }),
@@ -41,15 +42,36 @@ export const discount_post_rules = [
     .notEmpty()
     .withMessage(errorMessageValidator.notEmpty("description"))
     .isString()
-    .withMessage(errorMessageValidator.isString("description"))
-    .toLowerCase(),
+    .withMessage(errorMessageValidator.isString("description")),
 ];
 
 export const discount_get_rules = [
   query("idDiscount")
     .optional({ values: "falsy" })
     .isMongoId()
-    .withMessage(errorMessageValidator.isMongoId("id discount")),
+    .withMessage(errorMessageValidator.isMongoId("id discount"))
+    .custom((value, { req }) => {
+      if (value && req.query?.idDiscount) {
+        throw new Error(
+          "Only one of Id Discount or Title should be provided, not both"
+        );
+      }
+      return true;
+    }),
+  query("title")
+    .optional({ values: "falsy" })
+    .isString()
+    .withMessage(errorMessageValidator.isString("title"))
+    .isLength({ min: 3 })
+    .withMessage(errorMessageValidator.isLengthMin("title", 3))
+    .custom((value, { req }) => {
+      if (value && req.query?.idDiscount) {
+        throw new Error(
+          "Only one of Id Discount or Title should be provided, not both"
+        );
+      }
+      return true;
+    }),
 ];
 
 export const discount_put_rules = [
@@ -68,8 +90,8 @@ export const discount_put_rules = [
     .optional({ values: "falsy" })
     .isNumeric()
     .withMessage(errorMessageValidator.isNumeric("percentage"))
-    .custom((value) => value >= 0 && value <= 100)
-    .withMessage(errorMessageValidator.isRange("percentage", 0, 100)),
+    .custom((value: number) => value >= 1 && value <= 100)
+    .withMessage(errorMessageValidator.isRange("percentage", 1, 100)),
   body("dateBegin")
     .optional({ values: "falsy" })
     .isISO8601()
@@ -79,14 +101,18 @@ export const discount_put_rules = [
     .isISO8601()
     .withMessage(errorMessageValidator.isDate("date end"))
     .custom((value, { req }) => {
-      if (
-        req.body.dateBegin &&
-        new Date(value) <= new Date(req.body.dateBegin)
-      ) {
-        throw new Error("Date End must be after Date Begin");
+      if (!req.body.dateBegin) {
+        return true;
+      }
+      const dateBegin = new Date(req.body.dateBegin);
+      dateBegin.setDate(dateBegin.getDate() + 1);
+      const dateEnd = new Date(value);
+      if (dateEnd < dateBegin) {
+        throw new Error("Date End must exceed Date Begin by at least one day");
       }
       return true;
     }),
+
   body("description")
     .optional({ values: "falsy" })
     .isString()

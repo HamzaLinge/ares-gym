@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 import DiscountModel, { IDiscount } from "../../models/Discount";
-import { CustomError } from "../../types/common.types";
+import { CustomError } from "../../types/common.type";
 import {
   IRequest_discount_delete,
   IRequest_discount_file_put_params,
@@ -25,7 +25,7 @@ export async function discount_post_controller(
   next: NextFunction
 ) {
   const exists: IDiscount | null = await DiscountModel.findOne({
-    title: req.body.title,
+    title: { $regex: "^" + req.body.title + "$", $options: "i" },
     dateEnd: { $gte: new Date() },
   });
   if (exists) {
@@ -61,7 +61,10 @@ export async function discount_get_controller(
       res.status(200).send({ discount });
     }
   } else {
-    const discounts: IDiscount[] = await DiscountModel.find().sort({
+    const titleFilter = req.query.title ? req.query.title : "";
+    const discounts: IDiscount[] = await DiscountModel.find({
+      title: { $regex: "^" + titleFilter, $options: "i" },
+    }).sort({
       updatedAt: -1,
     });
     if (discounts.length === 0) {
@@ -81,44 +84,51 @@ export async function discount_put_controller(
     req.params.idDiscount
   );
   if (!discountExists) {
-    next(new CustomError("There is no discount found to edit", 404));
-  } else {
-    let flagUpdate: boolean = true;
-    if (
-      req.body.percentage &&
-      req.body.percentage !== discountExists.percentage
-    ) {
-      /*
-      Check if there is at least one confirmed command that uses this discount,
-      then, discount's percentage cannot be modified
-     */
-      const commands: ICommand[] = await CommandModel.find({
-        discount: { data: discountExists._id },
-        status: { confirmed: true },
-      });
-      if (commands.length >= 1) {
-        next(
-          new CustomError(
-            "You cannot change discount's percentage, because there is at least one confirmed command that uses this discount",
-            422
-          )
-        );
-        flagUpdate = false;
-      }
-    }
-    if (flagUpdate) {
-      const discount: IDiscount | null = await DiscountModel.findOneAndUpdate(
-        { _id: req.params.idDiscount },
-        req.body,
-        { new: true }
+    return next(new CustomError("There is no discount found to edit", 404));
+  }
+  if (req.body.dateEnd) {
+    const dateBegin = new Date(discountExists.dateBegin);
+    dateBegin.setDate(dateBegin.getDate() + 1);
+    const dateEnd = new Date(req.body.dateEnd);
+    if (dateEnd < dateBegin) {
+      next(
+        new CustomError(
+          "Date End must exceed Date Begin by at least one day",
+          422
+        )
       );
-      if (!discount) {
-        next(new CustomError("There is no updated discount found", 404));
-      } else {
-        res.status(200).send({ discount });
-      }
     }
   }
+  if (
+    req.body.percentage &&
+    req.body.percentage !== discountExists.percentage
+  ) {
+    /*
+    Check if there is at least one confirmed command that uses this discount,
+    if it's so, discount's percentage cannot be modified
+   */
+    const commands: ICommand[] = await CommandModel.find({
+      discount: { data: discountExists._id },
+      status: { confirmed: true },
+    });
+    if (commands.length >= 1) {
+      return next(
+        new CustomError(
+          "You cannot change discount's percentage, because there is at least one confirmed command that uses this discount",
+          422
+        )
+      );
+    }
+  }
+  const discount: IDiscount | null = await DiscountModel.findOneAndUpdate(
+    { _id: req.params.idDiscount },
+    req.body,
+    { new: true }
+  );
+  if (!discount) {
+    return next(new CustomError("There is no updated discount found", 404));
+  }
+  res.status(200).send({ discount });
 }
 
 export async function discount_file_put_controller(

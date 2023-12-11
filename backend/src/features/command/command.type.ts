@@ -1,4 +1,4 @@
-import { ProteinObject } from "../../types/common.types";
+import { ProteinObject } from "../../types/common.type";
 import { ICommand } from "../../models/Commands";
 
 /**

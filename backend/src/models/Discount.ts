@@ -1,4 +1,5 @@
-import { Document, Model, model, Schema } from "mongoose";
+import { CallbackError, Document, Model, model, Schema } from "mongoose";
+import { genSalt, hash } from "bcryptjs";
 
 export interface IDiscount extends Document {
   title: string;
@@ -13,7 +14,7 @@ type TDiscountModel = Model<IDiscount>;
 
 const discountSchema = new Schema<IDiscount, TDiscountModel>(
   {
-    title: { type: String, required: true, unique: true },
+    title: { type: String, required: true },
     percentage: {
       type: Number,
       required: true,
@@ -44,6 +45,15 @@ const discountSchema = new Schema<IDiscount, TDiscountModel>(
     thumbnail: { type: String, required: false },
   },
   { timestamps: true }
+);
+
+discountSchema.pre<IDiscount>(
+  "save",
+  async function (next: (error?: CallbackError) => void) {
+    this.title = this.title.toLowerCase();
+    this.description = this.description.toLowerCase();
+    next();
+  }
 );
 
 const DiscountModel = model<IDiscount, TDiscountModel>(

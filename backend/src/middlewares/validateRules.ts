@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 
-import { CustomError } from "../types/common.types";
+import { CustomError } from "../types/common.type";
 
 export const validateRules = (
   req: Request,

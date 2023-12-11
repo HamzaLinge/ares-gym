@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-import { TTokens } from "../types/common.types";
+import { TTokens } from "../types/common.type";
 import { getEnvironmentVariable } from "./getEnvironmentVariable";
 
 // Consider moving these to a configuration file or environment variables

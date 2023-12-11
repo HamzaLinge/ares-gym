@@ -7,7 +7,7 @@ import {
   Roles,
   TGenderUser,
   TRole,
-} from "../types/common.types";
+} from "../types/common.type";
 
 type TCredentialsProviders = {
   provider:

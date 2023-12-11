@@ -2,7 +2,7 @@ import { Document, model, Model, PopulatedDoc, Schema, Types } from "mongoose";
 
 import { IUser } from "./User";
 import { IDiscount } from "./Discount";
-import { ProteinObject } from "../types/common.types";
+import { ProteinObject } from "../types/common.type";
 
 export interface ICommand extends Document {
   user: PopulatedDoc<Document<Types.ObjectId> & IUser>;

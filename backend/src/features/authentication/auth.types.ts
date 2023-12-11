@@ -4,7 +4,7 @@ import {
   TRole,
   TTokens,
   TUserData,
-} from "../../types/common.types";
+} from "../../types/common.type";
 
 // Check Email Route
 export interface ICheckEmailRequest {

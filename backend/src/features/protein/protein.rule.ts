@@ -56,7 +56,7 @@ export const shopping_protein_get_rules = [
     .custom((value, { req }) => {
       if (value && req.query?.idProtein) {
         throw new Error(
-          "Only one of idProtein or name should be provided, not both"
+          "Only one of Id Protein or Name should be provided, not both"
         );
       }
       return true;
