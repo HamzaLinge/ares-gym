@@ -4,7 +4,7 @@ import multer from "multer";
 import { CustomError } from "../types/common.type";
 import { deleteFile } from "../utils/deleteFile";
 
-const centralizedErrors: ErrorRequestHandler = (
+const centralizedErrors: ErrorRequestHandler = async (
   err: CustomError | Error,
   req,
   res,
@@ -15,10 +15,12 @@ const centralizedErrors: ErrorRequestHandler = (
 
   // Delete the uploaded file of files if there is an error
   if (req.fileId) {
-    deleteFile(req.fileId);
+    await deleteFile(req.fileId);
   }
   if (req.fileIdArr) {
-    req.fileIdArr.forEach((fileId) => deleteFile(fileId));
+    for (let i = 0; i < req.fileIdArr.length; i++) {
+      await deleteFile(req.fileIdArr[i]);
+    }
   }
 
   // Return the size limit error for files

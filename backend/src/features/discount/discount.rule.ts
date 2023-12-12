@@ -1,5 +1,6 @@
 import { body, check, param, query } from "express-validator";
 import { errorMessageValidator } from "../../utils/errorMessageValidator";
+import { dateEndExceedsDateBegin } from "../../utils/date.util";
 
 export const discount_post_rules = [
   body("title")
@@ -17,7 +18,8 @@ export const discount_post_rules = [
     .withMessage(errorMessageValidator.isRange("percentage", 1, 100)),
 
   body("dateBegin")
-    .optional({ values: "falsy" })
+    .notEmpty()
+    .withMessage(errorMessageValidator.notEmpty("date begin"))
     .isISO8601()
     .withMessage(errorMessageValidator.isDate("date begin")),
 
@@ -27,12 +29,12 @@ export const discount_post_rules = [
     .isISO8601()
     .withMessage(errorMessageValidator.isDate("date end"))
     .custom((value, { req }) => {
-      const dateBegin = req.body.dateBegin
-        ? new Date(req.body.dateBegin)
-        : new Date();
-      dateBegin.setDate(dateBegin.getDate() + 1);
-      const dateEnd = new Date(value);
-      if (dateEnd < dateBegin) {
+      if (!req.body.dateBegin) {
+        throw new Error(
+          "Date Begin is not provided to compare it with Date End"
+        );
+      }
+      if (!dateEndExceedsDateBegin(req.body.dateBegin, value)) {
         throw new Error("Date End must exceed Date Begin by at least one day");
       }
       return true;
@@ -104,10 +106,7 @@ export const discount_put_rules = [
       if (!req.body.dateBegin) {
         return true;
       }
-      const dateBegin = new Date(req.body.dateBegin);
-      dateBegin.setDate(dateBegin.getDate() + 1);
-      const dateEnd = new Date(value);
-      if (dateEnd < dateBegin) {
+      if (!dateEndExceedsDateBegin(req.body.dateBegin, value)) {
         throw new Error("Date End must exceed Date Begin by at least one day");
       }
       return true;

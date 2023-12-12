@@ -6,7 +6,7 @@ import { IDiscount } from "../../models/Discount";
 export interface IRequest_discount_post {
   title: string;
   percentage: number;
-  dateBegin?: Date;
+  dateBegin: Date;
   dateEnd: Date;
   description: string;
 }
@@ -53,7 +53,7 @@ export interface IResponse_discount_put {
 }
 
 /**
- PUT /discount/:idDiscount
+ PUT /discount/file/:idDiscount
  */
 export interface IRequest_discount_file_put_params {
   idDiscount?: string;

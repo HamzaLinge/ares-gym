@@ -18,6 +18,7 @@ import {
 import CommandModel, { ICommand } from "../../models/Commands";
 import { deleteFile } from "../../utils/deleteFile";
 import { capitalize } from "../../utils/capitalize";
+import { dateEndExceedsDateBegin } from "../../utils/date.util";
 
 export async function discount_post_controller(
   req: Request<any, any, IRequest_discount_post>,
@@ -86,27 +87,41 @@ export async function discount_put_controller(
   if (!discountExists) {
     return next(new CustomError("There is no discount found to edit", 404));
   }
-  if (req.body.dateEnd) {
-    const dateBegin = new Date(discountExists.dateBegin);
-    dateBegin.setDate(dateBegin.getDate() + 1);
-    const dateEnd = new Date(req.body.dateEnd);
-    if (dateEnd < dateBegin) {
-      next(
+  if (req.body.title) {
+    const discountWithSameTitle: IDiscount | null = await DiscountModel.findOne(
+      {
+        title: { $regex: "^" + req.body.title, $options: "i" },
+        dateEnd: { $gte: new Date() },
+      }
+    );
+    if (discountWithSameTitle) {
+      return next(
         new CustomError(
-          "Date End must exceed Date Begin by at least one day",
-          422
+          "There is already a discount with this title that didn't expire yet",
+          409
         )
       );
     }
   }
   if (
+    !req.body.dateBegin &&
+    req.body.dateEnd &&
+    !dateEndExceedsDateBegin(
+      discountExists.dateBegin.toISOString(),
+      req.body.dateEnd.toISOString()
+    )
+  ) {
+    return next(
+      new CustomError(
+        "Date End must exceed Date Begin by at least one day",
+        422
+      )
+    );
+  }
+  if (
     req.body.percentage &&
     req.body.percentage !== discountExists.percentage
   ) {
-    /*
-    Check if there is at least one confirmed command that uses this discount,
-    if it's so, discount's percentage cannot be modified
-   */
     const commands: ICommand[] = await CommandModel.find({
       discount: { data: discountExists._id },
       status: { confirmed: true },
@@ -142,7 +157,7 @@ export async function discount_file_put_controller(
   if (!discountExists) {
     next(new CustomError("There is no discount found to upload a file", 404));
   } else {
-    if (discountExists.thumbnail) deleteFile(discountExists.thumbnail);
+    if (discountExists.thumbnail) await deleteFile(discountExists.thumbnail);
     const updatedDiscount: IDiscount | null =
       await DiscountModel.findOneAndUpdate(
         { _id: req.params.idDiscount },
@@ -226,7 +241,7 @@ export async function discount_file_delete_controller(
       new CustomError("There is no discount found to delete for this id", 404)
     );
   } else {
-    if (discountExists.thumbnail) deleteFile(discountExists.thumbnail);
+    if (discountExists.thumbnail) await deleteFile(discountExists.thumbnail);
     res.status(200).send({
       message: `"${capitalize(
         discountExists.title

@@ -25,7 +25,21 @@ const discountSchema = new Schema<IDiscount, TDiscountModel>(
         message: "Percentage must be between 0 and 100",
       },
     },
-    dateBegin: { type: Date, required: true, default: Date.now },
+    dateBegin: {
+      type: Date,
+      required: true,
+      // set: (v: string) => {
+      //   const date = new Date(v);
+      //   return new Date(
+      //     date.getFullYear(),
+      //     date.getMonth(),
+      //     date.getDate(),
+      //     0,
+      //     0,
+      //     0
+      //   );
+      // },
+    },
     dateEnd: {
       type: Date,
       required: true,
