@@ -7,11 +7,7 @@ import { ProteinObject } from "../types/common.type";
 export interface ICommand extends Document {
   user: PopulatedDoc<Document<Types.ObjectId> & IUser>;
   proteins: ProteinObject[];
-  discount?: {
-    data: PopulatedDoc<Document<Types.ObjectId> & IDiscount>;
-    files?: string[];
-    validated: boolean;
-  };
+  discount?: PopulatedDoc<Document<Types.ObjectId> & IDiscount>;
   status: {
     datePayment?: Date;
     confirmed: boolean;
@@ -38,11 +34,8 @@ const commandSchema = new Schema<ICommand, TCommand>(
       required: true,
     },
     discount: {
-      type: {
-        data: { type: Types.ObjectId, required: true },
-        files: { type: [String], required: false },
-        validated: { type: Boolean, required: true, default: false },
-      },
+      type: Schema.Types.ObjectId,
+      ref: "discounts",
       required: false,
     },
     status: {

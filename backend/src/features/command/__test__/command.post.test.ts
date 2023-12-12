@@ -1,9 +1,7 @@
 import supertest from "supertest";
 
-import { app } from "../../../jest.setup";
-
-import { IRequest_command_post } from "./command.type";
-import { getAccessTokenSubscriberTest } from "../../utils/test.util";
+import { app } from "../../../../jest.setup";
+import { getAccessTokenSubscriberTest } from "../../../utils/test.util";
 
 describe("POST /command/ for Subscriber", () => {
   let subscriberAccessToken: string | undefined;
@@ -16,25 +14,23 @@ describe("POST /command/ for Subscriber", () => {
   });
 
   it("should return an errors validation fields", async () => {
-    const requestData: IRequest_command_post = {
-      proteins: [{ data: "not-valid-mongodb-id", quantity: 0 }],
-      discount: {
-        data: "not-valid-mongodb-id",
-      },
-      note: "your_note",
+    const wrongData = {
+      proteins: [{ data: "invalid-mongo-id", quantity: 0 }],
+      discount: "invalid-mongo-id",
+      note: "some-note",
     };
 
     const response = await supertest(app)
       .post("/command/")
-      .send(requestData)
+      .send(wrongData)
       .set("Authorization", `Bearer ${subscriberAccessToken}`);
 
     expect(response.status).toBe(400);
     expect(response.body).toHaveProperty("errors");
     expect(Array.isArray(response.body.errors)).toBe(true);
-    const errorsValidation = response.body.errors;
     expect(response.body.errors.length).toBe(3);
   });
+
   // it("should return a created command successfully", async () => {
   //   const requestData: IRequest_command_post = {
   //     proteins: [{ data: "6571b15b70e2eac2b4558223", quantity: 5 }],

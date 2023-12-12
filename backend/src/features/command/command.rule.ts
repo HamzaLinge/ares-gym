@@ -1,4 +1,4 @@
-import { body, check, param, query } from "express-validator";
+import { body, param, query } from "express-validator";
 import { errorMessageValidator } from "../../utils/errorMessageValidator";
 
 export const command_post_rules = [
@@ -14,12 +14,8 @@ export const command_post_rules = [
 
   body("discount")
     .optional({ values: "falsy" })
-    .isObject()
-    .withMessage(errorMessageValidator.isObject("discount")),
-  body("discount.data")
-    .optional({ values: "falsy" })
     .isMongoId()
-    .withMessage(errorMessageValidator.isMongoId("Discount data")),
+    .withMessage(errorMessageValidator.isMongoId("discount")),
 
   body("note")
     .optional({ values: "falsy" })
@@ -59,15 +55,7 @@ export const command_put_rules = [
   body("discount")
     .optional({ values: "falsy" })
     .isObject()
-    .withMessage(errorMessageValidator.isObject("discount")),
-  body("discount.data")
-    .optional({ values: "falsy" })
-    .isMongoId()
-    .withMessage(errorMessageValidator.isMongoId("Discount data")),
-  body("discount.validated")
-    .optional({ values: "falsy" })
-    .isBoolean()
-    .withMessage(errorMessageValidator.isBool("Discount validated")),
+    .withMessage(errorMessageValidator.isMongoId("discount")),
 
   body("status")
     .optional({ values: "falsy" })
@@ -88,46 +76,10 @@ export const command_put_rules = [
     .withMessage(errorMessageValidator.isString("note")),
 ];
 
-export const command_confirm_put_rules = [
-  param("idCommand")
-    .notEmpty()
-    .withMessage(errorMessageValidator.notEmpty("id command"))
-    .isMongoId()
-    .withMessage(errorMessageValidator.isMongoId("id command")),
-];
-
-export const command_discount_files_put_rules = [
-  param("idCommand")
-    .notEmpty()
-    .withMessage(errorMessageValidator.notEmpty("id command"))
-    .isMongoId()
-    .withMessage(errorMessageValidator.isMongoId("id command")),
-
-  check("files").custom((value, { req }) => {
-    if (!req.files || req.files.length === 0) {
-      throw new Error(errorMessageValidator.isFilesUploaded());
-    }
-    return true;
-  }),
-];
-
 export const command_delete_rules = [
   param("idCommand")
     .notEmpty()
     .withMessage(errorMessageValidator.notEmpty("id command"))
     .isMongoId()
     .withMessage(errorMessageValidator.isMongoId("id command")),
-];
-
-export const command_discount_file_delete_rules = [
-  param("idCommand")
-    .notEmpty()
-    .withMessage(errorMessageValidator.notEmpty("id command"))
-    .isMongoId()
-    .withMessage(errorMessageValidator.isMongoId("id command")),
-  param("idDiscountFile")
-    .notEmpty()
-    .withMessage(errorMessageValidator.notEmpty("id discount file"))
-    .isMongoId()
-    .withMessage(errorMessageValidator.isMongoId("id discount file")),
 ];

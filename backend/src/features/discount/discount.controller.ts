@@ -4,12 +4,14 @@ import DiscountModel, { IDiscount } from "../../models/Discount";
 import { CustomError } from "../../types/common.type";
 import {
   IRequest_discount_delete,
+  IRequest_discount_file_delete,
   IRequest_discount_file_put_params,
   IRequest_discount_get,
   IRequest_discount_post,
   IRequest_discount_put_body,
   IRequest_discount_put_params,
   IResponse_discount_delete,
+  IResponse_discount_file_delete,
   IResponse_discount_file_put,
   IResponse_discount_post,
   IResponse_discount_put,
@@ -180,57 +182,48 @@ export async function discount_delete_controller(
     req.params.idDiscount
   );
   if (!discountExists) {
-    next(
-      new CustomError("There is no discount found to delete for this id", 404)
+    return next(
+      new CustomError("There is no discount found to delete with this id", 404)
     );
-  } else {
-    const confirmedCommands: ICommand[] = await CommandModel.find({
-      discount: { data: discountExists._id },
-      status: { confirmed: true },
-    });
-    if (confirmedCommands.length > 0) {
-      // Error when there is at least one confirmed command that is lied to this discount
-      next(
-        new CustomError(
-          "There is at least one confirmed command lied to this discount, you cannot delete it",
-          422
-        )
-      );
-    } else {
-      // Remove the Discount for the Not-Confirmed-Commands yet
-      const notConfirmedCommands: ICommand[] = await CommandModel.find({
-        discount: { data: discountExists._id },
-        status: { confirmed: false },
-      });
-      for (let i = 0; i < notConfirmedCommands.length; i++) {
-        if (
-          notConfirmedCommands[i].discount &&
-          notConfirmedCommands[i].discount?.files
-        ) {
-          notConfirmedCommands[i].discount?.files?.forEach((fileId) =>
-            deleteFile(fileId)
-          );
-        }
-        await CommandModel.findOneAndUpdate(
-          {
-            _id: notConfirmedCommands[i]._id,
-          },
-          { $unset: { discount: 1 } }
-        );
-      }
-      await DiscountModel.findOneAndDelete({ _id: req.params.idDiscount });
-      res.status(200).send({
-        message: `The "${capitalize(
-          discountExists.title
-        )}" discount successfully deleted`,
-      });
-    }
   }
+  const confirmedCommands: ICommand[] = await CommandModel.find({
+    discount: discountExists._id,
+    status: { confirmed: true },
+  });
+  if (confirmedCommands.length > 0) {
+    // Error when there is at least one confirmed command that is lied to this discount
+    return next(
+      new CustomError(
+        "There is at least one confirmed command lied to this discount, you cannot delete it",
+        422
+      )
+    );
+  }
+  // Remove the Discount for the Not-Confirmed-Commands yet
+  const notConfirmedCommands: ICommand[] = await CommandModel.find({
+    discount: { data: discountExists._id },
+    status: { confirmed: false },
+  });
+  for (let i = 0; i < notConfirmedCommands.length; i++) {
+    await CommandModel.findOneAndUpdate(
+      {
+        _id: notConfirmedCommands[i]._id,
+      },
+      { $unset: { discount: 1 } }
+    );
+  }
+
+  await DiscountModel.findOneAndDelete({ _id: req.params.idDiscount });
+  res.status(200).send({
+    message: `The "${capitalize(
+      discountExists.title
+    )}" discount successfully deleted`,
+  });
 }
 
 export async function discount_file_delete_controller(
-  req: Request<IRequest_discount_delete>,
-  res: Response<IResponse_discount_delete>,
+  req: Request<IRequest_discount_file_delete>,
+  res: Response<IResponse_discount_file_delete>,
   next: NextFunction
 ) {
   const discountExists: IDiscount | null = await DiscountModel.findById(

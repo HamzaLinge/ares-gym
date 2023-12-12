@@ -39,6 +39,10 @@ export const discount_post_rules = [
       }
       return true;
     }),
+  body("validationRequire")
+    .optional({ values: "falsy" })
+    .isBoolean()
+    .withMessage(errorMessageValidator.isBool("validation require")),
 
   body("description")
     .notEmpty()
@@ -111,7 +115,10 @@ export const discount_put_rules = [
       }
       return true;
     }),
-
+  body("validationRequire")
+    .optional({ values: "falsy" })
+    .isBoolean()
+    .withMessage(errorMessageValidator.isBool("validation require")),
   body("description")
     .optional({ values: "falsy" })
     .isString()

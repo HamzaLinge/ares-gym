@@ -9,6 +9,7 @@ export interface IRequest_discount_post {
   dateBegin: Date;
   dateEnd: Date;
   description: string;
+  validationRequire: boolean;
 }
 
 export interface IResponse_discount_post {
@@ -47,6 +48,7 @@ export interface IRequest_discount_put_body {
   dateBegin?: Date;
   dateEnd?: Date;
   description?: string;
+  validationRequire?: boolean;
 }
 export interface IResponse_discount_put {
   discount: IDiscount;

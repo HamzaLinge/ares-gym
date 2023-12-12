@@ -3,8 +3,6 @@ import { NextFunction, Request, Response } from "express";
 import { CustomError, Roles } from "../../types/common.type";
 import {
   IRequest_command_delete,
-  IRequest_command_discount_file_delete,
-  IRequest_command_discount_files_put,
   IRequest_command_put_body,
   IRequest_command_put_params,
 } from "./command.type";
@@ -15,17 +13,7 @@ export async function command_post_permission(
   res: Response,
   next: NextFunction
 ) {
-  const user = req.user;
-  if (!user) {
-    next(
-      new CustomError(
-        "There is no user found to check the permission for this request",
-        404
-      )
-    );
-  } else {
-    next();
-  }
+  next();
 }
 
 export async function command_get_permission(
@@ -33,17 +21,7 @@ export async function command_get_permission(
   res: Response,
   next: NextFunction
 ) {
-  const user = req.user;
-  if (!user) {
-    next(
-      new CustomError(
-        "There is no user found to check the permission for this request",
-        404
-      )
-    );
-  } else {
-    next();
-  }
+  next();
 }
 
 export async function command_put_permission(
@@ -51,82 +29,22 @@ export async function command_put_permission(
   res: Response,
   next: NextFunction
 ) {
-  const user = req.user;
-  if (!user) {
-    next(
-      new CustomError(
-        "There is no user found to check the permission for this request",
-        404
-      )
-    );
-  } else if (user.role === Roles.admin) {
+  if (req.user?.role === Roles.admin) {
     next();
-  } else if (user.role === Roles.subscriber) {
+  } else if (req.user?.role === Roles.subscriber) {
     const command: ICommand | null = await CommandModel.findById(
       req.params.idCommand
     );
     if (!command) {
       next(new CustomError("There is no command found to edit", 404));
-    } else if (!command.user.equals(user._id) || command.status.confirmed) {
+    } else if (
+      !command.user.equals(req.user?._id) ||
+      command.status.confirmed ||
+      req.body.status
+    ) {
       next(
         new CustomError(
           "You don't have the permission to edit this command",
-          401
-        )
-      );
-    } else {
-      next();
-    }
-  }
-}
-
-export async function command_confirm_put_permission(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  const user = req.user;
-  if (!user) {
-    next(
-      new CustomError(
-        "There is no user found to check the permission for this request",
-        404
-      )
-    );
-  } else if (user.role === Roles.admin) {
-    next();
-  } else {
-    next(
-      new CustomError("You don't have the permission to confirm a command", 401)
-    );
-  }
-}
-
-export async function command_discount_files_put_permission(
-  req: Request<IRequest_command_discount_files_put>,
-  res: Response,
-  next: NextFunction
-) {
-  const user = req.user;
-  if (!user) {
-    next(
-      new CustomError(
-        "There is no user found to check the permission for this request",
-        404
-      )
-    );
-  } else if (user.role === Roles.admin) {
-    next();
-  } else if (user.role === Roles.subscriber) {
-    const command: ICommand | null = await CommandModel.findById(
-      req.params.idCommand
-    );
-    if (!command) {
-      next(new CustomError("There is no command found to edit", 404));
-    } else if (!command.user.equals(user._id) || command.status.confirmed) {
-      next(
-        new CustomError(
-          "You don't have the permission to upload discount files for this command",
           401
         )
       );
@@ -141,70 +59,24 @@ export async function command_delete_permission(
   res: Response,
   next: NextFunction
 ) {
-  const user = req.user;
-  if (!user) {
-    next(
-      new CustomError(
-        "There is no user found to check the permission for this request",
-        404
-      )
-    );
-  } else if (user.role === Roles.admin) {
-    next();
-  } else if (user.role === Roles.subscriber) {
+  if (req.user?.role === Roles.admin) {
+    return next();
+  }
+  if (req.user?.role === Roles.subscriber) {
     const command: ICommand | null = await CommandModel.findById(
       req.params.idCommand
     );
     if (!command) {
-      next(new CustomError("There is no command found to delete", 404));
-    } else if (!command.user.equals(user._id) || command.status.confirmed) {
-      next(
+      return next(new CustomError("There is no command found to delete", 404));
+    }
+    if (!command.user.equals(req.user?._id) || command.status.confirmed) {
+      return next(
         new CustomError(
           "You don't have the permission to delete this command",
           401
         )
       );
-    } else {
-      next();
     }
-  }
-}
-
-export async function command_discount_file_delete_permission(
-  req: Request<IRequest_command_discount_file_delete>,
-  res: Response,
-  next: NextFunction
-) {
-  const user = req.user;
-  if (!user) {
-    next(
-      new CustomError(
-        "There is no user found to check the permission for this request",
-        404
-      )
-    );
-  } else if (user.role === Roles.admin) {
     next();
-  } else if (user.role === Roles.subscriber) {
-    const command: ICommand | null = await CommandModel.findById(
-      req.params.idCommand
-    );
-    if (!command) {
-      next(
-        new CustomError(
-          "There is no command found to delete a discount file",
-          404
-        )
-      );
-    } else if (!command.user.equals(user._id) || command.status.confirmed) {
-      next(
-        new CustomError(
-          "You don't have the permission to delete this command discount file",
-          401
-        )
-      );
-    } else {
-      next();
-    }
   }
 }

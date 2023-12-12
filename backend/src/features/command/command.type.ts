@@ -6,9 +6,7 @@ import { ICommand } from "../../models/Commands";
  */
 export interface IRequest_command_post {
   proteins: ProteinObject[];
-  discount?: {
-    data: string;
-  };
+  discount?: string;
   note?: string;
 }
 export interface IResponse_command_post {
@@ -40,32 +38,14 @@ export interface IRequest_command_put_params {
 }
 export interface IRequest_command_put_body {
   proteins?: ProteinObject[];
-  discount?: {
-    data?: string;
+  discount?: string;
+  status?: {
+    datePayment?: Date;
+    confirmed?: boolean;
   };
   note?: string;
 }
 export interface IResponse_command_put {
-  command: ICommand;
-}
-
-/**
- PUT: /command/confirm/:idCommand
- */
-export interface IRequest_command_confirm_put {
-  idCommand?: string;
-}
-export interface IResponse_command_confirm_put {
-  command: ICommand;
-}
-
-/**
- PUT: /command/discount/files/:idCommand
- */
-export interface IRequest_command_discount_files_put {
-  idCommand?: string;
-}
-export interface IResponse_command_discount_files_put {
   command: ICommand;
 }
 
@@ -77,15 +57,4 @@ export interface IRequest_command_delete {
 }
 export interface IResponse_command_delete {
   idCommandDeleted: string;
-}
-
-/**
- DELETE: /command/discount/file/:idCommand/:idDiscountFile
- */
-export interface IRequest_command_discount_file_delete {
-  idCommand?: string;
-  idDiscountFile?: string;
-}
-export interface IResponse_command_discount_file_delete {
-  command: ICommand;
 }
