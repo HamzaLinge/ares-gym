@@ -6,7 +6,7 @@ import {
   IRequest_command_put_body,
   IRequest_command_put_params,
 } from "./command.type";
-import CommandModel, { ICommand } from "../../models/Commands";
+import CommandModel, { ICommand } from "../../models/Command";
 
 export async function command_post_permission(
   req: Request,
