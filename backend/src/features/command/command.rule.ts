@@ -7,10 +7,10 @@ export const command_post_rules = [
     .withMessage(errorMessageValidator.isArray("proteins")),
   body("proteins.*.data")
     .isMongoId()
-    .withMessage(errorMessageValidator.isMongoId("Each protein data")),
+    .withMessage(errorMessageValidator.isMongoId("Each supplement data")),
   body("proteins.*.quantity")
     .isInt({ min: 1 })
-    .withMessage(errorMessageValidator.isIntMin("Each protein quantity", 0)),
+    .withMessage(errorMessageValidator.isIntMin("Each supplement quantity", 0)),
 
   body("discount")
     .optional({ values: "falsy" })
@@ -47,10 +47,10 @@ export const command_put_rules = [
     .withMessage(errorMessageValidator.isArray("proteins")),
   body("proteins.*.data")
     .isMongoId()
-    .withMessage(errorMessageValidator.isMongoId("Each protein data")),
+    .withMessage(errorMessageValidator.isMongoId("Each supplement data")),
   body("proteins.*.quantity")
     .isInt({ min: 1 })
-    .withMessage(errorMessageValidator.isIntMin("Each protein quantity", 0)),
+    .withMessage(errorMessageValidator.isIntMin("Each supplement quantity", 0)),
 
   body("discount")
     .optional({ values: "falsy" })

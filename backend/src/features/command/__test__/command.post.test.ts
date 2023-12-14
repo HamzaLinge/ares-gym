@@ -15,8 +15,8 @@ describe("POST /command/ for Subscriber", () => {
 
   it("should return an errors validation fields", async () => {
     const wrongData = {
-      proteins: [{ data: "invalid-mongo-id", quantity: 0 }],
-      discount: "invalid-mongo-id",
+      proteins: [{ data: "invalid-mongo-id", quantity: 0 }], // data must be a valid mongoid and quantity must be at least one
+      discount: "invalid-mongo-id", // If discount is provided, it must be a valid mongoid
       note: "some-note",
     };
 

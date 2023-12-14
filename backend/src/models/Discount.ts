@@ -7,7 +7,6 @@ export interface IDiscount extends Document {
   dateBegin: Date;
   dateEnd: Date;
   description: string;
-  validationRequire: boolean;
   thumbnail?: string;
 }
 
@@ -46,7 +45,6 @@ const discountSchema = new Schema<IDiscount, TDiscountModel>(
       },
     },
     description: { type: String, required: true },
-    validationRequire: { type: Boolean, required: true, default: false },
     thumbnail: { type: String, required: false },
   },
   { timestamps: true }

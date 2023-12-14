@@ -7,9 +7,10 @@ import { jwtAuthConfig } from "./middlewares/auth/jwt/jwtAuthConfig";
 import authRouter from "./features/authentication/auth.routes";
 import fileRouter from "./features/file/file.route";
 import discountRouter from "./features/discount/discount.route";
-import proteinRouter from "./features/protein/protein.route";
 import commandRouter from "./features/command/command.route";
 import centralizedErrors from "./middlewares/centralizedErrors";
+import categoryRoutes from "./features/category/category.route";
+import supplementRoutes from "./features/supplement/supplement.route";
 
 export function createApp(): Application {
   const app = express();
@@ -38,8 +39,10 @@ export function createApp(): Application {
   app.use("/files", fileRouter);
   // Discount Routes
   app.use("/discount", discountRouter);
+  // Category Routes
+  app.use("/category", categoryRoutes);
   // Protein Routes
-  app.use("/protein", proteinRouter);
+  app.use("/supplement", supplementRoutes);
   // Shopping Routes
   app.use("/command", commandRouter);
 

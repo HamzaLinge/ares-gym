@@ -14,7 +14,6 @@ configDotEnv({ path: envFile });
 async function server() {
   try {
     const port = process.env.PORT || 3001;
-
     /*
      CONNECT TO THE DATABASE -----------------------------------------------------------------------------------------
      */

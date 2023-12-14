@@ -16,11 +16,11 @@ describe("PUT /discount/:idDiscount", () => {
 
   it("should return an error validation field", async () => {
     const wrongData = {
-      title: 1234,
-      percentage: 150,
+      title: 1234, // Should be a string type
+      percentage: 150, // Must not exceed 100%
       dateBegin: "2023-12-10",
-      dateEnd: "2023-12-10",
-      description: 56789,
+      dateEnd: "2023-12-10", // dateEnd must be exceed dateBegin by at least one day
+      description: 56789, // Must be a string type
     };
 
     const response = await supertest(app)
@@ -79,6 +79,7 @@ describe("PUT /discount/:idDiscount", () => {
         .put(`/discount/${idDiscountParam}`)
         .set("Authorization", `Bearer ${adminAccessToken}`)
         .send(newInputDiscount);
+      console.log(response.body);
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty("discount");
       expect(response.body.discount).toMatchObject({

@@ -1,11 +1,11 @@
-import { ProteinObject } from "../../types/common.type";
-import { ICommand } from "../../models/Commands";
+import { SupplementObject } from "../../types/common.type";
+import { ICommand } from "../../models/Command";
 
 /**
   POST: /command/
  */
 export interface IRequest_command_post {
-  proteins: ProteinObject[];
+  supplements: SupplementObject[];
   discount?: string;
   note?: string;
 }
@@ -37,7 +37,7 @@ export interface IRequest_command_put_params {
   idCommand?: string;
 }
 export interface IRequest_command_put_body {
-  proteins?: ProteinObject[];
+  supplements?: SupplementObject[];
   discount?: string;
   status?: {
     datePayment?: Date;

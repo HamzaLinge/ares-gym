@@ -17,7 +17,7 @@ import {
   IResponse_discount_put,
   TResponse_discount_get,
 } from "./discount.type";
-import CommandModel, { ICommand } from "../../models/Commands";
+import CommandModel, { ICommand } from "../../models/Command";
 import { deleteFile } from "../../utils/deleteFile";
 import { capitalize } from "../../utils/capitalize";
 import { dateEndExceedsDateBegin } from "../../utils/date.util";
@@ -29,12 +29,12 @@ export async function discount_post_controller(
 ) {
   const exists: IDiscount | null = await DiscountModel.findOne({
     title: { $regex: "^" + req.body.title + "$", $options: "i" },
-    dateEnd: { $gte: new Date() },
+    dateEnd: { $gt: new Date(req.body.dateBegin) },
   });
   if (exists) {
     next(
       new CustomError(
-        "There is already a discount with this title that didn't expire yet",
+        "There is already a discount on the same title that will not expire before the given start date",
         409
       )
     );
@@ -125,7 +125,7 @@ export async function discount_put_controller(
     req.body.percentage !== discountExists.percentage
   ) {
     const commands: ICommand[] = await CommandModel.find({
-      discount: { data: discountExists._id },
+      discount: discountExists._id,
       status: { confirmed: true },
     });
     if (commands.length >= 1) {
@@ -201,7 +201,7 @@ export async function discount_delete_controller(
   }
   // Remove the Discount for the Not-Confirmed-Commands yet
   const notConfirmedCommands: ICommand[] = await CommandModel.find({
-    discount: { data: discountExists._id },
+    discount: discountExists._id,
     status: { confirmed: false },
   });
   for (let i = 0; i < notConfirmedCommands.length; i++) {

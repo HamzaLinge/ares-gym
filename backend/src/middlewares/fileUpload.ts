@@ -90,9 +90,14 @@ export const processSingleFileUpload = async (
       next(new CustomError("Error processing file", 500));
     } finally {
       // Cleanup: delete temporary file
-      fs.unlink(req.file.path, (err) => {
-        if (err) console.error("Error deleting temporary file:", err);
-      });
+      if (fs.existsSync(req.file.path)) {
+        try {
+          fs.unlinkSync(req.file.path);
+        } catch (err) {
+          // console.error("Error deleting temporary file:", err);
+          console.log("Error deleting temporary file:", err);
+        }
+      }
     }
     next();
   } else {
@@ -135,11 +140,19 @@ export const processMultipleFileUpload = async (
       next(new CustomError("Error processing files", 500));
     } finally {
       // Cleanup: delete temporary files
-      req.files.forEach((file) => {
-        fs.unlink(file.path, (err) => {
-          if (err) console.error("Error deleting temporary file:", err);
-        });
-      });
+      for (const file of req.files) {
+        try {
+          fs.unlinkSync(file.path);
+        } catch (err) {
+          // console.error("Error deleting temporary file:", err);
+          console.log("Error deleting temporary file:", err);
+        }
+      }
+      // req.files.forEach((file) => {
+      //   fs.unlinkSync(file.path, (err) => {
+      //     if (err) console.error("Error deleting temporary file:", err);
+      //   });
+      // });
     }
   } else {
     next();

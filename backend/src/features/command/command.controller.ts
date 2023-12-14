@@ -12,10 +12,9 @@ import {
   IResponse_command_put,
 } from "./command.type";
 import { CustomError } from "../../types/common.type";
-import { deleteFile } from "../../utils/deleteFile";
-import CommandModel, { ICommand } from "../../models/Commands";
+import CommandModel, { ICommand } from "../../models/Command";
 import DiscountModel, { IDiscount } from "../../models/Discount";
-import ProteinModel, { IProtein } from "../../models/Protein";
+import SupplementModel, { ISupplement } from "../../models/Supplement";
 import { capitalize } from "../../utils/capitalize";
 
 export async function command_post_controller(
@@ -41,21 +40,23 @@ export async function command_post_controller(
       );
     }
   }
-  for (let i = 0; i < req.body.proteins.length; i++) {
-    const protein: IProtein | null = await ProteinModel.findById(
-      req.body.proteins[i].data
+  for (let i = 0; i < req.body.supplements.length; i++) {
+    const supplement: ISupplement | null = await SupplementModel.findById(
+      req.body.supplements[i].data
     );
-    if (!protein) {
+    if (!supplement) {
       return next(
         new CustomError(
-          `Protein found to command with id: ${req.body.proteins[i].data}`,
+          `Supplement found to command with id: ${req.body.supplements[i].data}`,
           404
         )
       );
-    } else if (req.body.proteins[i].quantity > protein.stock) {
+    } else if (req.body.supplements[i].quantity > supplement.stock) {
       return next(
         new CustomError(
-          `${capitalize(protein.name)} Protein Quantity exceeds the stock`,
+          `${capitalize(
+            supplement.name
+          )} Supplement Quantity required exceeds the stock`,
           422
         )
       );
@@ -66,7 +67,9 @@ export async function command_post_controller(
   const command: ICommand | null = await CommandModel.findById(
     createdCommand._id
   )
-    .populate<{ "proteins.*.data": IProtein }>({ path: "proteins.*.data" })
+    .populate<{ "supplements.*.data": ISupplement }>({
+      path: "supplements.*.data",
+    })
     .populate<{ discount: IDiscount }>({ path: "discount" });
   if (!command) {
     return next(new CustomError("Created Discount not found", 404));
@@ -84,7 +87,9 @@ export async function command_get_controller(
       _id: req.query.idCommand,
       user: req.user?._id,
     })
-      .populate<{ "proteins.*.data": IProtein }>({ path: "proteins.*.data" })
+      .populate<{ "supplements.*.data": ISupplement }>({
+        path: "supplements.*.data",
+      })
       .populate<{ discount: IDiscount }>({ path: "discount" });
     if (!command) {
       next(new CustomError("There is no command found for this id", 404));
@@ -100,7 +105,9 @@ export async function command_get_controller(
       user: req.user?._id,
       status: req.query.confirmed ? { confirmed: req.query.confirmed } : {},
     })
-      .populate<{ "proteins.*.data": IProtein }>({ path: "proteins.*.data" })
+      .populate<{ "supplements.*.data": ISupplement }>({
+        path: "supplements.*.data",
+      })
       .populate<{ discount: IDiscount }>({ path: "discount" })
       .sort({ updatedAt: -1 });
     if (commands.length === 0) {
@@ -122,22 +129,22 @@ export async function command_put_controller(
   if (!commandExists) {
     return next(new CustomError("There is no command found to edit", 404));
   }
-  if (req.body.proteins) {
-    for (let i = 0; i < req.body.proteins.length; i++) {
-      const protein: IProtein | null = await ProteinModel.findById(
-        req.body.proteins[i].data
+  if (req.body.supplements) {
+    for (let i = 0; i < req.body.supplements.length; i++) {
+      const supplement: ISupplement | null = await SupplementModel.findById(
+        req.body.supplements[i].data
       );
-      if (!protein) {
+      if (!supplement) {
         return next(
           new CustomError(
-            `Protein found with id: ${req.body.proteins[i].data}`,
+            `Supplement found with id: ${req.body.supplements[i].data}`,
             404
           )
         );
-      } else if (req.body.proteins[i].quantity > protein.stock) {
+      } else if (req.body.supplements[i].quantity > supplement.stock) {
         return next(
           new CustomError(
-            `${capitalize(protein.name)} Quantity exceeds the stock`,
+            `${capitalize(supplement.name)} Quantity exceeds the stock`,
             422
           )
         );
@@ -149,7 +156,9 @@ export async function command_put_controller(
     { ...req.body },
     { new: true }
   )
-    .populate<{ "proteins.*.data": IProtein }>({ path: "proteins.*.data" })
+    .populate<{ "supplements.*.data": ISupplement }>({
+      path: "supplements.*.data",
+    })
     .populate<{ discount: IDiscount }>({ path: "discount" });
   if (!updatedCommand) {
     next(new CustomError("Updated Command not found", 404));

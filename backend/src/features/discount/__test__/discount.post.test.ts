@@ -27,7 +27,6 @@ describe("POST /discount/", () => {
       dateBegin: new Date().toISOString(),
       dateEnd: getEndDate(),
       description: "Gainer",
-      validationRequire: false,
       filePath: "discount-img.jpg",
     };
 
@@ -57,7 +56,6 @@ describe("POST /discount/", () => {
         .field("dateBegin", discountRequest.dateBegin)
         .field("dateEnd", discountRequest.dateEnd)
         .field("description", discountRequest.description)
-        .field("validationRequire", discountRequest.validationRequire)
         .attach("file", path.resolve(__dirname, discountRequest.filePath))
         .set("Authorization", `Bearer ${adminAccessToken}`);
 
@@ -95,17 +93,21 @@ describe("POST /discount/", () => {
 
   it("should return some errors validation fields", async () => {
     const wrongData = {
+      title: "some-title",
       percentage: 0, // percentage must be between 1 and 100 (1% < percentage <= 100%)
       dateBegin: "2023-12-11",
       dateEnd: "2023-12-11", // dateEnd must be after dateBegin by at least one day, which is the current date in this case
+      description: "some-desc", // dateEnd must be after dateBegin by at least one day, which is the current date in this case
       filePath: "discount-img.jpg", // Note: After the error, the file uploaded must be deleted from the database
     };
     const response = await supertest(app)
       .post("/discount/")
       .set("Authorization", `Bearer ${adminAccessToken}`)
+      .field("title", wrongData.title)
       .field("percentage", wrongData.percentage)
       .field("dateBegin", wrongData.dateBegin)
       .field("dateEnd", wrongData.dateEnd)
+      .field("description", wrongData.description)
       .attach("file", path.resolve(__dirname, wrongData.filePath));
 
     expect(response.status).toBe(400);

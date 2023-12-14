@@ -15,5 +15,6 @@ export const deleteFile = async (
       } => `,
       deleteErr
     );
+    throw new Error("Error deleting file from GridFS");
   }
 };
