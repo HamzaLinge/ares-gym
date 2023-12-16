@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 
-import { CustomError, Roles } from "../../types/common.type";
+import { CustomError } from "../../types/global.type";
+import { Roles } from "../authentication/auth.type";
+import { HttpStatusCodes } from "../../utils/error.util";
 
 export async function supplement_post_permission(
   req: Request,
@@ -12,7 +14,7 @@ export async function supplement_post_permission(
     next(
       new CustomError(
         "You do not have the permission to create a new supplement",
-        401
+        HttpStatusCodes.UNAUTHORIZED
       )
     );
   }
@@ -26,7 +28,10 @@ export async function supplement_put_permission(
   if (req.user?.role === Roles.admin) next();
   else {
     next(
-      new CustomError("You do not have the permission to edit supplement", 401)
+      new CustomError(
+        "You do not have the permission to edit supplement",
+        HttpStatusCodes.UNAUTHORIZED
+      )
     );
   }
 }
@@ -41,7 +46,7 @@ export async function supplement_put_files_permission(
     next(
       new CustomError(
         "You do not have the permission to upload supplement files",
-        401
+        HttpStatusCodes.UNAUTHORIZED
       )
     );
   }
@@ -57,7 +62,7 @@ export async function supplement_delete_permission(
     next(
       new CustomError(
         "You do not have the permission to delete supplement",
-        401
+        HttpStatusCodes.UNAUTHORIZED
       )
     );
   }
@@ -73,7 +78,7 @@ export async function supplement_delete_file_permission(
     next(
       new CustomError(
         "You do not have the permission to delete supplement file",
-        401
+        HttpStatusCodes.UNAUTHORIZED
       )
     );
   }

@@ -1,8 +1,9 @@
 import { ErrorRequestHandler } from "express";
 import multer from "multer";
 
-import { CustomError } from "../types/common.type";
-import { deleteFile } from "../utils/deleteFile";
+import { CustomError } from "../types/global.type";
+import { deleteFile } from "../utils/file.util";
+import { HttpStatusCodes } from "../utils/error.util";
 
 const centralizedErrors: ErrorRequestHandler = async (
   err: CustomError | Error,
@@ -30,7 +31,10 @@ const centralizedErrors: ErrorRequestHandler = async (
       .send({ message: "File size exceeds the maximum limit (10MB)" });
   }
 
-  const statusCode = err instanceof CustomError ? err.statusCode : 500;
+  const statusCode =
+    err instanceof CustomError
+      ? err.statusCode
+      : HttpStatusCodes.INTERNAL_SERVER_ERROR;
   const responsePayload: any = {
     message: err.message,
     ...(process.env.NODE_ENV === "development" && { stack: err.stack }),

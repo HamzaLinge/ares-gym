@@ -10,7 +10,7 @@ import {
 
 import { IUser } from "./User";
 import { IDiscount } from "./Discount";
-import { SupplementObject } from "../types/common.type";
+import { SupplementObject } from "../features/command/command.type";
 
 export interface ICommand extends Document {
   user: PopulatedDoc<Document<Types.ObjectId> & IUser>;

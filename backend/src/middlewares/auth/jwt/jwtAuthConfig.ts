@@ -17,12 +17,12 @@ import {
 } from "passport-jwt";
 
 import UserModel, { IUser } from "../../../models/User";
-import { getEnvironmentVariable } from "../../../utils/getEnvironmentVariable";
+import { getEnv } from "../../../utils/env.util";
 
 export function jwtAuthConfig() {
   const jwtOptions: StrategyOptions = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), // I can write my own extractor here
-    secretOrKey: getEnvironmentVariable("JWT_SECRET_KEY"),
+    secretOrKey: getEnv("JWT_SECRET_KEY"),
   };
   passport.use(
     new JwtStrategy(jwtOptions, async (payload, done) => {

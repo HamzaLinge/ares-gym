@@ -2,6 +2,7 @@ import supertest from "supertest";
 
 import { app } from "../../../../jest.setup";
 import { deleteCategories, uploadCategories } from "./category.test.util";
+import { HttpStatusCodes } from "../../../utils/error.util";
 
 describe("GET /category/", () => {
   const categories = [
@@ -29,9 +30,8 @@ describe("GET /category/", () => {
   });
   it("should return a tree of all categories", async () => {
     const res = await supertest(app).get("/category/");
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(HttpStatusCodes.OK);
     expect(res.body).toHaveProperty("categoryTree");
     expect(Array.isArray(res.body.categoryTree)).toBe(true);
-    // console.log(JSON.stringify(res.body.categoryTree, null, 2));
   });
 });

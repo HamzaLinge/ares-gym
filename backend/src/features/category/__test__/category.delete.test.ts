@@ -1,53 +1,35 @@
-import { getAccessTokenAdminTest } from "../../../utils/test.util";
-import CategoryModel from "../../../models/Category";
 import supertest from "supertest";
+
 import { app } from "../../../../jest.setup";
 
-describe("DELETE /category/idCategory", () => {
-  let adminAccessToken: string | undefined;
-  let idDiscountTest: string = "";
+import { getAdminTest } from "../../../utils/test.util";
+import { ICategory } from "../../../models/Category";
+import { HttpStatusCodes } from "../../../utils/error.util";
+import { categoryTestMethods } from "./category.test.util";
 
-  const categoryData = {
-    name: "Creatine",
-  };
+describe("DELETE /category/", () => {
+  let adminAccessToken: string;
+  let categoryTest: ICategory;
 
   beforeAll(async () => {
-    adminAccessToken = await getAccessTokenAdminTest();
-    if (adminAccessToken === undefined) {
-      throw new Error("Access token is undefined. Check test setup.");
-    }
+    adminAccessToken = (await getAdminTest()).tokens.accessToken;
   });
 
   beforeEach(async () => {
-    try {
-      const createdCategoryTest = await CategoryModel.create(categoryData);
-      idDiscountTest = createdCategoryTest._id.toString();
-    } catch (error) {
-      console.error(
-        `Error when creating a category for DELETE category => ${error}`
-      );
-      throw new Error("Error when creating a category for DELETE category");
-    }
+    categoryTest = await categoryTestMethods.create();
   });
 
   afterEach(async () => {
-    try {
-      await CategoryModel.findOneAndDelete({ _id: idDiscountTest });
-      idDiscountTest = "";
-    } catch (error) {
-      console.error(
-        `Error when deleting a category for DELETE category => ${error}`
-      );
-      throw new Error("Error when deleting a category for DELETE category");
-    }
+    await categoryTestMethods.delete(categoryTest._id);
   });
 
-  it("should return the deleted id category", async () => {
+  it("should return the Deleted Id Category", async () => {
     const res = await supertest(app)
-      .delete(`/category/${idDiscountTest}`)
+      .delete(`/category/${categoryTest._id}`)
       .set("Authorization", `Bearer ${adminAccessToken}`);
-    expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty("deletedIdCategory");
-    expect(typeof res.body.deletedIdCategory).toBe("string");
+
+    expect(res.status).toBe(HttpStatusCodes.OK);
+    expect(res.body).toHaveProperty("idDeletedCategory");
+    expect(typeof res.body.idDeletedCategory).toBe("string");
   });
 });

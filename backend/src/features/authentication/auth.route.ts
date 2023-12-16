@@ -1,11 +1,20 @@
 import { Router } from "express";
 
-import { checkEmail, login, register } from "./auth.controllers";
+import {
+  auth_checkEmailAvailability_controller,
+  auth_local_login_controller,
+  auth_local_register_controller,
+} from "./auth.controller";
 
-import { rules_check_email, rules_login, rules_register } from "./auth.rules";
+import {
+  auth_checkEmailAvailability_rules,
+  auth_local_login_rules,
+  auth_local_register_rules,
+} from "./auth.rule";
 import { validateRules } from "../../middlewares/validateRules";
+import { asyncHandler } from "../../middlewares/asyncHandler";
 
-const router = Router();
+const authRoutes = Router();
 
 /*
  *** The authentication process is based on the ACCESS TOKEN, which means JWT (JsonWebToken),
@@ -13,9 +22,24 @@ const router = Router();
  */
 
 // LOCAL AUTHENTICATION
-router.post("/check-email", rules_check_email, validateRules, checkEmail);
-router.post("/register", rules_register, validateRules, register);
-router.post("/login", rules_login, validateRules, login);
+authRoutes.post(
+  "/check-email-availability",
+  auth_checkEmailAvailability_rules,
+  validateRules,
+  asyncHandler(auth_checkEmailAvailability_controller)
+);
+authRoutes.post(
+  "/local/login",
+  auth_local_login_rules,
+  validateRules,
+  asyncHandler(auth_local_login_controller)
+);
+authRoutes.post(
+  "/local/register",
+  auth_local_register_rules,
+  validateRules,
+  asyncHandler(auth_local_register_controller)
+);
 
 /*
  *** TODO: Finish Google and Facebook Authentications after finishing the first version of the project
@@ -68,4 +92,4 @@ router.post("/login", rules_login, validateRules, login);
 //   facebookAuthCallback
 // );
 
-export default router;
+export default authRoutes;

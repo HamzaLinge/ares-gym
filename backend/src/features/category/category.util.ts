@@ -37,7 +37,6 @@ export function filterCategoryTreeByName(
       category.name.toLowerCase().includes(nameToSearch.toLowerCase()) ||
       children.length > 0
     ) {
-      // Si la catégorie correspond, ajouter la catégorie entière à la liste filtrée
       filteredTree.push({
         _id: category._id,
         name: category.name,

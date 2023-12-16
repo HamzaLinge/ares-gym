@@ -5,7 +5,7 @@ import { GridFSBucket } from "mongodb";
 import fs from "fs";
 import mongoose from "mongoose";
 
-import { CustomError } from "../types/common.type";
+import { CustomError } from "../types/global.type";
 
 const maxFileSize = 10 * 1024 * 1024; // 10MB file size limit
 const maxFileNumberAllowed = 6;

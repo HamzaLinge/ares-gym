@@ -5,19 +5,12 @@ import {
   CredentialsProviders,
   GendersUser,
   Roles,
+  TCredentialsProviders,
   TGenderUser,
   TRole,
-} from "../types/common.type";
+} from "../features/authentication/auth.type";
 
-type TCredentialsProviders = {
-  provider:
-    | CredentialsProviders.local
-    | CredentialsProviders.google
-    | CredentialsProviders.facebook;
-  id?: string; // This is the id from Google or Facebook. It will serve to identify if the subscriber is already registered or not
-};
-
-export interface IUser extends Document {
+export interface IUser extends Document, IUserMethods {
   credentialsProvider: TCredentialsProviders;
   email: string;
   password?: string;
@@ -26,8 +19,9 @@ export interface IUser extends Document {
 
   firstName: string;
   lastName: string;
-  phoneNumber: string;
-  gender: TGenderUser;
+
+  phoneNumber?: string;
+  gender?: TGenderUser;
 
   birthday?: Date;
   picture?: string;
@@ -64,11 +58,12 @@ const userSchema = new Schema<IUser, TUserModel, IUserMethods>(
 
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    phoneNumber: { type: String, required: true },
+
+    phoneNumber: { type: String, required: false },
     gender: {
       type: String,
       enum: Object.values(GendersUser),
-      required: true,
+      required: false,
     },
 
     birthday: { type: Date, required: false },
@@ -80,15 +75,24 @@ const userSchema = new Schema<IUser, TUserModel, IUserMethods>(
 userSchema.pre<IUser>(
   "save",
   async function (next: (error?: CallbackError) => void) {
-    if (!this.password || !this.isModified("password")) {
-      return next();
+    if (this.isNew || this.isModified("email")) {
+      this.email = this.email.toLowerCase();
     }
-    try {
-      const salt = await genSalt(12);
-      this.password = await hash(this.password, salt);
-    } catch (error) {
-      console.log(error);
-      return next(new Error(`Error hashing password`)); // I have to handle this error with an end-handler-error middleware
+    if (this.password && this.isModified("password")) {
+      try {
+        const salt = await genSalt(12);
+        this.password = await hash(this.password, salt);
+      } catch (error) {
+        console.log(error);
+        return next(new Error(`Error hashing password`)); // I have to handle this error with an end-handler-error middleware
+      }
+      next();
+    }
+    if (this.isNew || this.isModified("firstName")) {
+      this.firstName = this.firstName.toLowerCase();
+    }
+    if (this.isNew || this.isModified("lastName")) {
+      this.lastName = this.lastName.toLowerCase();
     }
     next();
   }

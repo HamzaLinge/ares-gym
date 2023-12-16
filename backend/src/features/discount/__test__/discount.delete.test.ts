@@ -1,17 +1,15 @@
 import supertest from "supertest";
 
-import { getAccessTokenAdminTest, getEndDate } from "../../../utils/test.util";
-import DiscountModel, { IDiscount } from "../../../models/Discount";
 import { app } from "../../../../jest.setup";
 
-describe("DELETE /discount/:idDiscount", () => {
-  let adminAccessToken: string | undefined;
+import { getAdminTest, getEndDate } from "../../../utils/test.util";
+import DiscountModel, { IDiscount } from "../../../models/Discount";
+
+describe("DELETE /discount/", () => {
+  let adminAccessToken: string;
 
   beforeAll(async () => {
-    adminAccessToken = await getAccessTokenAdminTest();
-    if (adminAccessToken === undefined) {
-      throw new Error("Access token is undefined. Check test setup.");
-    }
+    adminAccessToken = (await getAdminTest()).tokens.accessToken;
   });
   let idDiscountParam: string;
   const discount = {

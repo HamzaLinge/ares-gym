@@ -4,7 +4,7 @@ import cors from "cors";
 import passport from "passport";
 
 import { jwtAuthConfig } from "./middlewares/auth/jwt/jwtAuthConfig";
-import authRouter from "./features/authentication/auth.routes";
+import authRouter from "./features/authentication/auth.route";
 import fileRouter from "./features/file/file.route";
 import discountRouter from "./features/discount/discount.route";
 import commandRouter from "./features/command/command.route";
@@ -34,7 +34,7 @@ export function createApp(): Application {
   // Test Route
   app.get("/test", (req, res) => res.status(200).send("Works Well !"));
   // Auth Routes
-  app.use("/authentication", authRouter); // Add this line to mount the Task API routes
+  app.use("/auth", authRouter); // Add this line to mount the Task API routes
   // Files Routes
   app.use("/files", fileRouter);
   // Discount Routes

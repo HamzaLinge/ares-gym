@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 
-import { CustomError } from "../types/common.type";
+import { CustomError } from "../types/global.type";
+import { HttpStatusCodes } from "../utils/error.util";
 
 export const validateRules = (
   req: Request,
@@ -10,6 +11,12 @@ export const validateRules = (
 ) => {
   const errors = validationResult(req);
   if (!errors.isEmpty())
-    next(new CustomError("Error validation fields", 400, errors.array()));
+    next(
+      new CustomError(
+        "Error validation fields",
+        HttpStatusCodes.BAD_REQUEST,
+        errors.array()
+      )
+    );
   else next();
 };

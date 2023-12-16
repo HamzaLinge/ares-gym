@@ -1,3 +1,5 @@
+import { faker } from "@faker-js/faker";
+
 import CategoryModel, { ICategory } from "../../../models/Category";
 
 async function createCategory(
@@ -51,3 +53,24 @@ export async function deleteCategories(
     throw new Error("Error deleting categories");
   }
 }
+
+export const categoryTestMethods = {
+  create: async (): Promise<ICategory> => {
+    try {
+      return (await CategoryModel.create({
+        name: faker.word.noun(),
+      })) as ICategory;
+    } catch (error) {
+      console.error(`Error creating category => ${error}`);
+      throw new Error("Error creating category");
+    }
+  },
+  delete: async (idCategory: string): Promise<void> => {
+    try {
+      await CategoryModel.findOneAndDelete({ _id: idCategory });
+    } catch (error) {
+      console.error(`Error deleting category => ${error}`);
+      throw new Error("Error deleting category");
+    }
+  },
+};

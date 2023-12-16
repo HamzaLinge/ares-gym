@@ -16,10 +16,11 @@ import {
   IResponse_supplement_files_put,
 } from "./supplement.type";
 import SupplementModel, { ISupplement } from "../../models/Supplement";
-import { CustomError } from "../../types/common.type";
+import { CustomError } from "../../types/global.type";
 import { ICategory } from "../../models/Category";
 import CommandModel, { ICommand } from "../../models/Command";
-import { deleteFile } from "../../utils/deleteFile";
+import { deleteFile } from "../../utils/file.util";
+import { HttpStatusCodes } from "../../utils/error.util";
 
 export async function supplement_post_controller(
   req: Request<any, any, IRequest_supplement_post>,
@@ -30,7 +31,7 @@ export async function supplement_post_controller(
     ...req.body,
     thumbnails: req.fileIdArr ? req.fileIdArr : undefined,
   });
-  res.status(200).send({ supplement });
+  res.status(HttpStatusCodes.OK).send({ supplement });
 }
 
 export async function supplement_get_controller(
@@ -47,7 +48,7 @@ export async function supplement_get_controller(
         new CustomError("There is no supplement found with this id", 404)
       );
     }
-    res.status(200).send({ supplement });
+    res.status(HttpStatusCodes.OK).send({ supplement });
   } else {
     const supplements: ISupplement[] = await SupplementModel.find()
       .populate<{ category: ICategory }>({ path: "category" })
@@ -55,7 +56,7 @@ export async function supplement_get_controller(
     if (supplements.length === 0) {
       return next(new CustomError("There are no supplements found", 404));
     }
-    res.status(200).send({ supplements });
+    res.status(HttpStatusCodes.OK).send({ supplements });
   }
 }
 
@@ -85,7 +86,7 @@ export async function supplement_put_controller(
   if (!updatedSupplement) {
     return next(new CustomError("Updated supplement not found", 404));
   }
-  res.status(200).send({ supplement: updatedSupplement });
+  res.status(HttpStatusCodes.OK).send({ supplement: updatedSupplement });
 }
 
 export async function supplement_put_files_controller(
@@ -102,14 +103,18 @@ export async function supplement_put_files_controller(
     );
   }
   if (!req.fileIdArr) {
-    return next(new CustomError("No Files Id found", 422));
+    return next(
+      new CustomError("No Files Id found", HttpStatusCodes.UNPROCESSABLE)
+    );
   }
   const updatedSupplementThumbnails = (await SupplementModel.findOneAndUpdate(
     { _id: req.params.idSupplement },
     { $push: { thumbnails: { $each: req.fileIdArr } } },
     { new: true }
   )) as ISupplement;
-  res.status(200).send({ supplement: updatedSupplementThumbnails });
+  res
+    .status(HttpStatusCodes.OK)
+    .send({ supplement: updatedSupplementThumbnails });
 }
 
 export async function supplement_delete_controller(
@@ -130,7 +135,7 @@ export async function supplement_delete_controller(
     return next(
       new CustomError(
         "There is at least one command that is lied with this supplement",
-        422
+        HttpStatusCodes.CONFLICT
       )
     );
   }
@@ -140,7 +145,7 @@ export async function supplement_delete_controller(
     }
   }
   await SupplementModel.findOneAndDelete({ _id: req.params.idSupplement });
-  res.status(200).send({
+  res.status(HttpStatusCodes.OK).send({
     deletedIdSupplement: supplementExists._id,
   });
 }
@@ -162,6 +167,6 @@ export async function supplement_delete_file_controller(
   );
   await deleteFile(req.params.idThumbnail as string);
   res
-    .status(200)
+    .status(HttpStatusCodes.OK)
     .send({ deletedIdThumbnail: req.params.idThumbnail as string });
 }

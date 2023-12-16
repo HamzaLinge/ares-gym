@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 import DiscountModel, { IDiscount } from "../../models/Discount";
-import { CustomError } from "../../types/common.type";
+import { CustomError } from "../../types/global.type";
 import {
   IRequest_discount_delete,
   IRequest_discount_file_delete,
@@ -18,9 +18,10 @@ import {
   TResponse_discount_get,
 } from "./discount.type";
 import CommandModel, { ICommand } from "../../models/Command";
-import { deleteFile } from "../../utils/deleteFile";
-import { capitalize } from "../../utils/capitalize";
+import { deleteFile } from "../../utils/file.util";
+import { capitalize } from "../../utils/string.util";
 import { dateEndExceedsDateBegin } from "../../utils/date.util";
+import { HttpStatusCodes } from "../../utils/error.util";
 
 export async function discount_post_controller(
   req: Request<any, any, IRequest_discount_post>,
@@ -35,7 +36,7 @@ export async function discount_post_controller(
     next(
       new CustomError(
         "There is already a discount on the same title that will not expire before the given start date",
-        409
+        HttpStatusCodes.CONFLICT
       )
     );
   } else {
@@ -45,7 +46,7 @@ export async function discount_post_controller(
     const inputDiscount: TInputDiscount = { ...req.body };
     if (req.fileId) inputDiscount.thumbnail = req.fileId;
     const discount: IDiscount = await DiscountModel.create(inputDiscount);
-    res.status(200).send({ discount });
+    res.status(HttpStatusCodes.OK).send({ discount });
   }
 }
 
@@ -59,9 +60,14 @@ export async function discount_get_controller(
       req.query.idDiscount
     );
     if (!discount) {
-      next(new CustomError("There is no discount found for this id", 404));
+      next(
+        new CustomError(
+          "There is no discount found for this id",
+          HttpStatusCodes.NOT_FOUND
+        )
+      );
     } else {
-      res.status(200).send({ discount });
+      res.status(HttpStatusCodes.OK).send({ discount });
     }
   } else {
     const titleFilter = req.query.title ? req.query.title : "";
@@ -71,9 +77,14 @@ export async function discount_get_controller(
       updatedAt: -1,
     });
     if (discounts.length === 0) {
-      next(new CustomError("There are no discounts found", 404));
+      next(
+        new CustomError(
+          "There are no discounts found",
+          HttpStatusCodes.NOT_FOUND
+        )
+      );
     } else {
-      res.status(200).send({ discounts });
+      res.status(HttpStatusCodes.OK).send({ discounts });
     }
   }
 }
@@ -87,7 +98,12 @@ export async function discount_put_controller(
     req.params.idDiscount
   );
   if (!discountExists) {
-    return next(new CustomError("There is no discount found to edit", 404));
+    return next(
+      new CustomError(
+        "There is no discount found to edit",
+        HttpStatusCodes.NOT_FOUND
+      )
+    );
   }
   if (req.body.title) {
     const discountWithSameTitle: IDiscount | null = await DiscountModel.findOne(
@@ -100,7 +116,7 @@ export async function discount_put_controller(
       return next(
         new CustomError(
           "There is already a discount with this title that didn't expire yet",
-          409
+          HttpStatusCodes.CONFLICT
         )
       );
     }
@@ -116,7 +132,7 @@ export async function discount_put_controller(
     return next(
       new CustomError(
         "Date End must exceed Date Begin by at least one day",
-        422
+        HttpStatusCodes.CONFLICT
       )
     );
   }
@@ -132,7 +148,7 @@ export async function discount_put_controller(
       return next(
         new CustomError(
           "You cannot change discount's percentage, because there is at least one confirmed command that uses this discount",
-          422
+          HttpStatusCodes.CONFLICT
         )
       );
     }
@@ -143,9 +159,14 @@ export async function discount_put_controller(
     { new: true }
   );
   if (!discount) {
-    return next(new CustomError("There is no updated discount found", 404));
+    return next(
+      new CustomError(
+        "There is no updated discount found",
+        HttpStatusCodes.NOT_FOUND
+      )
+    );
   }
-  res.status(200).send({ discount });
+  res.status(HttpStatusCodes.OK).send({ discount });
 }
 
 export async function discount_file_put_controller(
@@ -157,7 +178,12 @@ export async function discount_file_put_controller(
     req.params.idDiscount
   );
   if (!discountExists) {
-    next(new CustomError("There is no discount found to upload a file", 404));
+    next(
+      new CustomError(
+        "There is no discount found to upload a file",
+        HttpStatusCodes.NOT_FOUND
+      )
+    );
   } else {
     if (discountExists.thumbnail) await deleteFile(discountExists.thumbnail);
     const updatedDiscount: IDiscount | null =
@@ -166,9 +192,11 @@ export async function discount_file_put_controller(
         { thumbnail: req.fileId }
       );
     if (!updatedDiscount) {
-      next(new CustomError("Updated discount not found", 404));
+      next(
+        new CustomError("Updated discount not found", HttpStatusCodes.NOT_FOUND)
+      );
     } else {
-      res.status(200).send({ discount: updatedDiscount });
+      res.status(HttpStatusCodes.OK).send({ discount: updatedDiscount });
     }
   }
 }
@@ -183,7 +211,10 @@ export async function discount_delete_controller(
   );
   if (!discountExists) {
     return next(
-      new CustomError("There is no discount found to delete with this id", 404)
+      new CustomError(
+        "There is no discount found to delete with this id",
+        HttpStatusCodes.NOT_FOUND
+      )
     );
   }
   const confirmedCommands: ICommand[] = await CommandModel.find({
@@ -195,7 +226,7 @@ export async function discount_delete_controller(
     return next(
       new CustomError(
         "There is at least one confirmed command lied to this discount, you cannot delete it",
-        422
+        HttpStatusCodes.CONFLICT
       )
     );
   }
@@ -214,7 +245,7 @@ export async function discount_delete_controller(
   }
 
   await DiscountModel.findOneAndDelete({ _id: req.params.idDiscount });
-  res.status(200).send({
+  res.status(HttpStatusCodes.OK).send({
     message: `The "${capitalize(
       discountExists.title
     )}" discount successfully deleted`,
@@ -231,11 +262,14 @@ export async function discount_file_delete_controller(
   );
   if (!discountExists) {
     next(
-      new CustomError("There is no discount found to delete for this id", 404)
+      new CustomError(
+        "There is no discount found to delete for this id",
+        HttpStatusCodes.NOT_FOUND
+      )
     );
   } else {
     if (discountExists.thumbnail) await deleteFile(discountExists.thumbnail);
-    res.status(200).send({
+    res.status(HttpStatusCodes.OK).send({
       message: `"${capitalize(
         discountExists.title
       )}" discount thumbnail successfully deleted`,

@@ -1,13 +1,13 @@
 // import passport from "passport";
 // import { Strategy as FacebookStrategy } from "passport-facebook";
-// import { getEnvironmentVariable } from "../../utils/getEnvironmentVariable";
+// import { envUtil } from "../../utils/envUtil";
 //
 // export default function facebookAuthConfig() {
 //   passport.use(
 //     <passport.Strategy>new FacebookStrategy(
 //       {
-//         clientID: getEnvironmentVariable("FACEBOOK_CLIENT_ID"),
-//         clientSecret: getEnvironmentVariable("FACEBOOK_CLIENT_SECRET"),
+//         clientID: envUtil("FACEBOOK_CLIENT_ID"),
+//         clientSecret: envUtil("FACEBOOK_CLIENT_SECRET"),
 //         callbackURL: "/authentication/facebook/callback",
 //       },
 //       function (accessToken, refreshToken, profile, done) {

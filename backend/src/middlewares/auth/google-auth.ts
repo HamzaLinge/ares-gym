@@ -1,13 +1,13 @@
 // import passport from "passport";
 // import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-// import { getEnvironmentVariable } from "../../utils/getEnvironmentVariable";
+// import { envUtil } from "../../utils/envUtil";
 //
 // export default function googleAuthConfig() {
 //   passport.use(
 //     <passport.Strategy>new GoogleStrategy(
 //       {
-//         clientID: getEnvironmentVariable("GOOGLE_CLIENT_ID"),
-//         clientSecret: getEnvironmentVariable("GOOGLE_CLIENT_SECRET"),
+//         clientID: envUtil("GOOGLE_CLIENT_ID"),
+//         clientSecret: envUtil("GOOGLE_CLIENT_SECRET"),
 //         callbackURL: "/authentication/google/callback",
 //       },
 //       (accessToken, refreshToken, profile, done) => {

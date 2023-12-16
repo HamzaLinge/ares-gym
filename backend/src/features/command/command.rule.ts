@@ -1,14 +1,14 @@
 import { body, param, query } from "express-validator";
-import { errorMessageValidator } from "../../utils/errorMessageValidator";
+import { errorMessageValidator } from "../../utils/error.util";
 
 export const command_post_rules = [
-  body("proteins")
+  body("supplements")
     .isArray()
     .withMessage(errorMessageValidator.isArray("proteins")),
-  body("proteins.*.data")
+  body("supplements.*.data")
     .isMongoId()
     .withMessage(errorMessageValidator.isMongoId("Each supplement data")),
-  body("proteins.*.quantity")
+  body("supplements.*.quantity")
     .isInt({ min: 1 })
     .withMessage(errorMessageValidator.isIntMin("Each supplement quantity", 0)),
 
@@ -41,14 +41,16 @@ export const command_put_rules = [
     .isMongoId()
     .withMessage(errorMessageValidator.isMongoId("id Command")),
 
-  body("proteins")
+  body("supplements")
     .optional({ values: "falsy" })
     .isArray()
-    .withMessage(errorMessageValidator.isArray("proteins")),
-  body("proteins.*.data")
+    .withMessage(errorMessageValidator.isArray("supplements")),
+  body("supplements.*.data")
+    .optional({ values: "falsy" })
     .isMongoId()
     .withMessage(errorMessageValidator.isMongoId("Each supplement data")),
-  body("proteins.*.quantity")
+  body("supplements.*.quantity")
+    .optional({ values: "falsy" })
     .isInt({ min: 1 })
     .withMessage(errorMessageValidator.isIntMin("Each supplement quantity", 0)),
 
@@ -73,7 +75,8 @@ export const command_put_rules = [
   body("note")
     .optional({ values: "falsy" })
     .isString()
-    .withMessage(errorMessageValidator.isString("note")),
+    .withMessage(errorMessageValidator.isString("note"))
+    .toLowerCase(),
 ];
 
 export const command_delete_rules = [

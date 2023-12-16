@@ -1,6 +1,6 @@
 import { body, check, param, query } from "express-validator";
-import { errorMessageValidator } from "../../utils/errorMessageValidator";
 import { dateEndExceedsDateBegin } from "../../utils/date.util";
+import { errorMessageValidator } from "../../utils/error.util";
 
 export const discount_post_rules = [
   body("title")

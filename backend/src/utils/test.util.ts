@@ -1,19 +1,24 @@
 import UserModel, { IUser } from "../models/User";
-import { CredentialsProviders, Roles } from "../types/common.type";
-import { getTokens } from "./jwtHelper";
+import { getTokens } from "./jwt.util";
+import {
+  CredentialsProviders,
+  Roles,
+  TTokens,
+} from "../features/authentication/auth.type";
 
-export async function getAccessTokenSubscriberTest(): Promise<
-  string | undefined
-> {
+export async function getSubscriberTest(): Promise<{
+  user: Omit<IUser, "password">;
+  tokens: TTokens;
+}> {
   try {
     const user: IUser | null = await UserModel.findOne({
       email: process.env.EMAIL_SUBSCRIBER_TEST as string,
     });
     if (user) {
       const tokens = await getTokens(user._id.toString());
-      return tokens.accessToken;
+      return { user, tokens };
     } else {
-      const user = await UserModel.create({
+      const user = (await UserModel.create({
         credentialsProvider: { provider: CredentialsProviders.local },
         email: process.env.EMAIL_SUBSCRIBER_TEST as string as string,
         password: process.env.PASSWORD_SUBSCRIBER_TEST as string,
@@ -23,28 +28,34 @@ export async function getAccessTokenSubscriberTest(): Promise<
         gender: process.env.GENDER_SUBSCRIBER_TEST as string,
         birthday: process.env.BIRTHDAY_SUBSCRIBER_TEST as string,
         role: Roles.subscriber,
-      });
+      })) as IUser;
       const tokens = await getTokens(user._id.toString());
-      return tokens.accessToken;
+      return { user, tokens };
     }
   } catch (error) {
     console.error(
-      `Something went wrong during getting access token for admin tests => ${error}`
+      `Something went wrong during getting Subscriber user for tests => ${error}`
     );
-    return undefined;
+    throw new Error(
+      "Something went wrong during getting Subscriber user for tests"
+    );
   }
 }
 
-export async function getAccessTokenAdminTest(): Promise<string | undefined> {
+export async function getAdminTest(): Promise<{
+  user: Omit<IUser, "password">;
+  tokens: TTokens;
+}> {
   try {
-    const user: IUser | null = await UserModel.findOne({
+    let user: IUser | null = await UserModel.findOne({
       email: process.env.EMAIL_ADMIN_TEST as string,
     });
     if (user) {
       const tokens = await getTokens(user._id.toString());
-      return tokens.accessToken;
+      delete user.password;
+      return { user, tokens };
     } else {
-      const user = await UserModel.create({
+      let user = (await UserModel.create({
         credentialsProvider: { provider: CredentialsProviders.local },
         email: process.env.EMAIL_ADMIN_TEST as string as string,
         password: process.env.PASSWORD_ADMIN_TEST as string,
@@ -54,15 +65,16 @@ export async function getAccessTokenAdminTest(): Promise<string | undefined> {
         gender: process.env.GENDER_ADMIN_TEST as string,
         birthday: process.env.BIRTHDAY_ADMIN_TEST as string,
         role: Roles.admin,
-      });
+      })) as IUser;
       const tokens = await getTokens(user._id.toString());
-      return tokens.accessToken;
+      delete user.password;
+      return { user, tokens };
     }
   } catch (error) {
     console.error(
-      `Something went wrong during getting access token for admin tests => ${error}`
+      `Something went wrong during getting Admin user for tests => ${error}`
     );
-    return undefined;
+    throw new Error("Something went wrong during getting Admin user for tests");
   }
 }
 

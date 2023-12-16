@@ -1,5 +1,13 @@
-import { SupplementObject } from "../../types/common.type";
+import { Document, PopulatedDoc, Types } from "mongoose";
+
 import { ICommand } from "../../models/Command";
+import { ISupplement } from "../../models/Supplement";
+
+// Supplement Property for Command --------------------------------------------------------------------------------
+export type SupplementObject = {
+  data: PopulatedDoc<Document<Types.ObjectId> & ISupplement>;
+  quantity: number;
+};
 
 /**
   POST: /command/
@@ -56,5 +64,5 @@ export interface IRequest_command_delete {
   idCommand?: string;
 }
 export interface IResponse_command_delete {
-  idCommandDeleted: string;
+  idDeletedCommand: string;
 }

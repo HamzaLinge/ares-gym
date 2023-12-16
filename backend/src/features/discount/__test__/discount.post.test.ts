@@ -2,22 +2,20 @@ import supertest from "supertest";
 import path from "path";
 
 import { app } from "../../../../jest.setup";
+
 import {
   expectedRuleErrorsFields,
-  getAccessTokenAdminTest,
+  getAdminTest,
   getEndDate,
 } from "../../../utils/test.util";
 import DiscountModel, { IDiscount } from "../../../models/Discount";
-import { deleteFile } from "../../../utils/deleteFile";
+import { deleteFile } from "../../../utils/file.util";
 
 describe("POST /discount/", () => {
-  let adminAccessToken: string | undefined;
+  let adminAccessToken: string;
 
   beforeAll(async () => {
-    adminAccessToken = await getAccessTokenAdminTest();
-    if (adminAccessToken === undefined) {
-      throw new Error("Access token is undefined. Check test setup.");
-    }
+    adminAccessToken = (await getAdminTest()).tokens.accessToken;
   });
 
   describe("Create Discount", () => {

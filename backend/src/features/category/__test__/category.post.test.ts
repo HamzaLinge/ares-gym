@@ -1,19 +1,21 @@
-import { getAccessTokenAdminTest } from "../../../utils/test.util";
 import supertest from "supertest";
+import { faker } from "@faker-js/faker";
+
 import { app } from "../../../../jest.setup";
-import CategoryModel, { ICategory } from "../../../models/Category";
+
+import { getAdminTest } from "../../../utils/test.util";
+import { ICategory } from "../../../models/Category";
+import { HttpStatusCodes } from "../../../utils/error.util";
+import { categoryTestMethods } from "./category.test.util";
 
 describe("POST /category/", () => {
-  let adminAccessToken: string | undefined;
+  let adminAccessToken: string;
 
   beforeAll(async () => {
-    adminAccessToken = await getAccessTokenAdminTest();
-    if (adminAccessToken === undefined) {
-      throw new Error("Access token is undefined. Check test setup.");
-    }
+    adminAccessToken = (await getAdminTest()).tokens.accessToken;
   });
 
-  it("should return errors validation fields", async () => {
+  it("should return BAD REQUEST due the validation fields", async () => {
     const wrongCategoryData = {
       name: 1234, // Must be a string type
       description: "some-desc",
@@ -23,7 +25,7 @@ describe("POST /category/", () => {
       .post("/category/")
       .set("Authorization", `Bearer ${adminAccessToken}`)
       .send(wrongCategoryData);
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(HttpStatusCodes.BAD_REQUEST);
     expect(res.body).toHaveProperty("errors");
     expect(res.body).toHaveProperty("message");
     expect(Array.isArray(res.body.errors)).toBe(true);
@@ -31,46 +33,27 @@ describe("POST /category/", () => {
   });
 
   describe("Create Category", () => {
+    let categoryParentTest: ICategory;
+    let idCategoryTest: string;
     let categoryData = {
-      name: "Protein",
-      description: "Supplement Protein",
+      name: faker.lorem.word(),
+      description: faker.lorem.sentence(2),
       parent: "Will-be-filled-with-beforeAll",
     };
     beforeAll(async () => {
-      const categoryParentTest = { name: "Vitamin" };
-      try {
-        const createdCategoryParentTest: ICategory = await CategoryModel.create(
-          categoryParentTest
-        );
-        categoryData.parent = createdCategoryParentTest._id.toString();
-      } catch (error) {
-        console.error(
-          `Error creating category parent test for POST request => ${error}`
-        );
-        throw new Error("Error creating category parent test for POST request");
-      }
+      categoryParentTest = await categoryTestMethods.create();
+      categoryData.parent = categoryParentTest._id;
     });
     afterAll(async () => {
-      try {
-        await CategoryModel.findOneAndDelete({
-          _id: categoryData.parent,
-        });
-        await CategoryModel.findOneAndDelete({
-          name: categoryData.name.toLowerCase(),
-        });
-      } catch (error) {
-        console.error(
-          `Error deleting categories test for POST request => ${error}`
-        );
-        throw new Error("Error deleting categories test for POST request");
-      }
+      await categoryTestMethods.delete(categoryParentTest._id);
+      await categoryTestMethods.delete(idCategoryTest);
     });
-    it("should return a created category successfully", async () => {
+    it("should return OK status for created category", async () => {
       const res = await supertest(app)
         .post("/category/")
         .set("Authorization", `Bearer ${adminAccessToken}`)
         .send(categoryData);
-      expect(res.status).toBe(200);
+      expect(res.status).toBe(HttpStatusCodes.OK);
       expect(res.body).toHaveProperty("category");
       expect(res.body.category).toEqual(
         expect.objectContaining({
@@ -80,6 +63,7 @@ describe("POST /category/", () => {
           parent: expect.any(String),
         })
       );
+      idCategoryTest = res.body.category._id;
     });
   });
 });

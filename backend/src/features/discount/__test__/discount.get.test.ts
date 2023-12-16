@@ -3,13 +3,13 @@ import supertest from "supertest";
 import { app } from "../../../../jest.setup";
 import {
   expectedRuleErrorsFields,
-  getAccessTokenSubscriberTest,
+  getSubscriberTest,
   getEndDate,
 } from "../../../utils/test.util";
 import DiscountModel from "../../../models/Discount";
 
 describe("GET /discount/", () => {
-  let subscriberAccessToken: string | undefined;
+  let subscriberAccessToken: string;
 
   const discounts = [
     {
@@ -29,10 +29,7 @@ describe("GET /discount/", () => {
   ];
 
   beforeAll(async () => {
-    subscriberAccessToken = await getAccessTokenSubscriberTest();
-    if (subscriberAccessToken === undefined) {
-      throw new Error("Access token is undefined. Check test setup.");
-    }
+    subscriberAccessToken = (await getSubscriberTest()).tokens.accessToken;
   });
 
   describe("Return Discount", () => {

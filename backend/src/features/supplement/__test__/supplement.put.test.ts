@@ -2,72 +2,32 @@ import supertest from "supertest";
 
 import { app } from "../../../../jest.setup";
 
-import { getAccessTokenAdminTest } from "../../../utils/test.util";
-import { faker } from "@faker-js/faker";
-import CategoryModel, { ICategory } from "../../../models/Category";
-import SupplementModel, { ISupplement } from "../../../models/Supplement";
+import { getAdminTest } from "../../../utils/test.util";
+import { supplementTestMethods } from "./supplement.test.util";
+import { HttpStatusCodes } from "../../../utils/error.util";
 
 describe("PUT /supplement/", () => {
-  let adminAccessToken: string | undefined;
-  let idSupplementTest: string = "";
-
-  const categoryTestData = { name: faker.word.noun() };
-
-  let supplementTestData = {
-    name: faker.word.noun(),
-    category: "",
-    price: faker.commerce.price(),
-    stock: faker.number.int({ max: 100 }),
-    filePath: "supplement-1-img-jpg",
-  };
+  let adminAccessToken: string;
+  let idSupplementTest: string;
 
   beforeAll(async () => {
-    adminAccessToken = await getAccessTokenAdminTest();
-    if (adminAccessToken === undefined) {
-      throw new Error("Access token is undefined. Check test setup.");
-    }
+    adminAccessToken = (await getAdminTest()).tokens.accessToken;
   });
 
   beforeEach(async () => {
-    try {
-      const categoryTest = (await CategoryModel.create(
-        categoryTestData
-      )) as ICategory;
-      supplementTestData.category = categoryTest._id;
-      const supplementTest = (await SupplementModel.create(
-        supplementTestData
-      )) as ISupplement;
-      idSupplementTest = supplementTest._id;
-    } catch (error) {
-      console.error(
-        `Error creating category and supplement for PUT /supplement/ => ${error}`
-      );
-      throw new Error(
-        `Error creating category and supplement for PUT /supplement/`
-      );
-    }
+    idSupplementTest = (await supplementTestMethods.create())._id;
   });
   afterEach(async () => {
-    try {
-      await CategoryModel.findOneAndDelete({ name: categoryTestData.name });
-      await SupplementModel.findOneAndDelete({ name: supplementTestData.name });
-      idSupplementTest = "";
-    } catch (error) {
-      console.error(
-        `Error deleting category and supplement for PUT /supplement/ => ${error}`
-      );
-      throw new Error(
-        `Error deleting category and supplement for PUT /supplement/`
-      );
-    }
+    await supplementTestMethods.delete(idSupplementTest);
+    idSupplementTest = "";
   });
-  it("should return the updated supplement successfully", async () => {
+  it("should return OK status and the Updated Supplement", async () => {
     const newData = { stock: 0 };
     const res = await supertest(app)
       .put(`/supplement/${idSupplementTest}`)
       .set("Authorization", `Bearer ${adminAccessToken}`)
       .send(newData);
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(HttpStatusCodes.OK);
     expect(res.body.supplement).toBeDefined();
   });
   // it("should return the updated supplement's thumbnails successfully", async () => {

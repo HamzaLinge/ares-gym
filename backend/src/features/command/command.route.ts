@@ -22,32 +22,32 @@ import {
 } from "./command.controller";
 import { customJwtAuth } from "../../middlewares/auth/jwt/customJwtAuth";
 
-const router = Router();
+const commandRoutes = Router();
 
-router.use(customJwtAuth);
+commandRoutes.use(customJwtAuth);
 
-router.post(
+commandRoutes.post(
   "",
   command_post_rules,
   validateRules,
   asyncHandler(command_post_permission),
   asyncHandler(command_post_controller)
 );
-router.get(
+commandRoutes.get(
   "",
   command_get_rules,
   validateRules,
   asyncHandler(command_get_permission),
   asyncHandler(command_get_controller)
 );
-router.put(
+commandRoutes.put(
   "/:idCommand",
   command_put_rules,
   validateRules,
   asyncHandler(command_put_permission),
   asyncHandler(command_put_controller)
 );
-router.delete(
+commandRoutes.delete(
   "/:idCommand",
   command_delete_rules,
   validateRules,
@@ -55,4 +55,4 @@ router.delete(
   asyncHandler(command_delete_controller)
 );
 
-export default router;
+export default commandRoutes;

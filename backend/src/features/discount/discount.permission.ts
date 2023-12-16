@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 
-import { CustomError, Roles } from "../../types/common.type";
+import { CustomError } from "../../types/global.type";
+import { Roles } from "../authentication/auth.type";
+import { HttpStatusCodes } from "../../utils/error.util";
 
 export async function discount_post_permission(
   req: Request,
@@ -12,7 +14,7 @@ export async function discount_post_permission(
     next(
       new CustomError(
         "You do not have the permission to create a discount",
-        401
+        HttpStatusCodes.UNAUTHORIZED
       )
     );
 }
@@ -33,7 +35,10 @@ export async function discount_put_permission(
   if (req.user?.role === Roles.admin) return next();
   else
     next(
-      new CustomError("You do not have the permission to edit a discount", 401)
+      new CustomError(
+        "You do not have the permission to edit a discount",
+        HttpStatusCodes.UNAUTHORIZED
+      )
     );
 }
 
@@ -47,7 +52,7 @@ export async function discount_file_put_permission(
     next(
       new CustomError(
         "You do not have the permission to upload a discount file",
-        401
+        HttpStatusCodes.UNAUTHORIZED
       )
     );
 }
@@ -62,7 +67,7 @@ export async function discount_delete_permission(
     next(
       new CustomError(
         "You do not have the permission to delete a discount",
-        401
+        HttpStatusCodes.UNAUTHORIZED
       )
     );
 }
@@ -77,7 +82,7 @@ export async function discount_file_delete_permission(
     next(
       new CustomError(
         "You do not have the permission to delete a discount file",
-        401
+        HttpStatusCodes.UNAUTHORIZED
       )
     );
 }

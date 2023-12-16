@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 
-import { TTokens } from "../types/common.type";
-import { getEnvironmentVariable } from "./getEnvironmentVariable";
+import { getEnv } from "./env.util";
+import { TTokens } from "../features/authentication/auth.type";
 
 // Consider moving these to a configuration file or environment variables
 const expiresInAccessToken = 30 * 24 * 60 * 60; // 30 days in seconds
@@ -12,17 +12,13 @@ export function getTokens(idUser: string): TTokens {
   let refreshToken: string;
 
   try {
-    accessToken = jwt.sign(
-      { idUser },
-      getEnvironmentVariable("JWT_SECRET_KEY"),
-      { expiresIn: expiresInAccessToken }
-    );
+    accessToken = jwt.sign({ idUser }, getEnv("JWT_SECRET_KEY"), {
+      expiresIn: expiresInAccessToken,
+    });
 
-    refreshToken = jwt.sign(
-      { idUser },
-      getEnvironmentVariable("JWT_REFRESH_SECRET_KEY"),
-      { expiresIn: expiresInRefreshToken }
-    );
+    refreshToken = jwt.sign({ idUser }, getEnv("JWT_REFRESH_SECRET_KEY"), {
+      expiresIn: expiresInRefreshToken,
+    });
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.log("Error generating tokens: " + error.message);

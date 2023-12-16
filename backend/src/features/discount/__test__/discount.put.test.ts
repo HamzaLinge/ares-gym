@@ -1,17 +1,14 @@
 import supertest from "supertest";
 
-import { getAccessTokenAdminTest, getEndDate } from "../../../utils/test.util";
+import { getAdminTest, getEndDate } from "../../../utils/test.util";
 import { app } from "../../../../jest.setup";
 import DiscountModel, { IDiscount } from "../../../models/Discount";
 
-describe("PUT /discount/:idDiscount", () => {
-  let adminAccessToken: string | undefined;
+describe("PUT /discount/", () => {
+  let adminAccessToken: string;
 
   beforeAll(async () => {
-    adminAccessToken = await getAccessTokenAdminTest();
-    if (adminAccessToken === undefined) {
-      throw new Error("Access token is undefined. Check test setup.");
-    }
+    adminAccessToken = (await getAdminTest()).tokens.accessToken;
   });
 
   it("should return an error validation field", async () => {
@@ -79,7 +76,6 @@ describe("PUT /discount/:idDiscount", () => {
         .put(`/discount/${idDiscountParam}`)
         .set("Authorization", `Bearer ${adminAccessToken}`)
         .send(newInputDiscount);
-      console.log(response.body);
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty("discount");
       expect(response.body.discount).toMatchObject({

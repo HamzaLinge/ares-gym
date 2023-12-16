@@ -1,5 +1,5 @@
 import { body, param, query } from "express-validator";
-import { errorMessageValidator } from "../../utils/errorMessageValidator";
+import { errorMessageValidator } from "../../utils/error.util";
 
 export const category_post_rules = [
   body("name")

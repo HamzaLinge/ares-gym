@@ -49,5 +49,5 @@ export interface IRequest_category_delete {
   idCategory?: string;
 }
 export interface IResponse_category_delete {
-  deletedIdCategory: string;
+  idDeletedCategory: string;
 }
