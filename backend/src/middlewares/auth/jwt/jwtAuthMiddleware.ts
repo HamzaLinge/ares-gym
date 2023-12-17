@@ -4,13 +4,18 @@
   - handling of authentication errors and provide a more tailored response to the client
  */
 
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import passport from "passport";
 
 import { IUser } from "../../../models/User";
 import { CustomError } from "../../../types/global.type";
+import { HttpStatusCodes } from "../../../utils/error.util";
 
-export function customJwtAuth(req: Request, res: Response, next: NextFunction) {
+export function jwtAuthMiddleware(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   passport.authenticate(
     "jwt",
     { session: false },
@@ -19,7 +24,7 @@ export function customJwtAuth(req: Request, res: Response, next: NextFunction) {
         next(
           new CustomError(
             "Something went wrong during the JWT authentication",
-            500
+            HttpStatusCodes.INTERNAL_SERVER_ERROR
           )
         );
       } else {

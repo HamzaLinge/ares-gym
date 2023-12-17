@@ -1,8 +1,9 @@
 import supertest from "supertest";
 
-import { getAdminTest, getEndDate } from "../../../utils/test.util";
+import { getAdminTest } from "../../../utils/test.util";
 import { app } from "../../../../jest.setup";
 import DiscountModel, { IDiscount } from "../../../models/Discount";
+import { getEndDate } from "./discount.test.util";
 
 describe("PUT /discount/", () => {
   let adminAccessToken: string;

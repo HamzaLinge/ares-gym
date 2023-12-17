@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { customJwtAuth } from "../../middlewares/auth/jwt/customJwtAuth";
+import { jwtAuthMiddleware } from "../../middlewares/auth/jwt/jwtAuthMiddleware";
 import {
   category_delete_rules,
   category_get_rules,
@@ -25,7 +25,7 @@ const categoryRoutes = Router();
 
 categoryRoutes.post(
   "",
-  customJwtAuth,
+  jwtAuthMiddleware,
   ...category_post_rules,
   validateRules,
   asyncHandler(category_post_permission),
@@ -39,7 +39,7 @@ categoryRoutes.get(
 );
 categoryRoutes.put(
   "/:idCategory",
-  customJwtAuth,
+  jwtAuthMiddleware,
   ...category_put_rules,
   validateRules,
   asyncHandler(category_put_permission),
@@ -47,7 +47,7 @@ categoryRoutes.put(
 );
 categoryRoutes.delete(
   "/:idCategory",
-  customJwtAuth,
+  jwtAuthMiddleware,
   ...category_delete_rules,
   validateRules,
   asyncHandler(category_delete_permission),

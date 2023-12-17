@@ -1,5 +1,4 @@
 import { CallbackError, Document, Model, model, Schema } from "mongoose";
-import { genSalt, hash } from "bcryptjs";
 
 export interface IDiscount extends Document {
   title: string;

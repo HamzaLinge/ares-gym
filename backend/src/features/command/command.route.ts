@@ -20,11 +20,11 @@ import {
   command_post_controller,
   command_put_controller,
 } from "./command.controller";
-import { customJwtAuth } from "../../middlewares/auth/jwt/customJwtAuth";
+import { jwtAuthMiddleware } from "../../middlewares/auth/jwt/jwtAuthMiddleware";
 
 const commandRoutes = Router();
 
-commandRoutes.use(customJwtAuth);
+commandRoutes.use(jwtAuthMiddleware);
 
 commandRoutes.post(
   "",

@@ -29,13 +29,13 @@ import {
   multipleFileMiddleware,
   processMultipleFileUpload,
 } from "../../middlewares/fileUpload";
-import { customJwtAuth } from "../../middlewares/auth/jwt/customJwtAuth";
+import { jwtAuthMiddleware } from "../../middlewares/auth/jwt/jwtAuthMiddleware";
 
 const supplementRoutes = Router();
 
 supplementRoutes.post(
   "",
-  customJwtAuth,
+  jwtAuthMiddleware,
   multipleFileMiddleware,
   processMultipleFileUpload,
   ...supplement_post_rules,
@@ -51,7 +51,7 @@ supplementRoutes.get(
 );
 supplementRoutes.put(
   "/:idSupplement",
-  customJwtAuth,
+  jwtAuthMiddleware,
   ...supplement_put_rules,
   validateRules,
   asyncHandler(supplement_put_permission),
@@ -59,7 +59,7 @@ supplementRoutes.put(
 );
 supplementRoutes.put(
   "/files/:idSupplement",
-  customJwtAuth,
+  jwtAuthMiddleware,
   multipleFileMiddleware,
   processMultipleFileUpload,
   ...supplement_files_put_rules,
@@ -69,7 +69,7 @@ supplementRoutes.put(
 );
 supplementRoutes.delete(
   "/:idSupplement",
-  customJwtAuth,
+  jwtAuthMiddleware,
   ...supplement_delete_rules,
   validateRules,
   asyncHandler(supplement_delete_permission),
@@ -77,7 +77,7 @@ supplementRoutes.delete(
 );
 supplementRoutes.delete(
   "/:idSupplement/file/:idThumbnail",
-  customJwtAuth,
+  jwtAuthMiddleware,
   ...supplement_file_delete_rules,
   validateRules,
   asyncHandler(supplement_delete_file_permission),

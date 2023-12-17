@@ -9,7 +9,7 @@ export async function discount_post_permission(
   res: Response,
   next: NextFunction
 ) {
-  if (req.user?.role === Roles.admin) return next();
+  if (req.user?.role === Roles.admin) next();
   else
     next(
       new CustomError(

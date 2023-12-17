@@ -26,17 +26,17 @@ import {
   discount_post_controller,
   discount_put_controller,
 } from "./discount.controller";
-import { customJwtAuth } from "../../middlewares/auth/jwt/customJwtAuth";
+import { jwtAuthMiddleware } from "../../middlewares/auth/jwt/jwtAuthMiddleware";
 import {
   singleFileMiddleware,
   processSingleFileUpload,
 } from "../../middlewares/fileUpload";
 
-const router = Router();
+const discountRoutes = Router();
 
-router.use(customJwtAuth);
+discountRoutes.use(jwtAuthMiddleware);
 
-router.post(
+discountRoutes.post(
   "",
   singleFileMiddleware,
   processSingleFileUpload,
@@ -45,21 +45,21 @@ router.post(
   asyncHandler(discount_post_permission),
   asyncHandler(discount_post_controller)
 );
-router.get(
+discountRoutes.get(
   "",
   discount_get_rules,
   validateRules,
   asyncHandler(discount_get_permission),
   asyncHandler(discount_get_controller)
 );
-router.put(
+discountRoutes.put(
   "/:idDiscount",
   ...discount_put_rules,
   validateRules,
   asyncHandler(discount_put_permission),
   asyncHandler(discount_put_controller)
 );
-router.put(
+discountRoutes.put(
   "/file/:idDiscount",
   singleFileMiddleware,
   processSingleFileUpload,
@@ -68,14 +68,14 @@ router.put(
   asyncHandler(discount_file_put_permission),
   asyncHandler(discount_file_put_controller)
 );
-router.delete(
+discountRoutes.delete(
   "/:idDiscount",
   discount_delete_rules,
   validateRules,
   asyncHandler(discount_delete_permission),
   asyncHandler(discount_delete_controller)
 );
-router.delete(
+discountRoutes.delete(
   "/file/:idDiscount",
   discount_file_delete_rules,
   validateRules,
@@ -83,4 +83,4 @@ router.delete(
   asyncHandler(discount_file_delete_controller)
 );
 
-export default router;
+export default discountRoutes;

@@ -70,7 +70,7 @@ export interface IRequest_discount_delete {
 }
 
 export interface IResponse_discount_delete {
-  message: string;
+  idDeletedDiscount: string;
 }
 
 /**

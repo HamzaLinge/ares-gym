@@ -2,10 +2,12 @@ import { NextFunction, Request, Response } from "express";
 import multer from "multer";
 import sharp from "sharp";
 import { GridFSBucket } from "mongodb";
-import fs from "fs";
+import fs from "fs-extra";
 import mongoose from "mongoose";
 
 import { CustomError } from "../types/global.type";
+import { HttpStatusCodes } from "../utils/error.util";
+import { IMetadataFile } from "../features/file/file.type";
 
 const maxFileSize = 10 * 1024 * 1024; // 10MB file size limit
 const maxFileNumberAllowed = 6;
@@ -34,9 +36,10 @@ export const multipleFileMiddleware = upload.array(
 async function uploadToGridFS(
   bucket: GridFSBucket,
   filename: string,
-  buffer: Buffer
+  buffer: Buffer,
+  metadata: IMetadataFile
 ): Promise<string> {
-  const uploadStream = bucket.openUploadStream(filename);
+  const uploadStream = bucket.openUploadStream(filename, { metadata });
   uploadStream.end(buffer);
   return new Promise((resolve, reject) => {
     uploadStream.on("finish", () => resolve(uploadStream.id.toString()));
@@ -44,12 +47,13 @@ async function uploadToGridFS(
   });
 }
 
-async function streamToGridFS(
+export async function streamToGridFS(
   bucket: GridFSBucket,
   filename: string,
-  stream: fs.ReadStream
+  stream: fs.ReadStream,
+  metadata: IMetadataFile
 ): Promise<string> {
-  const uploadStream = bucket.openUploadStream(filename);
+  const uploadStream = bucket.openUploadStream(filename, { metadata });
   stream.pipe(uploadStream);
   return new Promise((resolve, reject) => {
     uploadStream.on("finish", () => resolve(uploadStream.id.toString()));
@@ -57,51 +61,92 @@ async function streamToGridFS(
   });
 }
 
-// Middleware to process multiple files upload
+// Utility function for processing and uploading a file
+export async function processAndUploadFile(file: Express.Multer.File) {
+  const gridFSBucket = new GridFSBucket(mongoose.connection.db);
+  let fileId;
+  const metadata = {
+    contentType: file.mimetype,
+    originalName: file.originalname,
+    uploadDate: new Date(),
+  };
+  if (file.mimetype.startsWith("image/")) {
+    // const buffer = await sharp(file.path).toBuffer();
+    // fileId = await uploadToGridFS(
+    //   gridFSBucket,
+    //   file.originalname,
+    //   buffer,
+    //   metadata
+    // );
+    const processedFilePath = file.path + "-processed.jpg"; // Temporary path for processed file
+    await sharp(file.path).toFile(processedFilePath); // Process and save to new file
+
+    const buffer = await fs.readFile(processedFilePath); // Read the processed file into buffer
+    fileId = await uploadToGridFS(
+      gridFSBucket,
+      file.originalname,
+      buffer,
+      metadata
+    );
+
+    await fs.remove(processedFilePath);
+  } else if (file.mimetype === "application/pdf") {
+    const readStream = fs.createReadStream(file.path);
+    fileId = await streamToGridFS(
+      gridFSBucket,
+      file.originalname,
+      readStream,
+      metadata
+    );
+  } else {
+    throw new CustomError(
+      "Unsupported file type",
+      HttpStatusCodes.UNSUPPORTED_MEDIA_TYPE
+    );
+  }
+  return fileId;
+}
+
+// Utility function to delete temporary file that it is stored in /tmp/ folder
+async function deleteTemporaryFile(
+  file: Express.Multer.File,
+  retries = 5,
+  delay = 100
+) {
+  try {
+    await fs.remove(file.path);
+    console.log("Temporary file deleted successfully");
+  } catch (err) {
+    if (retries === 0) {
+      console.error("Error deleting temporary file:", err);
+      // throw err;
+    } else {
+      console.log(`Retrying file deletion, attempts remaining: ${retries}`);
+      await new Promise((resolve) => setTimeout(resolve, delay));
+      await deleteTemporaryFile(file, retries - 1, delay);
+    }
+  }
+}
+
+// Middleware to process single file upload
 export const processSingleFileUpload = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   if (req.file) {
-    const gridFSBucket = new GridFSBucket(mongoose.connection.db);
     try {
-      if (req.file.mimetype.startsWith("image/")) {
-        const buffer = await sharp(req.file.path).toBuffer();
-        req.fileId = await uploadToGridFS(
-          gridFSBucket,
-          req.file.originalname,
-          buffer
-        );
-      } else if (req.file.mimetype === "application/pdf") {
-        const readStream = fs.createReadStream(req.file.path);
-        req.fileId = await streamToGridFS(
-          gridFSBucket,
-          req.file.originalname,
-          readStream
-        );
-      } else {
-        next(
-          new CustomError("Please provide an Image or PDF format file", 415)
-        );
-      }
+      req.fileId = await processAndUploadFile(req.file);
     } catch (error) {
       console.error("Error processing file:", error);
-      next(new CustomError("Error processing file", 500));
+      next(error);
     } finally {
-      // Cleanup: delete temporary file
-      if (fs.existsSync(req.file.path)) {
-        try {
-          fs.unlinkSync(req.file.path);
-        } catch (err) {
-          // console.error("Error deleting temporary file:", err);
-          console.log("Error deleting temporary file:", err);
-        }
-      }
+      deleteTemporaryFile(req.file);
     }
+    // When the all processes are completed, then pass to the next middleware
     next();
   } else {
-    // Because file is not required, it is optional
+    // Case when the file is not provided
     next();
   }
 };
@@ -112,23 +157,10 @@ export const processMultipleFileUpload = async (
   res: Response,
   next: NextFunction
 ) => {
-  if (req.files && req.files.length > 0) {
-    const gridFSBucket = new GridFSBucket(mongoose.connection.db);
+  if (req.files && Array.isArray(req.files)) {
     try {
       const fileIds: Awaited<string | undefined>[] = await Promise.all(
-        req.files.map(async (file) => {
-          if (file.mimetype.startsWith("image/")) {
-            const buffer = await sharp(file.path).toBuffer();
-            return uploadToGridFS(gridFSBucket, file.originalname, buffer);
-          } else if (file.mimetype === "application/pdf") {
-            const readStream = fs.createReadStream(file.path);
-            return streamToGridFS(gridFSBucket, file.originalname, readStream);
-          } else {
-            next(
-              new CustomError("Only images and PDF types file are allowed", 415)
-            );
-          }
-        })
+        req.files.map(async (file) => processAndUploadFile(file))
       );
       const filteredFileIds = fileIds.filter(
         (id): id is string => id !== undefined
@@ -137,16 +169,11 @@ export const processMultipleFileUpload = async (
       next();
     } catch (error) {
       console.error("Error processing files:", error);
-      next(new CustomError("Error processing files", 500));
+      next(error);
     } finally {
       // Cleanup: delete temporary files
       for (const file of req.files) {
-        try {
-          fs.unlinkSync(file.path);
-        } catch (err) {
-          // console.error("Error deleting temporary file:", err);
-          console.log("Error deleting temporary file:", err);
-        }
+        deleteTemporaryFile(file);
       }
       // req.files.forEach((file) => {
       //   fs.unlinkSync(file.path, (err) => {
@@ -154,7 +181,10 @@ export const processMultipleFileUpload = async (
       //   });
       // });
     }
+    // When the all processes are completed, then pass to the next middleware
+    next();
   } else {
+    // Case where files are not provided
     next();
   }
 };

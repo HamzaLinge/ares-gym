@@ -27,7 +27,7 @@ const centralizedErrors: ErrorRequestHandler = async (
   // Return the size limit error for files
   if (err instanceof multer.MulterError && err.code === "LIMIT_FILE_SIZE") {
     return res
-      .status(400)
+      .status(HttpStatusCodes.BAD_REQUEST)
       .send({ message: "File size exceeds the maximum limit (10MB)" });
   }
 
@@ -35,17 +35,17 @@ const centralizedErrors: ErrorRequestHandler = async (
     err instanceof CustomError
       ? err.statusCode
       : HttpStatusCodes.INTERNAL_SERVER_ERROR;
+
   const responsePayload: any = {
     message: err.message,
     ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
   };
-  // Check if the error has a 'errors' property and include it in the response
+  // Check if the error has an 'errors' property (from express-validator) and include it in the response
   if (err instanceof CustomError && err.errors) {
     responsePayload.errors = err.errors;
   }
 
-  // console.error(responsePayload);
-  res.status(statusCode).json(responsePayload);
+  res.status(statusCode).send(responsePayload);
 };
 
 export default centralizedErrors;

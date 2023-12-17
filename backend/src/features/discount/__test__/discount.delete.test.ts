@@ -2,48 +2,29 @@ import supertest from "supertest";
 
 import { app } from "../../../../jest.setup";
 
-import { getAdminTest, getEndDate } from "../../../utils/test.util";
-import DiscountModel, { IDiscount } from "../../../models/Discount";
+import { getAdminTest } from "../../../utils/test.util";
+import { discountTestUtil } from "./discount.test.util";
+import { HttpStatusCodes } from "../../../utils/error.util";
 
 describe("DELETE /discount/", () => {
   let adminAccessToken: string;
-
+  let idDiscount: string;
   beforeAll(async () => {
     adminAccessToken = (await getAdminTest()).tokens.accessToken;
   });
-  let idDiscountParam: string;
-  const discount = {
-    title: "Muscles",
-    percentage: 50,
-    dateBegin: new Date().toISOString(),
-    dateEnd: getEndDate(),
-    description: "For Big Guys",
-  };
   beforeEach(async () => {
-    try {
-      const createdDiscount: IDiscount = await DiscountModel.create(discount);
-      idDiscountParam = createdDiscount._id.toString();
-    } catch (error) {
-      console.error(`Something went wrong when creating discount => ${error}`);
-      throw new Error("Something went wrong when creating discount");
-    }
+    idDiscount = (await discountTestUtil.create())._id;
   });
-
   afterEach(async () => {
-    try {
-      await DiscountModel.findOneAndDelete({ _id: idDiscountParam });
-      idDiscountParam = "";
-    } catch (error) {
-      console.error(`Something went wrong when deleting discount => ${error}`);
-      throw new Error("Something went wrong when deleting discount");
-    }
+    await discountTestUtil.delete(idDiscount);
+    idDiscount = "";
   });
-  it("should return successful message about the deleted discount", async () => {
+  it("should return an OK status the Id Deleted Discount", async () => {
     const res = await supertest(app)
-      .delete(`/discount/${idDiscountParam}`)
+      .delete(`/discount/${idDiscount}`)
       .set("Authorization", `Bearer ${adminAccessToken}`);
-    expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty("message");
-    expect(typeof res.body.message).toBe("string");
+    expect(res.status).toBe(HttpStatusCodes.OK);
+    expect(res.body).toHaveProperty("idDeletedDiscount");
+    expect(typeof res.body.idDeletedDiscount).toBe("string");
   });
 });

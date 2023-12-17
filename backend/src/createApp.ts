@@ -36,7 +36,7 @@ export function createApp(): Application {
   // Auth Routes
   app.use("/auth", authRouter); // Add this line to mount the Task API routes
   // Files Routes
-  app.use("/files", fileRouter);
+  app.use("/file", fileRouter);
   // Discount Routes
   app.use("/discount", discountRouter);
   // Category Routes

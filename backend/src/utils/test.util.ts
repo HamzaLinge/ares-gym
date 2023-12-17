@@ -85,10 +85,3 @@ export const expectedRuleErrorsFields = {
   value: expect.anything(),
   msg: expect.anything(),
 };
-
-// Set up end date to be sure that it is after the current date
-export const getEndDate = (days: number = 1) => {
-  const endDate = new Date();
-  endDate.setDate(endDate.getDate() + days);
-  return endDate.toISOString();
-};

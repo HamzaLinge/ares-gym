@@ -42,7 +42,7 @@ describe("POST /auth/", () => {
         idUser = "";
       }
     });
-    it("should return OK status", async () => {
+    it("should return OK status from local register", async () => {
       const password = faker.internet.password({ length: 10 });
       const userTestData = {
         email: faker.internet.email(),
@@ -58,6 +58,7 @@ describe("POST /auth/", () => {
       idUser = res.body.user._id;
     });
   });
+
   describe("/local/login/", () => {
     let user: IUser;
     let password: string;
@@ -69,11 +70,48 @@ describe("POST /auth/", () => {
     afterAll(async () => {
       await authTestMethods.delete(user._id);
     });
-    it("should return OK status", async () => {
+    it("should return OK status from local login", async () => {
       const res = await supertest(app)
         .post("/auth/local/login")
         .send({ email: user.email, password: password });
       expect(res.status).toBe(HttpStatusCodes.OK);
+    });
+  });
+
+  describe("JWT Errors", () => {
+    it("should return an UNAUTHORIZED status due to the invalid token", async () => {
+      const someRandomCategoryData = { name: faker.lorem.word() };
+      const fakeToken = `${faker.number.hex(10)}.${faker.number.hex(
+        10
+      )}.${faker.number.hex(10)}`;
+      const res = await supertest(app)
+        .post("/category/")
+        .set("Authorization", `Bearer ${fakeToken}`)
+        .send(someRandomCategoryData);
+      expect(res.status).toBe(HttpStatusCodes.UNAUTHORIZED);
+      expect(res.body).toHaveProperty("message");
+      expect(typeof res.body.message).toBe("string");
+      /*
+      res.body = { message: 'invalid token' }
+       */
+    });
+    it("should return an UNAUTHORIZED status due to the expired token", async () => {
+      const { accessToken, expiresInMilliseconds } =
+        authTestMethods.getExpiredToken();
+      const someRandomCategoryData = { name: faker.lorem.word() };
+      await new Promise((resolve) =>
+        setTimeout(resolve, expiresInMilliseconds)
+      );
+      const res = await supertest(app)
+        .post("/category/")
+        .set("Authorization", `Bearer ${accessToken}`)
+        .send(someRandomCategoryData);
+      expect(res.status).toBe(HttpStatusCodes.UNAUTHORIZED);
+      expect(res.body).toHaveProperty("message");
+      expect(typeof res.body.message).toBe("string");
+      /*
+      res.body = { message: 'jwt expired' }
+       */
     });
   });
 });

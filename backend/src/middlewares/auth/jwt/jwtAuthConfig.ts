@@ -35,8 +35,9 @@ export function jwtAuthConfig() {
         }
         done(null, user);
       } catch (errorLoadSubscriber) {
-        console.log("Error Passport JWT Strategy Authentication :");
-        console.log(errorLoadSubscriber);
+        console.error(
+          `Error Passport JWT Strategy Authentication => ${errorLoadSubscriber}`
+        );
         done(null, false, {
           message: "An error occurred while authenticating",
         });

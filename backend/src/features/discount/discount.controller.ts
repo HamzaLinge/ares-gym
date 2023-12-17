@@ -243,12 +243,10 @@ export async function discount_delete_controller(
       { $unset: { discount: 1 } }
     );
   }
-
+  if (discountExists.thumbnail) await deleteFile(discountExists.thumbnail);
   await DiscountModel.findOneAndDelete({ _id: req.params.idDiscount });
   res.status(HttpStatusCodes.OK).send({
-    message: `The "${capitalize(
-      discountExists.title
-    )}" discount successfully deleted`,
+    idDeletedDiscount: discountExists._id,
   });
 }
 
