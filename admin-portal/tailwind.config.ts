@@ -36,6 +36,7 @@ const config = {
           200: "#ebebeb",
           300: "#c2c2c2",
         },
+        error: "#D32F2F",
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],

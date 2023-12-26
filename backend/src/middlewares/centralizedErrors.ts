@@ -36,7 +36,7 @@ const centralizedErrors: ErrorRequestHandler = async (
       ? err.statusCode
       : HttpStatusCodes.INTERNAL_SERVER_ERROR;
 
-  const responsePayload: any = {
+  let responsePayload: any = {
     message: err.message,
     ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
   };
@@ -45,6 +45,7 @@ const centralizedErrors: ErrorRequestHandler = async (
     responsePayload.errors = err.errors;
   }
 
+  console.error(responsePayload);
   res.status(statusCode).send(responsePayload);
 };
 
