@@ -42,9 +42,9 @@ export async function login(
       );
       return { message: err.message, ...formattedValidationErrors };
     }
-    redirect("/");
   } catch (error) {
     console.error(error);
     return { message: "Not Cool" };
   }
+  redirect("/dashboard");
 }

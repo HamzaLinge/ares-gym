@@ -5,10 +5,15 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { login } from "@/app/auth/action";
 import AlertError from "@/components/custom/AlertError";
+import { useEffect } from "react";
 
 export default function AuthPage() {
   const { pending } = useFormStatus();
   const [state, formAction] = useFormState(login, null);
+
+  useEffect(() => {
+    console.log(pending);
+  }, [pending]);
 
   return (
     <form
@@ -17,7 +22,7 @@ export default function AuthPage() {
         "grid w-full max-w-md grid-rows-2 gap-y-8 rounded-lg bg-bg-300 p-4 shadow-lg"
       }
     >
-      <div className={"grid w-full gap-y-1.5"}>
+      <div className={"relative grid w-full gap-y-1.5"}>
         <Input
           required
           type="email"
@@ -26,9 +31,12 @@ export default function AuthPage() {
           placeholder="Email"
           className={"text-text-100"}
         />
-        <AlertError messageError={state?.email} />
+        <AlertError
+          messageError={state?.email}
+          className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
+        />
       </div>
-      <div className={"grid w-full gap-y-1.5"}>
+      <div className={"relative grid w-full gap-y-1.5"}>
         <Input
           required
           type="password"
@@ -37,16 +45,23 @@ export default function AuthPage() {
           placeholder="Password"
           className={"text-text-100"}
         />
-        <AlertError messageError={state?.password} />
+        <AlertError
+          messageError={state?.password}
+          className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
+        />
       </div>
-      <div className={"grid w-full gap-y-1.5"}>
+      <div className={"relative my-4 grid w-full gap-y-1.5"}>
         <Button
           aria-disabled={pending}
           className={"bg-primary-100 text-primary-300 hover:bg-primary-200"}
         >
           Login
         </Button>
-        <AlertError messageError={state?.message} withIcon />
+        <AlertError
+          messageError={state?.message}
+          withIcon
+          className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
+        />
       </div>
     </form>
   );
