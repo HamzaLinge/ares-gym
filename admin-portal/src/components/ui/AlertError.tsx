@@ -15,9 +15,10 @@ const AlertError: React.FC<AlertErrorProps> = ({
 }) => {
   return (
     <div
+      role={"status"}
       className={cn(
         "flex w-full items-center justify-center gap-x-2 text-xs text-error",
-        className
+        className ? className : ""
       )}
     >
       {messageError && withIcon ? (

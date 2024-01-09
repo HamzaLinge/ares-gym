@@ -40,7 +40,7 @@ export type TUserData = {
 // TOKENS ---------------------------------------------------------------------------------------------
 export type TTokens = {
   accessToken: string;
-  refreshToken?: string;
+  refreshToken: string;
   expiresAccessToken?: number;
   expiresRefreshToken?: number;
 };

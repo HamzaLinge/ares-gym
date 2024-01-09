@@ -4,15 +4,17 @@ import { ValidationError } from "express-validator";
 interface ICustomError {
   statusCode: number;
   message: string;
-  error?: ValidationError[];
+  error?: TErrorValidation[];
 }
+
+export type TErrorValidation = { [key: string]: string };
 
 // Implement the CustomError class
 export class CustomError extends Error implements ICustomError {
   statusCode: number;
-  errors?: ValidationError[];
+  errors?: TErrorValidation;
 
-  constructor(message: string, statusCode: number, errors?: ValidationError[]) {
+  constructor(message: string, statusCode: number, errors?: TErrorValidation) {
     super(message); // Call the constructor of the parent class (Error), because it handles the message property
     this.statusCode = statusCode;
     this.errors = errors;
