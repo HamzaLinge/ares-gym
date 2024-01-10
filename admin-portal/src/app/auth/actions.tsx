@@ -2,12 +2,13 @@
 
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { TError, TToken, TUser } from "@/util/global.type";
+import { TError, TToken, TUser } from "@/utils/global.type";
+import { routePaths } from "@/utils/route-paths";
 
 export async function login(prevState: any, formData: FormData) {
-  await new Promise<Boolean>((resolve) => {
-    setTimeout(() => resolve(true), 2000);
-  });
+  // await new Promise<Boolean>((resolve) => {
+  //   setTimeout(() => resolve(true), 2000);
+  // });
   const loginData = {
     email: formData.get("email"),
     password: formData.get("password"),
@@ -30,5 +31,5 @@ export async function login(prevState: any, formData: FormData) {
     const err: TError = { message: "Not Cool" };
     return err;
   }
-  redirect("/dashboard");
+  redirect(routePaths.dashboard.path);
 }

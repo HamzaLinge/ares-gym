@@ -1,4 +1,11 @@
 import React from "react";
+import { Metadata } from "next";
+import { routePaths } from "@/utils/route-paths";
+
+export const metadata: Metadata = {
+  title: routePaths.auth.title,
+  description: "",
+};
 
 export default function AuthLayout({
   children,

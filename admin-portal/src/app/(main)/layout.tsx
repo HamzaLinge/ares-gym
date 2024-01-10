@@ -7,16 +7,9 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className={"relative flex w-full"}>
-      <nav
-        className={
-          "absolute left-0 top-0 h-screen w-48 -translate-x-full bg-accent-100"
-        }
-      ></nav>
-      <div className={"relative grow"}>
-        <TopBar />
-        <div>{children}</div>
-      </div>
+    <section className={"relative w-full"}>
+      <TopBar />
+      <div className={"col-span-2"}>{children}</div>
     </section>
   );
 }

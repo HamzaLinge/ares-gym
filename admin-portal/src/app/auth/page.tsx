@@ -3,7 +3,7 @@ import { useFormState } from "react-dom";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { login } from "@/app/auth/util/action";
+import { login } from "@/app/auth/actions";
 import AlertError from "@/components/ui/AlertError";
 
 export default function AuthPage() {
