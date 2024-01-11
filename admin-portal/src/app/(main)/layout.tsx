@@ -1,5 +1,5 @@
 import React from "react";
-import TopBar from "@/app/(main)/components/TopBar";
+import NavigationLayout from "@/app/(main)/components/NavigationLayout";
 
 export default function MainLayout({
   children,
@@ -7,9 +7,9 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className={"relative w-full"}>
-      <TopBar />
-      <div className={"col-span-2"}>{children}</div>
+    <section className={"relative flex grow flex-col"}>
+      <NavigationLayout />
+      <main className={"mt-20 flex-1 transition-all md:ml-64"}>{children}</main>
     </section>
   );
 }

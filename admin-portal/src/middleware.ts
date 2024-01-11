@@ -1,13 +1,21 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+
 import { isAuthenticated } from "@/lib/auth";
 import { routePaths } from "@/utils/route-paths";
 
 export function middleware(request: NextRequest) {
-  if (!isAuthenticated(request))
+  if (!isAuthenticated(request)) {
     if (!request.nextUrl.pathname.startsWith("/auth"))
       return NextResponse.redirect(new URL(routePaths.auth.path, request.url));
-  // return NextResponse.redirect(new URL("/auth", request.url));
+  } else if (
+    request.nextUrl.pathname.startsWith("/auth") ||
+    request.nextUrl.pathname.length === 1
+  ) {
+    return NextResponse.redirect(
+      new URL(routePaths.dashboard.path, request.url)
+    );
+  }
 }
 
 export const config = {

@@ -1,13 +1,10 @@
-"use client";
-
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { signOut } from "@/app/(main)/actions";
 import Drawer from "@/components/ui/Drawer";
 import { routePaths } from "@/utils/route-paths";
 
-export default function TopBar() {
+export default function NavLinkMobile() {
   const router = useRouter();
   const [isOpenNavLinks, setIsOpenVanLinks] = useState(false);
 
@@ -20,11 +17,7 @@ export default function TopBar() {
   ];
 
   return (
-    <nav
-      className={
-        "sticky left-0 top-0 grid w-full grid-cols-3 justify-items-center bg-bg-200 py-8"
-      }
-    >
+    <>
       <button onClick={() => setIsOpenVanLinks(true)}>Navigation</button>
       <Drawer isOpen={isOpenNavLinks} setIsOpen={setIsOpenVanLinks}>
         <nav className={"flex h-full flex-col items-center bg-bg-100"}>
@@ -49,8 +42,6 @@ export default function TopBar() {
           </ul>
         </nav>
       </Drawer>
-      <p>Logo</p>
-      <button onClick={() => signOut()}>Sign Out</button>
-    </nav>
+    </>
   );
 }
