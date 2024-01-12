@@ -9,7 +9,7 @@ export default function Header({ setIsOpen }) {
   return (
     <header
       className={
-        "z-20 grid h-20 w-full grid-cols-3 justify-items-center border-[1px] border-b-bg-300 bg-bg-200 py-6 md:grid-cols-2"
+        "z-10 grid h-20 w-full grid-cols-3 justify-items-center border-[1px] border-b-bg-300 bg-bg-200 py-6 md:grid-cols-2"
       }
     >
       <HamburgerMenuIcon
