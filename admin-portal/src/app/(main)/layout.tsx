@@ -7,9 +7,13 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className={"relative flex grow flex-col"}>
+    <section className={"relative flex flex-1 flex-col"}>
       <NavigationLayout />
-      <main className={"mt-20 flex-1 transition-all md:ml-64"}>{children}</main>
+      <main
+        className={"ml-0 mt-20 flex flex-1 flex-col transition-all md:ml-64"}
+      >
+        {children}
+      </main>
     </section>
   );
 }

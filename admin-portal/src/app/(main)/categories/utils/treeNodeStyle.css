@@ -1,0 +1,4 @@
+.node:hover .node-icons {
+    display: block;
+    fill: white
+}

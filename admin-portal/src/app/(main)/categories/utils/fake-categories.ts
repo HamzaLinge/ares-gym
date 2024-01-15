@@ -2,6 +2,7 @@ const categories = [
   {
     id: "1",
     name: "Health & Wellness",
+    description: "Some desc",
     children: [
       {
         id: "1-1",
