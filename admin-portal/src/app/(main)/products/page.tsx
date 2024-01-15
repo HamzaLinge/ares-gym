@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { routePaths } from "@/utils/route-paths";
+import HeaderProduct from "@/app/(main)/products/components/HeaderProduct";
 
 export const metadata: Metadata = {
   title: routePaths.products.title,
@@ -7,5 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default function ProductsPage() {
-  return <section>Products Page</section>;
+  return (
+    <section>
+      <HeaderProduct />
+    </section>
+  );
 }
