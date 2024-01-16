@@ -15,13 +15,12 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "bg-primary-100 text-primary-300 shadow hover:bg-primary-200 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-50/90",
+          "font-semibold text-bg-200 bg-primary-100 shadow hover:bg-primary-300",
         default:
           "bg-slate-900 text-slate-50 shadow hover:bg-slate-900/90 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-50/90",
         destructive:
           "bg-red-500 text-slate-50 shadow-sm hover:bg-red-500/90 dark:bg-red-900 dark:text-slate-50 dark:hover:bg-red-900/90",
-        outline:
-          "border border-slate-200 bg-white shadow-sm hover:bg-slate-100 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-slate-800 dark:hover:text-slate-50",
+        outline: "bg-bg-100 font-semibold text-text-100 shadow hover:bg-bg-300",
         secondary:
           "bg-slate-100 text-slate-900 shadow-sm hover:bg-slate-100/80 dark:bg-slate-800 dark:text-slate-50 dark:hover:bg-slate-800/80",
         ghost:
@@ -36,7 +35,7 @@ const buttonVariants = cva(
       },
     },
     defaultVariants: {
-      variant: "default",
+      variant: "primary",
       size: "default",
     },
   }

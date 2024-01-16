@@ -10,7 +10,9 @@ export default function MainLayout({
     <section className={"relative flex flex-1 flex-col"}>
       <NavigationLayout />
       <main
-        className={"ml-0 mt-20 flex flex-1 flex-col transition-all md:ml-64"}
+        className={
+          "ml-0 mt-20 flex flex-1 flex-col overflow-auto p-2 transition-margin md:ml-64"
+        }
       >
         {children}
       </main>

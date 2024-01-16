@@ -18,6 +18,9 @@ const config = {
       },
     },
     extend: {
+      transitionProperty: {
+        margin: "margin",
+      },
       colors: {
         primary: {
           100: "#2196F3",
