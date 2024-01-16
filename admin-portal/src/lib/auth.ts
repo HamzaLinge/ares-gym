@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { cookies } from "next/headers";
 
 export function isAuthenticated(request: NextRequest) {
   if (request.cookies.has("AresGymStore")) {
@@ -8,4 +9,14 @@ export function isAuthenticated(request: NextRequest) {
     return true;
   }
   return false;
+}
+
+export function getAccessToken() {
+  if (!cookies().has(process.env.USER_KEY_COOKIE)) {
+    return null;
+  }
+  const userCookieStr = cookies().get(process.env.USER_KEY_COOKIE)
+    ?.value as string;
+  const userCookieObj = JSON.parse(userCookieStr);
+  return userCookieObj.tokens.accessToken;
 }

@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 import { TError, TToken, TUser } from "@/utils/global.type";
 import { routePaths } from "@/utils/route-paths";
 
-export async function login(prevState: any, formData: FormData) {
+export async function login(prevState, formData: FormData) {
   // await new Promise<Boolean>((resolve) => {
   //   setTimeout(() => resolve(true), 2000);
   // });

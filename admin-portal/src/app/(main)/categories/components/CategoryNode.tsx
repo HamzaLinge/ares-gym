@@ -2,6 +2,7 @@ import { MoveIcon, PlusIcon, TrashIcon } from "@radix-ui/react-icons";
 
 import CategoryTree from "@/app/(main)/categories/components/CategoryTree";
 import EditCategory from "@/app/(main)/categories/components/EditCategory";
+import AddCategory from "@/app/(main)/categories/components/AddCategory";
 
 export default function CategoryNode({ category }) {
   return (
@@ -18,11 +19,7 @@ export default function CategoryNode({ category }) {
           </div>
         </div>
         <div className={"flex gap-x-2"}>
-          <PlusIcon
-            className={
-              "h-7 w-7 rounded-full p-1 text-primary-300 hover:cursor-pointer hover:bg-primary-300 hover:bg-opacity-25"
-            }
-          />
+          <AddCategory category={category} />
           <EditCategory category={category} />
           <MoveIcon
             className={
