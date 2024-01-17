@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { Pencil2Icon } from "@radix-ui/react-icons";
 
 import { Input } from "@/components/ui/input";
-import AlertError from "@/components/ui/AlertError";
+import InputError from "@/components/ui/InputError";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 
@@ -42,7 +42,7 @@ export default function EditCategory({ category }) {
                 defaultValue={category.name}
                 className={"bg-bg-100 text-text-100"}
               />
-              <AlertError
+              <InputError
                 // messageError={state?.errors?.email}
                 className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
               />
@@ -56,7 +56,7 @@ export default function EditCategory({ category }) {
                 defaultValue={category.description}
                 className={"bg-bg-100 text-text-100"}
               />
-              <AlertError
+              <InputError
                 // messageError={state?.errors?.email}
                 className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
               />

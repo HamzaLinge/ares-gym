@@ -19,7 +19,7 @@ export default function CategoryNode({ category }) {
           </div>
         </div>
         <div className={"flex gap-x-2"}>
-          <AddCategory category={category} />
+          <AddCategory parent={category} />
           <EditCategory category={category} />
           <MoveIcon
             className={

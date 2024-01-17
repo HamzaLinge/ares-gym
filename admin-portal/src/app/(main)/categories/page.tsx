@@ -1,7 +1,8 @@
 import React from "react";
-import CategoryD3Tree from "@/app/(main)/categories/components/CategoryD3Tree";
+
 import CategoryTree from "@/app/(main)/categories/components/CategoryTree";
-import categories from "@/app/(main)/categories/utils/fake-categories";
+import { ICategoryTree } from "@/app/(main)/categories/utils/types";
+import { ICustomError } from "@/utils/global-types";
 
 async function getCategories() {
   const res = await fetch(`${process.env.BASE_URL}/category`, {
@@ -9,20 +10,32 @@ async function getCategories() {
     headers: {
       "Content-Type": "application/json",
     },
+    next: { tags: ["category"] },
   });
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
-    throw new Error("Failed to fetch data");
+    throw await res.json();
   }
-
-  return res.json();
+  const categories: { categoryTree: ICategoryTree[] } = await res.json();
+  return categories.categoryTree;
 }
 
-export default function CategoriesPage() {
+export default async function CategoriesPage() {
+  let categories: ICategoryTree[] = [
+    {
+      name: "Ares Gym Store Categories",
+      description: "Hamza, this is for the top categories",
+    },
+  ];
+  try {
+    categories[0].children = await getCategories();
+  } catch (error: ICustomError) {
+    console.log(error);
+  }
   return (
     <div className={"flex flex-1 flex-col"}>
-      <h1>Categories Page</h1>
+      <div>Dashboard Categories</div>
       <CategoryTree categories={categories} />
       {/*<CategoryD3Tree />*/}
     </div>

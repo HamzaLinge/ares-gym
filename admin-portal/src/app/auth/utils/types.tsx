@@ -1,4 +1,6 @@
 // CREDENTIALS PROVIDERS -----------------------------------------------------------------------------
+import { TErrorValidation } from "@/utils/global-types";
+
 enum CredentialsProviders {
   local = "local",
   google = "google",
@@ -26,7 +28,6 @@ enum Roles {
 }
 
 type TRole = Roles;
-
 // TOKEN --------------------------------------------------------------------------------------
 export type TToken = {
   accessToken: string;
@@ -34,7 +35,6 @@ export type TToken = {
   expiresAccessToken: number;
   expiresRefreshToken: number;
 };
-
 // USER DATA ------------------------------------------------------------------------------------------
 export type TUser = {
   _id: string;
@@ -49,9 +49,6 @@ export type TUser = {
   createdAt: string;
   updatedAt: string;
 };
-
-export type TErrorValidation = { [key: string]: string };
-
 export type TError = {
   message: string;
   errors?: TErrorValidation[];

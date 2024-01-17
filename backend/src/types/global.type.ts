@@ -1,4 +1,4 @@
-import { ValidationError } from "express-validator";
+import { Types } from "mongoose";
 
 // Define the interface for CustomError class
 interface ICustomError {
@@ -31,3 +31,5 @@ declare module "express-serve-static-core" {
     fileIdArr?: string[] | undefined; // Add fileUrl Array as an optional string[] property
   }
 }
+
+export type TId = Types.ObjectId | string | undefined | null;

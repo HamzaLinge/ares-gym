@@ -1,9 +1,9 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import AlertError from "@/components/ui/AlertError";
+import InputError from "@/components/ui/InputError";
 import { useFormState } from "react-dom";
-import { login } from "@/app/auth/actions";
+import { login } from "@/app/auth/utils/actions";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -30,7 +30,7 @@ export default function NewProductPage() {
           placeholder="Name"
           className={"text-text-100"}
         />
-        <AlertError
+        <InputError
           messageError={state?.errors?.name}
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
         />
@@ -51,7 +51,7 @@ export default function NewProductPage() {
             </SelectGroup>
           </SelectContent>
         </Select>
-        <AlertError
+        <InputError
           messageError={state?.errors?.name}
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
         />
@@ -65,7 +65,7 @@ export default function NewProductPage() {
           placeholder="Price"
           className={"text-text-100"}
         />
-        <AlertError
+        <InputError
           messageError={state?.errors?.price}
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
         />
@@ -79,14 +79,14 @@ export default function NewProductPage() {
           placeholder="Stock"
           className={"text-text-100"}
         />
-        <AlertError
+        <InputError
           messageError={state?.errors?.stock}
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
         />
       </div>
       <div className={"relative my-4 grid w-full gap-y-1.5"}>
         <Button variant={"primary"}>Save</Button>
-        <AlertError
+        <InputError
           messageError={state?.message}
           withIcon
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}

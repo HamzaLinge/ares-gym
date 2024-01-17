@@ -2,8 +2,8 @@
 
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { TError, TToken, TUser } from "@/utils/global.type";
 import { routePaths } from "@/utils/route-paths";
+import { TError, TToken, TUser } from "@/app/auth/utils/types";
 
 export async function login(prevState, formData: FormData) {
   // await new Promise<Boolean>((resolve) => {

@@ -1,17 +1,29 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { revalidateTag } from "next/cache";
 
-import { TError, TToken, TUser } from "@/utils/global.type";
 import { getAccessToken } from "@/lib/auth";
+import { TError, TToken, TUser } from "@/app/auth/utils/types";
+import { ICustomError } from "@/utils/global-types";
+import {
+  ICategory,
+  IStateAddCategory,
+} from "@/app/(main)/categories/utils/types";
 
-export async function addCategory(idCategory, formData: FormData) {
-  const addCategoryData = {
-    parent: idCategory,
-    name: formData.get("name"),
-    description: formData.get("description"),
-  };
-  console.log(addCategoryData);
+export async function addCategory(
+  { parent }: IStateAddCategory,
+  formData: FormData
+) {
+  let addCategoryData: {
+    parent?: string;
+    name: string;
+    description?: string;
+  } = { name: formData.get("name") as string };
+  if (parent) addCategoryData.parent = parent;
+  if ((formData.get("description") as string).length > 0)
+    addCategoryData.description = formData.get("description") as string;
+
   const accessToken = getAccessToken();
   if (!accessToken) {
     throw new Error("No Access Token found!");
@@ -27,16 +39,17 @@ export async function addCategory(idCategory, formData: FormData) {
     });
 
     if (!res.ok) {
-      const response: TError = await res.json();
-      return response;
+      const error: ICustomError = await res.json();
+      return { error };
     }
-    const response = await res.json();
-    console.log(response);
-    return response;
-  } catch (error) {
+    const createdCategory: { category: ICategory } = await res.json();
+    revalidateTag("category");
+    return { category: createdCategory.category };
+  } catch (error: Error) {
     console.error(error);
     throw new Error(
-      "Something went wrong when attempting to access to the API"
+      `Something went wrong when attempting to process ${addCategory.name} API` +
+        error.message
     );
   }
 }
