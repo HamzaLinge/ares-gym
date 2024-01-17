@@ -14,8 +14,8 @@ export interface ICategoryTree {
   children?: ICategoryTree[];
 }
 
-export interface IStateAddCategory {
-  parent: string | undefined;
+export interface IStateActionModalCategory {
+  id: string | undefined;
   category?: ICategory;
   error?: ICustomError;
 }

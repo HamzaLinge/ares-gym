@@ -2,7 +2,7 @@ import { MoveIcon, PlusIcon, TrashIcon } from "@radix-ui/react-icons";
 
 import CategoryTree from "@/app/(main)/categories/components/CategoryTree";
 import EditCategory from "@/app/(main)/categories/components/EditCategory";
-import AddCategory from "@/app/(main)/categories/components/AddCategory";
+import ModalCategory from "@/app/(main)/categories/components/ModalCategory";
 
 export default function CategoryNode({ category }) {
   return (
@@ -19,7 +19,7 @@ export default function CategoryNode({ category }) {
           </div>
         </div>
         <div className={"flex gap-x-2"}>
-          <AddCategory parent={category} />
+          <ModalCategory category={category} />
           <EditCategory category={category} />
           <MoveIcon
             className={

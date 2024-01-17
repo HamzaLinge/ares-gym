@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 import { useFormState } from "react-dom";
 import { PlusIcon } from "@radix-ui/react-icons";
 
@@ -8,24 +8,44 @@ import { Input } from "@/components/ui/input";
 import InputError from "@/components/ui/InputError";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { addCategory } from "@/app/(main)/categories/utils/actions";
+import {
+  createCategory,
+  editCategory,
+} from "@/app/(main)/categories/utils/actions";
 import {
   ICategory,
-  IStateAddCategory,
+  IStateActionModalCategory,
 } from "@/app/(main)/categories/utils/types";
 
-export default function AddCategory({ parent }: { parent: ICategory }) {
-  const refAddModal = useRef<HTMLDialogElement>(null);
+enum TypeModalCategory {
+  create = "CREATE",
+  edit = "EDIT",
+}
+type TModalCategory = TypeModalCategory;
 
-  const prevState: IStateAddCategory = {
-    parent: parent._id ? parent._id : undefined,
+interface IModalCategoryProps {
+  type: TModalCategory;
+  category: ICategory;
+}
+
+export default function ModalCategory({
+  type = TypeModalCategory.create,
+  category,
+}: IModalCategoryProps) {
+  const refModalCategory = useRef<HTMLDialogElement>(null);
+
+  const actionCategory =
+    type === TypeModalCategory.create ? createCategory : editCategory;
+
+  const prevState: IStateActionModalCategory = {
+    id: category ? category._id : undefined,
   };
 
-  const [result, addCategoryAction] = useFormState(addCategory, prevState);
+  const [result, addCategoryAction] = useFormState(createCategory, prevState);
 
   useEffect(() => {
     if (result.category) {
-      refAddModal.current.close();
+      refModalCategory.current.close();
     }
   }, [result]);
 
@@ -35,11 +55,11 @@ export default function AddCategory({ parent }: { parent: ICategory }) {
         className={
           "h-7 w-7 rounded-full p-1 text-primary-300 hover:cursor-pointer hover:bg-primary-300 hover:bg-opacity-25"
         }
-        onClick={() => refAddModal.current.showModal()}
+        onClick={() => refModalCategory.current.showModal()}
       />
       <dialog
         role={"dialog"}
-        ref={refAddModal}
+        ref={refModalCategory}
         className={
           "z-10 w-full rounded border-none backdrop:bg-black backdrop:bg-opacity-50"
         }
@@ -49,7 +69,7 @@ export default function AddCategory({ parent }: { parent: ICategory }) {
           className={"flex flex-col items-center gap-y-10 bg-bg-200 p-4 pb-10"}
         >
           <h1 className={"text-lg font-semibold"}>
-            Create new category to {parent.name}
+            {type === TypeModalCategory.create ? "create" : "edit"}
           </h1>
           <div className={"flex w-full flex-col gap-y-8"}>
             <div className={"relative w-full "}>
@@ -59,6 +79,7 @@ export default function AddCategory({ parent }: { parent: ICategory }) {
                 name="name"
                 placeholder="Name"
                 className={"bg-bg-100 text-text-100"}
+                defaultValue={category ? category.name : ""}
               />
               <InputError messageError={result?.error?.errors?.name} />
             </div>
@@ -68,6 +89,7 @@ export default function AddCategory({ parent }: { parent: ICategory }) {
                 name="description"
                 placeholder="Description"
                 className={"bg-bg-100 text-text-100"}
+                defaultValue={category ? category.description : ""}
               />
               <InputError messageError={result?.error?.errors?.description} />
             </div>
@@ -79,12 +101,12 @@ export default function AddCategory({ parent }: { parent: ICategory }) {
               }
             >
               <Button type={"submit"} className={"w-1/3"}>
-                Save
+                {type === TypeModalCategory.create ? "New" : "Update"}
               </Button>
               <Button
                 variant={"outline"}
                 className={"absolute right-0"}
-                onClick={() => refAddModal.current.close()}
+                onClick={() => refModalCategory.current.close()}
                 formMethod={"dialog"}
                 type={"submit"}
               >

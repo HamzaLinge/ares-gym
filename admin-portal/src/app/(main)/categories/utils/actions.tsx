@@ -8,11 +8,11 @@ import { TError, TToken, TUser } from "@/app/auth/utils/types";
 import { ICustomError } from "@/utils/global-types";
 import {
   ICategory,
-  IStateAddCategory,
+  IStateActionModalCategory,
 } from "@/app/(main)/categories/utils/types";
 
-export async function addCategory(
-  { parent }: IStateAddCategory,
+export async function createCategory(
+  { id: parent }: IStateActionModalCategory,
   formData: FormData
 ) {
   let addCategoryData: {
@@ -42,19 +42,22 @@ export async function addCategory(
       const error: ICustomError = await res.json();
       return { error };
     }
-    const createdCategory: { category: ICategory } = await res.json();
+    const category: { category: ICategory } = await res.json();
     revalidateTag("category");
-    return { category: createdCategory.category };
+    return { category };
   } catch (error: Error) {
     console.error(error);
     throw new Error(
-      `Something went wrong when attempting to process ${addCategory.name} API` +
+      `Something went wrong when attempting to process ${this.name} API` +
         error.message
     );
   }
 }
 
-export async function editCategory(prevState: any, formData: FormData) {
+export async function editCategory(
+  { id: category }: IStateActionModalCategory,
+  formData: FormData
+) {
   const editCategoryData = {
     name: formData.get("name"),
     description: formData.get("description"),
@@ -67,18 +70,24 @@ export async function editCategory(prevState: any, formData: FormData) {
     const res = await fetch(`${process.env.BASE_URL}/category`, {
       method: "PUT",
       body: JSON.stringify(editCategoryData),
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
 
     if (!res.ok) {
-      const response: TError = await res.json();
-      return response;
+      const error: ICustomError = await res.json();
+      return { error };
     }
-    const response: TUser & TToken = await res.json();
-    cookies().set("AresGymStore", JSON.stringify(response));
+    const category: { category: ICategory } = await res.json();
+    revalidateTag("category");
+    return { category };
   } catch (error) {
     console.error(error);
-    const err: TError = { message: "Not Cool" };
-    return err;
+    throw new Error(
+      `Something went wrong when attempting to process ${this.name} API` +
+        error.message
+    );
   }
 }
