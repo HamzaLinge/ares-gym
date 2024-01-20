@@ -4,7 +4,7 @@ import { useFormState } from "react-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { login } from "@/app/auth/utils/actions";
-import InputError from "@/components/ui/InputError";
+import FormError from "@/components/ui/FormError";
 
 export default function AuthPage() {
   const [state, loginAction] = useFormState(login, null);
@@ -25,7 +25,7 @@ export default function AuthPage() {
           placeholder="Email"
           className={"text-text-100"}
         />
-        <InputError
+        <FormError
           messageError={state?.errors?.email}
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
         />
@@ -39,14 +39,14 @@ export default function AuthPage() {
           placeholder="Password"
           className={"text-text-100"}
         />
-        <InputError
+        <FormError
           messageError={state?.errors?.password}
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
         />
       </div>
       <div className={"relative my-4 grid w-full gap-y-1.5"}>
         <Button variant={"primary"}>Login</Button>
-        <InputError
+        <FormError
           messageError={state?.message}
           withIcon
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}

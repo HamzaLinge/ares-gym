@@ -5,14 +5,14 @@ import { revalidateTag } from "next/cache";
 
 import { getAccessToken } from "@/lib/auth";
 import { TError, TToken, TUser } from "@/app/auth/utils/types";
-import { ICustomError } from "@/utils/global-types";
+import { ICustomError, TStateAction } from "@/utils/global-types";
 import {
   ICategory,
-  IStateActionModalCategory,
+  TStateActionModalCategory,
 } from "@/app/(main)/categories/utils/types";
 
 export async function createCategory(
-  { id: parent }: IStateActionModalCategory,
+  { id: parent }: TStateActionModalCategory,
   formData: FormData
 ) {
   let addCategoryData: {
@@ -48,26 +48,26 @@ export async function createCategory(
   } catch (error: Error) {
     console.error(error);
     throw new Error(
-      `Something went wrong when attempting to process ${this.name} API` +
+      `Something went wrong when attempting to process Create Category API:` +
         error.message
     );
   }
 }
 
 export async function editCategory(
-  { id: category }: IStateActionModalCategory,
+  { id: idCategory }: TStateActionModalCategory,
   formData: FormData
 ) {
   const editCategoryData = {
-    name: formData.get("name"),
-    description: formData.get("description"),
+    name: formData.get("name") as string,
+    description: formData.get("description") as string,
   };
   const accessToken = getAccessToken();
   if (!accessToken) {
     throw new Error("No Access Token found!");
   }
   try {
-    const res = await fetch(`${process.env.BASE_URL}/category`, {
+    const res = await fetch(`${process.env.BASE_URL}/category/${idCategory}`, {
       method: "PUT",
       body: JSON.stringify(editCategoryData),
       headers: {
@@ -75,7 +75,6 @@ export async function editCategory(
         Authorization: `Bearer ${accessToken}`,
       },
     });
-
     if (!res.ok) {
       const error: ICustomError = await res.json();
       return { error };
@@ -86,7 +85,40 @@ export async function editCategory(
   } catch (error) {
     console.error(error);
     throw new Error(
-      `Something went wrong when attempting to process ${this.name} API` +
+      `Something went wrong when attempting to process Edit Category API:` +
+        error.message
+    );
+  }
+}
+
+export async function deleteCategory(
+  { idCategory }: { idCategory: string },
+  formData: FormData
+) {
+  const accessToken = getAccessToken();
+  if (!accessToken) {
+    throw new Error("No Access Token found!");
+  }
+  try {
+    const res = await fetch(`${process.env.BASE_URL}/category/${idCategory}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    if (!res.ok) {
+      const error: ICustomError = await res.json();
+      return { error };
+    }
+    const { idDeletedCategory }: { idDeletedCategory: string } =
+      await res.json();
+    revalidateTag("category");
+    return { idDeletedCategory };
+  } catch (error) {
+    console.error(error);
+    throw new Error(
+      `Something went wrong when attempting to process Delete Category API:` +
         error.message
     );
   }

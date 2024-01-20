@@ -5,3 +5,5 @@ export interface ICustomError {
   stack?: string;
   errors?: TErrorValidation;
 }
+
+export type TStateAction<T> = { [key: string]: T; error?: ICustomError };

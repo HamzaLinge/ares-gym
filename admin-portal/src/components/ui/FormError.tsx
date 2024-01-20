@@ -2,14 +2,14 @@ import React, { ReactNode } from "react";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 
-type AlertErrorProps = {
+type FormErrorProps = {
   children?: ReactNode;
   messageError?: string | undefined;
   withIcon?: boolean;
   className?: string;
 };
 
-const InputError: React.FC<AlertErrorProps> = ({
+const FormError: React.FC<FormErrorProps> = ({
   children,
   messageError = undefined,
   withIcon = false,
@@ -32,4 +32,4 @@ const InputError: React.FC<AlertErrorProps> = ({
   );
 };
 
-export default InputError;
+export default FormError;

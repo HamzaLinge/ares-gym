@@ -1,8 +1,11 @@
-import { MoveIcon, PlusIcon, TrashIcon } from "@radix-ui/react-icons";
+"use client";
+
+import React from "react";
+import { MoveIcon } from "@radix-ui/react-icons";
 
 import CategoryTree from "@/app/(main)/categories/components/CategoryTree";
-import EditCategory from "@/app/(main)/categories/components/EditCategory";
 import ModalCategory from "@/app/(main)/categories/components/ModalCategory";
+import AlertCategory from "@/app/(main)/categories/components/AlertCategory";
 
 export default function CategoryNode({ category }) {
   return (
@@ -20,17 +23,13 @@ export default function CategoryNode({ category }) {
         </div>
         <div className={"flex gap-x-2"}>
           <ModalCategory category={category} />
-          <EditCategory category={category} />
+          <ModalCategory type={"EDIT"} category={category} />
           <MoveIcon
             className={
               "h-7 w-7 rounded-full p-1 text-text-200 hover:cursor-pointer hover:bg-text-200 hover:bg-opacity-25"
             }
           />
-          <TrashIcon
-            className={
-              "h-7 w-7 rounded-full p-1 text-error hover:cursor-pointer hover:bg-error hover:bg-opacity-25"
-            }
-          />
+          <AlertCategory category={category} />
         </div>
       </div>
 

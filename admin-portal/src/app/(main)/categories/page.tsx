@@ -1,8 +1,12 @@
+// "use client";
+
 import React from "react";
+import { DndContext } from "@dnd-kit/core";
 
 import CategoryTree from "@/app/(main)/categories/components/CategoryTree";
 import { ICategoryTree } from "@/app/(main)/categories/utils/types";
 import { ICustomError } from "@/utils/global-types";
+import DnDCategoryTree from "@/app/(main)/categories/components/DnDCategoryTree";
 
 async function getCategories() {
   const res = await fetch(`${process.env.BASE_URL}/category`, {
@@ -34,10 +38,10 @@ export default async function CategoriesPage() {
     console.log(error);
   }
   return (
-    <div className={"flex flex-1 flex-col"}>
-      <div>Dashboard Categories</div>
-      <CategoryTree categories={categories} />
+    <section className={"flex flex-1 flex-col"}>
+      <header>Dashboard Categories</header>
+      <DnDCategoryTree categories={categories} />
       {/*<CategoryD3Tree />*/}
-    </div>
+    </section>
   );
 }

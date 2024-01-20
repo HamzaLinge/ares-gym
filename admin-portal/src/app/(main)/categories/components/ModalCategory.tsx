@@ -1,11 +1,30 @@
 "use client";
 
-import { ReactNode, useEffect, useRef } from "react";
+/**
+ * ModalCategory - A Client React component for creating a new category or editing an existing one.
+ *
+ * @component
+ *
+ * @example
+ * // Example usage of ModalCategory for creating a new category:
+ * <ModalCategory type="CREATE" category={parentCategory} />
+ *
+ * @example
+ * // Example usage of ModalCategory for editing an existing category:
+ * <ModalCategory type="EDIT" category={categoryToEdit} />
+ *
+ * @param {TypesModalCategory} [props.type=TypesModalCategory.create] - The type of modal, either 'CREATE' or 'EDIT'.
+ * @param {ICategory} props.category - The parent category when creating a new category, or the category to edit.
+ *
+ * @returns {JSX.Element} React component for category creation or editing.
+ */
+
+import { useEffect, useRef } from "react";
 import { useFormState } from "react-dom";
-import { PlusIcon } from "@radix-ui/react-icons";
+import { Pencil2Icon, PlusIcon } from "@radix-ui/react-icons";
 
 import { Input } from "@/components/ui/input";
-import InputError from "@/components/ui/InputError";
+import FormError from "@/components/ui/FormError";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,49 +33,62 @@ import {
 } from "@/app/(main)/categories/utils/actions";
 import {
   ICategory,
-  IStateActionModalCategory,
+  TStateActionModalCategory,
 } from "@/app/(main)/categories/utils/types";
 
-enum TypeModalCategory {
+const enum TypesModalCategory {
   create = "CREATE",
   edit = "EDIT",
 }
-type TModalCategory = TypeModalCategory;
+
+type TModalCategory = TypesModalCategory;
 
 interface IModalCategoryProps {
-  type: TModalCategory;
+  type?: TModalCategory;
   category: ICategory;
 }
 
 export default function ModalCategory({
-  type = TypeModalCategory.create,
+  type = TypesModalCategory.create,
   category,
 }: IModalCategoryProps) {
   const refModalCategory = useRef<HTMLDialogElement>(null);
 
   const actionCategory =
-    type === TypeModalCategory.create ? createCategory : editCategory;
+    type === TypesModalCategory.create ? createCategory : editCategory;
 
-  const prevState: IStateActionModalCategory = {
+  const prevStateModalCategory: TStateActionModalCategory = {
     id: category ? category._id : undefined,
   };
 
-  const [result, addCategoryAction] = useFormState(createCategory, prevState);
+  const [stateModalCategory, addCategoryAction] = useFormState(
+    actionCategory,
+    prevStateModalCategory
+  );
 
   useEffect(() => {
-    if (result.category) {
+    if (stateModalCategory?.category) {
       refModalCategory.current.close();
     }
-  }, [result]);
+  }, [stateModalCategory]);
 
   return (
     <div>
-      <PlusIcon
-        className={
-          "h-7 w-7 rounded-full p-1 text-primary-300 hover:cursor-pointer hover:bg-primary-300 hover:bg-opacity-25"
-        }
-        onClick={() => refModalCategory.current.showModal()}
-      />
+      {type === TypesModalCategory.create ? (
+        <PlusIcon
+          className={
+            "h-7 w-7 rounded-full p-1 text-primary-300 hover:cursor-pointer hover:bg-primary-300 hover:bg-opacity-25"
+          }
+          onClick={() => refModalCategory.current.showModal()}
+        />
+      ) : (
+        <Pencil2Icon
+          className={
+            "h-7 w-7 rounded-full p-1 text-text-200 hover:cursor-pointer hover:bg-text-200 hover:bg-opacity-25"
+          }
+          onClick={() => refModalCategory.current.showModal()}
+        />
+      )}
       <dialog
         role={"dialog"}
         ref={refModalCategory}
@@ -69,19 +101,28 @@ export default function ModalCategory({
           className={"flex flex-col items-center gap-y-10 bg-bg-200 p-4 pb-10"}
         >
           <h1 className={"text-lg font-semibold"}>
-            {type === TypeModalCategory.create ? "create" : "edit"}
+            {type === TypesModalCategory.create ? "create" : "edit"}
           </h1>
           <div className={"flex w-full flex-col gap-y-8"}>
             <div className={"relative w-full "}>
               <Input
                 autoFocus
+                onFocus={(e) => {
+                  const tmpValue = e.target.value;
+                  e.target.value = "";
+                  e.target.value = tmpValue;
+                }}
                 type="text"
                 name="name"
                 placeholder="Name"
                 className={"bg-bg-100 text-text-100"}
-                defaultValue={category ? category.name : ""}
+                defaultValue={
+                  type === TypesModalCategory.create ? "" : category.name
+                }
               />
-              <InputError messageError={result?.error?.errors?.name} />
+              <FormError
+                messageError={stateModalCategory?.error?.errors?.name}
+              />
             </div>
             <div className={"relative w-full"}>
               <Textarea
@@ -89,9 +130,13 @@ export default function ModalCategory({
                 name="description"
                 placeholder="Description"
                 className={"bg-bg-100 text-text-100"}
-                defaultValue={category ? category.description : ""}
+                defaultValue={
+                  type === TypesModalCategory.create ? "" : category.description
+                }
               />
-              <InputError messageError={result?.error?.errors?.description} />
+              <FormError
+                messageError={stateModalCategory?.error?.errors?.description}
+              />
             </div>
           </div>
           <div className={"relative w-full"}>
@@ -101,22 +146,23 @@ export default function ModalCategory({
               }
             >
               <Button type={"submit"} className={"w-1/3"}>
-                {type === TypeModalCategory.create ? "New" : "Update"}
+                {type === TypesModalCategory.create ? "New" : "Update"}
               </Button>
               <Button
                 variant={"outline"}
                 className={"absolute right-0"}
                 onClick={() => refModalCategory.current.close()}
-                formMethod={"dialog"}
-                type={"submit"}
+                type={"reset"}
+                formNoValidate={true}
+                aria-label="Cancel"
               >
                 Cancel
               </Button>
             </div>
-            <InputError withIcon>
-              <p>{result?.error?.message}</p>
-              <p>{result?.error?.errors?.parent}</p>
-            </InputError>
+            <FormError withIcon>
+              <p>{stateModalCategory?.error?.message}</p>
+              <p>{stateModalCategory?.error?.errors?.parent}</p>
+            </FormError>
           </div>
         </form>
       </dialog>

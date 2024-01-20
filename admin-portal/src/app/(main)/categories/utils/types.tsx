@@ -1,4 +1,4 @@
-import { ICustomError } from "@/utils/global-types";
+import { ICustomError, TStateAction } from "@/utils/global-types";
 
 export interface ICategory {
   _id: string;
@@ -14,8 +14,13 @@ export interface ICategoryTree {
   children?: ICategoryTree[];
 }
 
-export interface IStateActionModalCategory {
+export type TStateActionModalCategory = {
   id: string | undefined;
   category?: ICategory;
   error?: ICustomError;
-}
+};
+
+export type TStateAlertCategory = TStateAction<{
+  idCategory: string;
+  idDeletedCategory: string;
+}>;
