@@ -8,8 +8,30 @@ import { TError, TToken, TUser } from "@/app/auth/utils/types";
 import { ICustomError, TStateAction } from "@/utils/global-types";
 import {
   ICategory,
+  ICategoryTree,
   TStateActionModalCategory,
 } from "@/app/(main)/categories/utils/types";
+
+export async function getCategories() {
+  const res = await fetch(`${process.env.BASE_URL}/category`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    next: { tags: ["category"] },
+  });
+
+  if (!res.ok) {
+    const error: ICustomError = await res.json();
+    if (res.status === 404) {
+      const emptyCategories: ICategoryTree[] = [];
+      return emptyCategories;
+    }
+    throw error;
+  }
+  const { categoryTree }: { categoryTree: ICategoryTree[] } = await res.json();
+  return categoryTree;
+}
 
 export async function createCategory(
   { id: parent }: TStateActionModalCategory,

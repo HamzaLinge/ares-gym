@@ -8,7 +8,7 @@ export interface ICategory {
 }
 
 export interface ICategoryTree {
-  _id?: string;
+  _id: string;
   name: string;
   description?: string;
   children?: ICategoryTree[];
