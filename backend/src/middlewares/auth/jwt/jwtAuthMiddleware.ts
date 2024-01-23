@@ -32,6 +32,7 @@ export function jwtAuthMiddleware(
           next(new CustomError(info?.message || "Unauthorized", 401));
         } else {
           req.user = user as IUser;
+          // console.log("JWT Success ------------");
           next();
         }
       }

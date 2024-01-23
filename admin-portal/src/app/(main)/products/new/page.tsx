@@ -1,4 +1,4 @@
-import FormProduct from "@/app/(main)/products/new/components/FormProduct";
+import FormProduct from "@/app/(main)/products/components/FormProduct";
 import { getCategories } from "@/app/(main)/categories/utils/actions";
 
 export default async function NewProductPage() {

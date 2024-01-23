@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { cookies } from "next/headers";
+import { TToken, TUser } from "@/app/auth/utils/types";
 
 export function isAuthenticated(request: NextRequest) {
   if (request.cookies.has("AresGymStore")) {
@@ -17,6 +18,7 @@ export function getAccessToken() {
   }
   const userCookieStr = cookies().get(process.env.USER_KEY_COOKIE)
     ?.value as string;
-  const userCookieObj = JSON.parse(userCookieStr);
+  const userCookieObj: { user: TUser; tokens: TToken } =
+    JSON.parse(userCookieStr);
   return userCookieObj.tokens.accessToken;
 }

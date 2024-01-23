@@ -7,4 +7,10 @@ export interface IProduct {
   price: number;
   stock: number;
   thumbnails?: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ICreatedProductResponse {
+  supplement: IProduct;
 }

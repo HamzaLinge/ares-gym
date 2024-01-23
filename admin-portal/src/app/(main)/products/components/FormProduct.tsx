@@ -18,7 +18,8 @@ import {
 import FormError from "@/components/ui/FormError";
 import { ICategoryTree } from "@/app/(main)/categories/utils/types";
 import { cn } from "@/lib/utils";
-import { createProduct } from "@/app/(main)/products/new/_actions";
+import { createProduct } from "@/app/(main)/products/_actions";
+import { Textarea } from "@/components/ui/textarea";
 
 interface IFormProductProps {
   categories: ICategoryTree[];
@@ -52,17 +53,12 @@ export default function FormProduct({ categories }: IFormProductProps) {
         <Input
           required
           type={"text"}
-          id="name"
-          name="name"
-          placeholder="Name"
+          name={"name"}
+          placeholder={"Name"}
           className={"text-text-100"}
         />
         <FormError
-          messageError={
-            "error" in stateFormProduct
-              ? stateFormProduct.error.errors?.name
-              : undefined
-          }
+          messageError={stateFormProduct?.error.errors?.name}
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
         />
       </div>
@@ -74,8 +70,8 @@ export default function FormProduct({ categories }: IFormProductProps) {
               type={"text"}
               readOnly
               value={selectedCategory}
-              name="category"
-              placeholder="Category"
+              name={"category"}
+              placeholder={"Category"}
               className={"text-text-100"}
             />
           </DropdownMenuTrigger>
@@ -91,11 +87,7 @@ export default function FormProduct({ categories }: IFormProductProps) {
           </DropdownMenuContent>
         </DropdownMenu>
         <FormError
-          messageError={
-            "error" in stateFormProduct
-              ? stateFormProduct.error.errors?.category
-              : undefined
-          }
+          messageError={stateFormProduct?.error.errors?.category}
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
         />
       </div>
@@ -103,41 +95,40 @@ export default function FormProduct({ categories }: IFormProductProps) {
         <Input
           required
           type={"number"}
-          id="price"
-          name="price"
-          placeholder="Price"
+          name={"price"}
+          placeholder={"Price"}
           className={"text-text-100"}
         />
         <FormError
-          messageError={
-            "error" in stateFormProduct
-              ? stateFormProduct.error.errors?.price
-              : undefined
-          }
+          messageError={stateFormProduct?.error.errors?.price}
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
         />
       </div>
       <div className={"relative grid w-full gap-y-1.5"}>
         <Input
-          required
           type={"number"}
-          id="stock"
-          name="stock"
-          placeholder="Stock"
+          name={"stock"}
+          placeholder={"Stock"}
           className={"text-text-100"}
         />
         <FormError
-          messageError={
-            "error" in stateFormProduct
-              ? stateFormProduct.error.errors?.stock
-              : undefined
-          }
+          messageError={stateFormProduct?.error.errors?.stock}
+          className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
+        />
+      </div>
+      <div className={"relative grid w-full gap-y-1.5"}>
+        <Textarea
+          name={"description"}
+          placeholder={"Description"}
+          className={"text-text-100"}
+        />
+        <FormError
+          messageError={stateFormProduct?.error.errors?.description}
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
         />
       </div>
       <div className={"relative grid w-full gap-y-1.5"}>
         <Input
-          required
           type={"file"}
           multiple
           name={"files"}
@@ -145,22 +136,14 @@ export default function FormProduct({ categories }: IFormProductProps) {
           className={"text-text-100"}
         />
         <FormError
-          messageError={
-            "error" in stateFormProduct
-              ? stateFormProduct.error.errors?.files
-              : undefined
-          }
+          messageError={stateFormProduct?.error.errors?.files}
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
         />
       </div>
       <div className={"relative my-4 grid w-full gap-y-1.5"}>
         <Button variant={"primary"}>Save</Button>
         <FormError
-          messageError={
-            "error" in stateFormProduct
-              ? stateFormProduct.error.message
-              : undefined
-          }
+          messageError={stateFormProduct?.error.message}
           withIcon
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
         />

@@ -9,8 +9,10 @@ export async function supplement_post_permission(
   res: Response,
   next: NextFunction
 ) {
-  if (req.user?.role === Roles.admin) next();
-  else {
+  if (req.user?.role === Roles.admin) {
+    // console.log("Permission Success ------------");
+    next();
+  } else {
     next(
       new CustomError(
         "You do not have the permission to create a new supplement",

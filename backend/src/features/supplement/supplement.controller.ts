@@ -1,36 +1,39 @@
 import { NextFunction, Request, Response } from "express";
 
+import { CustomError } from "../../types/global.type";
 import {
-  IRequest_supplement_get,
   IRequest_supplement_delete,
   IRequest_supplement_file_delete,
+  IRequest_supplement_files_put,
+  IRequest_supplement_get,
+  IRequest_supplement_post,
   IRequest_supplement_put_body,
   IRequest_supplement_put_params,
-  IRequest_supplement_post,
-  IResponse_supplement_get,
-  IResponse_supplement_put,
   IResponse_supplement_delete,
   IResponse_supplement_file_delete,
-  IResponse_supplement_post,
-  IRequest_supplement_files_put,
   IResponse_supplement_files_put,
+  IResponse_supplement_get,
+  IResponse_supplement_post,
+  IResponse_supplement_put,
 } from "./supplement.type";
+
 import SupplementModel, { ISupplement } from "../../models/Supplement";
-import { CustomError } from "../../types/global.type";
-import { ICategory } from "../../models/Category";
 import CommandModel, { ICommand } from "../../models/Command";
+import { ICategory } from "../../models/Category";
+
 import { deleteFile } from "../../utils/file.util";
 import { HttpStatusCodes } from "../../utils/error.util";
+import { filterObj } from "../../utils/obj.util";
 
 export async function supplement_post_controller(
   req: Request<any, any, IRequest_supplement_post>,
   res: Response<IResponse_supplement_post>,
   next: NextFunction
 ) {
-  const supplement: ISupplement = await SupplementModel.create({
-    ...req.body,
-    thumbnails: req.fileIdArr ? req.fileIdArr : undefined,
-  });
+  let inputSupplement = filterObj(req.body);
+  if (req.fileIdArr) inputSupplement.thumbnails = req.fileIdArr;
+
+  const supplement: ISupplement = await SupplementModel.create(inputSupplement);
   res.status(HttpStatusCodes.OK).send({ supplement });
 }
 

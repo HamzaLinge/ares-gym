@@ -1,8 +1,8 @@
 import { getAccessToken } from "@/lib/auth";
-import { ICustomError, IErrorAPI } from "@/utils/global-types";
+import { ICustomError, IErrorAPI, ISuccessAPI } from "@/utils/global-types";
 
 type THttpMethod = "GET" | "POST" | "PUT" | "DELETE";
-type THttpBody = string | { [key: string]: any };
+type THttpBody = string | { [key: string]: any } | FormData;
 
 type TFetchDataProps = {
   url: string;
@@ -23,35 +23,33 @@ function getFetchOptions({
   let options: {
     method: THttpMethod;
     body?: THttpBody;
-    headers: {
-      "Content-Type": "application/json" | "multipart/form-data";
+    headers?: {
+      "Content-Type"?: "application/json";
       Authorization?: string;
     };
-  } = { method: "GET", headers: { "Content-Type": "application/json" } };
+  } = { method: "GET" };
+  if (method) options.method = method;
+
   if (isProtected) {
     const accessToken = getAccessToken();
     if (!accessToken) {
       throw new Error("No access token found!");
     }
     options.headers = {
-      ...options.headers,
       Authorization: `Bearer ${accessToken}`,
     };
   }
-  if (method) options.method = method;
+
   if (body) {
-    if (typeof body !== "string" && (body.file || body.files)) {
-      options.headers = {
-        ...options.headers,
-        "Content-Type": "multipart/form-data",
-      };
+    if (body instanceof FormData) {
+      options.body = body;
     } else {
       options.headers = {
         ...options?.headers,
         "Content-Type": "application/json",
       };
+      options.body = JSON.stringify(body);
     }
-    options.body = body;
   } else {
     options.headers = {
       ...options?.headers,
@@ -61,7 +59,7 @@ function getFetchOptions({
   return options;
 }
 
-export async function fetchData<ISuccessResponse>({
+export async function fetchData<Interface>({
   url,
   method = "GET",
   body = undefined,
@@ -70,18 +68,28 @@ export async function fetchData<ISuccessResponse>({
   const options = getFetchOptions({ method, body, isProtected });
   try {
     const res = await fetch(
-      `${process.env.BASE_URL}/${url[0] === "/" ? url : url.substring(1)}`,
+      `${process.env.BASE_URL}/${url[0] === "/" ? url.substring(1) : url}`,
       options
     );
 
     if (!res.ok) {
       const customError: ICustomError = await res.json();
-      const errorApi: IErrorAPI = { status: res.status, error: customError };
+      const errorApi: IErrorAPI = {
+        status: res.status,
+        success: false,
+        error: customError,
+      };
       return errorApi;
     }
-    const response: ISuccessResponse = await res.json();
-    return response;
+    const response: Interface = await res.json();
+    const result: ISuccessAPI<Interface> = {
+      status: res.status,
+      success: true,
+      data: response,
+    };
+    return result;
   } catch (error) {
+    console.error(error);
     throw new Error("Something went wrong during Fetch Data");
   }
 }

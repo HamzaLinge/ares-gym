@@ -51,5 +51,8 @@ export const validateRules = (
         combinedObject
       )
     );
-  } else next();
+  } else {
+    // console.log("Validation Success ------------");
+    next();
+  }
 };

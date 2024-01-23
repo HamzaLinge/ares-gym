@@ -18,8 +18,8 @@ export function createApp(): Application {
   /*
        MIDDLEWARES and POLICIES ------------------------------------------------------------------------------------------------------
        */
-  app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cors({ origin: "*" }));
 
   // PASSPORT Configuration
@@ -32,7 +32,7 @@ export function createApp(): Application {
      ROUTES ---------------------------------------------------------------------------------------------------------
      */
   // Test Route
-  app.get("/test", (req, res) => res.status(200).send("Works Well !"));
+  app.get("/test", async (req, res) => res.status(200).send("Works Well !"));
   // Auth Routes
   app.use("/auth", authRouter); // Add this line to mount the Task API routes
   // Files Routes

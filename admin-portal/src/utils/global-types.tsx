@@ -10,7 +10,13 @@ export interface ICustomError {
   errors?: TErrorValidation;
 }
 
+export interface ISuccessAPI<Interface> extends IResponseAPI {
+  success: true;
+  data: Interface;
+}
+
 export interface IErrorAPI extends IResponseAPI {
+  success: false;
   error: ICustomError;
 }
 
