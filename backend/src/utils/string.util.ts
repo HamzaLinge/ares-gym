@@ -6,3 +6,7 @@ export const capitalize = (name: string): string => {
   });
   return strArr.join(" ");
 };
+
+export const notEmptyString = (value: string | any) => {
+  return typeof value === "string" && value.trim()! == "";
+};

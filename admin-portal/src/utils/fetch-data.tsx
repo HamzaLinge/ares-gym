@@ -1,25 +1,25 @@
 import { getAccessToken } from "@/lib/auth";
 import { ICustomError, IErrorAPI, ISuccessAPI } from "@/utils/global-types";
+import { filterDataForm } from "@/utils/data-form";
 
 type THttpMethod = "GET" | "POST" | "PUT" | "DELETE";
-type THttpBody = string | { [key: string]: any } | FormData;
+type THttpBody = string | FormData;
 
 type TFetchDataProps = {
   url: string;
-  method: THttpMethod;
+  method?: THttpMethod;
   body?: THttpBody;
+  isMultipartFormData?: boolean;
   isProtected?: boolean;
+  tags?: string[];
 };
 
 function getFetchOptions({
   method,
-  body = undefined,
-  isProtected = false,
-}: {
-  method: THttpMethod;
-  body?: THttpBody;
-  isProtected?: boolean;
-}) {
+  body,
+  isMultipartFormData,
+  isProtected,
+}: Omit<TFetchDataProps, "url" | "body" | "tags"> & { body?: FormData }) {
   let options: {
     method: THttpMethod;
     body?: THttpBody;
@@ -40,22 +40,17 @@ function getFetchOptions({
     };
   }
 
-  if (body) {
-    if (body instanceof FormData) {
-      options.body = body;
-    } else {
-      options.headers = {
-        ...options?.headers,
-        "Content-Type": "application/json",
-      };
-      options.body = JSON.stringify(body);
-    }
+  if (isMultipartFormData) {
+    if (body) options.body = filterDataForm(body);
   } else {
     options.headers = {
-      ...options?.headers,
+      ...options.headers,
       "Content-Type": "application/json",
     };
+    if (body)
+      options.body = JSON.stringify(Object.fromEntries(filterDataForm(body)));
   }
+  // console.log(options);
   return options;
 }
 
@@ -63,13 +58,23 @@ export async function fetchData<Interface>({
   url,
   method = "GET",
   body = undefined,
+  isMultipartFormData = false,
   isProtected = false,
+  tags,
 }: TFetchDataProps) {
-  const options = getFetchOptions({ method, body, isProtected });
+  const fetchOptions = getFetchOptions({
+    method,
+    body,
+    isMultipartFormData,
+    isProtected,
+  });
+  const nextOptions: { tags: string[] } = {};
+  if (tags) nextOptions.tags = tags;
   try {
     const res = await fetch(
       `${process.env.BASE_URL}/${url[0] === "/" ? url.substring(1) : url}`,
-      options
+      fetchOptions,
+      nextOptions
     );
 
     if (!res.ok) {

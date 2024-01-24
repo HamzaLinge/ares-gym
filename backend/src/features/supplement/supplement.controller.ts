@@ -30,8 +30,10 @@ export async function supplement_post_controller(
   res: Response<IResponse_supplement_post>,
   next: NextFunction
 ) {
-  let inputSupplement = filterObj(req.body);
+  let inputSupplement: any = req.body;
   if (req.fileIdArr) inputSupplement.thumbnails = req.fileIdArr;
+
+  console.log(inputSupplement);
 
   const supplement: ISupplement = await SupplementModel.create(inputSupplement);
   res.status(HttpStatusCodes.OK).send({ supplement });

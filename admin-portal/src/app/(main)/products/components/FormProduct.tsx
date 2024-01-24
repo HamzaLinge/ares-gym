@@ -51,7 +51,6 @@ export default function FormProduct({ categories }: IFormProductProps) {
       <h1>Insert a new product</h1>
       <div className={"relative grid w-full gap-y-1.5"}>
         <Input
-          required
           type={"text"}
           name={"name"}
           placeholder={"Name"}
@@ -66,7 +65,6 @@ export default function FormProduct({ categories }: IFormProductProps) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Input
-              required
               type={"text"}
               readOnly
               value={selectedCategory}
@@ -93,7 +91,6 @@ export default function FormProduct({ categories }: IFormProductProps) {
       </div>
       <div className={"relative grid w-full gap-y-1.5"}>
         <Input
-          required
           type={"number"}
           name={"price"}
           placeholder={"Price"}

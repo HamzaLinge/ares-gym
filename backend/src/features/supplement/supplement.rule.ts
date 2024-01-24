@@ -1,5 +1,6 @@
 import { body, check, param, query } from "express-validator";
 import { errorMessageValidator } from "../../utils/error.util";
+import { notEmptyString } from "../../utils/string.util";
 
 export const supplement_post_rules = [
   body("name")

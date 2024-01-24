@@ -4,6 +4,7 @@ import { ResultFactory, validationResult } from "express-validator";
 import { CustomError, TErrorValidation } from "../types/global.type";
 import { HttpStatusCodes } from "../utils/error.util";
 
+// Format the error fields from ValidationError(default type build-in express-validator) to TErrorValidation({[p:string]:string})
 const myValidationResult: ResultFactory<TErrorValidation> =
   validationResult.withDefaults({
     formatter: (error) => {
@@ -39,10 +40,11 @@ export const validateRules = (
   next: NextFunction
 ) => {
   const errors = myValidationResult(req);
+  console.log(errors);
   if (!errors.isEmpty()) {
     const arrErrors = errors.array();
     const combinedObject = arrErrors.reduce((accumulator, currentObject) => {
-      return { ...accumulator, ...currentObject };
+      return { ...currentObject, ...accumulator };
     }, {});
     next(
       new CustomError(
