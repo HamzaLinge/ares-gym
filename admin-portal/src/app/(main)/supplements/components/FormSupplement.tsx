@@ -18,16 +18,16 @@ import {
 import FormError from "@/components/ui/FormError";
 import { ICategoryTree } from "@/app/(main)/categories/utils/types";
 import { cn } from "@/lib/utils";
-import { createProduct } from "@/app/(main)/products/_actions";
+import { createSupplement } from "@/app/(main)/supplements/_actions";
 import { Textarea } from "@/components/ui/textarea";
 
 interface IFormProductProps {
   categories: ICategoryTree[];
 }
 
-export default function FormProduct({ categories }: IFormProductProps) {
+export default function FormSupplement({ categories }: IFormProductProps) {
   const [stateFormProduct, actionFormProduct] = useFormState(
-    createProduct,
+    createSupplement,
     null
   );
   const [selectedCategory, setSelectedCategory] = useState<string>("");

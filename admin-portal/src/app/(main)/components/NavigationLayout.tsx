@@ -11,7 +11,7 @@ export default function NavigationLayout() {
 
   const links = [
     { title: "Dashboard", path: routePaths.dashboard.path },
-    { title: "Products", path: routePaths.products.path },
+    { title: "Products", path: routePaths.supplements.path },
     { title: "Commands", path: routePaths.commands.path },
     { title: "Discounts", path: routePaths.discounts.path },
     { title: "Categories", path: routePaths.categories.path },

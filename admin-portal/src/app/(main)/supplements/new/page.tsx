@@ -1,11 +1,11 @@
-import FormProduct from "@/app/(main)/products/components/FormProduct";
+import FormSupplement from "@/app/(main)/supplements/components/FormSupplement";
 import { getCategories } from "@/app/(main)/categories/utils/actions";
 
 export default async function NewProductPage() {
   const categories = await getCategories();
   return (
     <section>
-      <FormProduct categories={categories} />
+      <FormSupplement categories={categories} />
     </section>
   );
 }

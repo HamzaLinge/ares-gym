@@ -1,6 +1,6 @@
 import { ICategory } from "@/app/(main)/categories/utils/types";
 
-export interface IProduct {
+export interface ISupplement {
   _id: string;
   name: string;
   category: string | ICategory;
@@ -11,6 +11,6 @@ export interface IProduct {
   updatedAt: string;
 }
 
-export interface ICreatedProductResponse {
-  supplement: IProduct;
+export interface ICreatedSupplementResponse {
+  supplement: ISupplement;
 }

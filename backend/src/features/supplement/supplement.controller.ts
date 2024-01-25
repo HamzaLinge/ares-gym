@@ -23,7 +23,6 @@ import { ICategory } from "../../models/Category";
 
 import { deleteFile } from "../../utils/file.util";
 import { HttpStatusCodes } from "../../utils/error.util";
-import { filterObj } from "../../utils/obj.util";
 
 export async function supplement_post_controller(
   req: Request<any, any, IRequest_supplement_post>,
@@ -50,7 +49,10 @@ export async function supplement_get_controller(
     ).populate<{ category: ICategory }>({ path: "category" });
     if (!supplement) {
       return next(
-        new CustomError("There is no supplement found with this id", 404)
+        new CustomError(
+          "There is no supplement found for this id",
+          HttpStatusCodes.NOT_FOUND
+        )
       );
     }
     res.status(HttpStatusCodes.OK).send({ supplement });
@@ -59,7 +61,12 @@ export async function supplement_get_controller(
       .populate<{ category: ICategory }>({ path: "category" })
       .sort({ updatedAt: -1 });
     if (supplements.length === 0) {
-      return next(new CustomError("There are no supplements found", 404));
+      return next(
+        new CustomError(
+          "There are no supplements found",
+          HttpStatusCodes.NOT_FOUND
+        )
+      );
     }
     res.status(HttpStatusCodes.OK).send({ supplements });
   }

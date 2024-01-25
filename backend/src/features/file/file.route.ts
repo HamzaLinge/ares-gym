@@ -4,7 +4,6 @@ import { file_get_rule } from "./file.rule";
 import { validateRules } from "../../middlewares/validateRules";
 import { asyncHandler } from "../../middlewares/asyncHandler";
 import { file_get_controller } from "./file.controller";
-import { jwtAuthConfig } from "../../middlewares/auth/jwt/jwtAuthConfig";
 import { jwtAuthMiddleware } from "../../middlewares/auth/jwt/jwtAuthMiddleware";
 import {
   processSingleFileUpload,

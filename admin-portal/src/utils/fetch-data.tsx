@@ -12,14 +12,62 @@ type TFetchDataProps = {
   isMultipartFormData?: boolean;
   isProtected?: boolean;
   tags?: string[];
+  cache?: boolean;
 };
+
+export async function fetchData<Interface>({
+  url,
+  method = "GET",
+  body = undefined,
+  isMultipartFormData = false,
+  isProtected = false,
+  tags,
+  cache,
+}: TFetchDataProps) {
+  const fetchOptions = getFetchOptions({
+    method,
+    body,
+    isMultipartFormData,
+    isProtected,
+    tags,
+    cache,
+  });
+  try {
+    const res = await fetch(
+      `${process.env.BASE_URL}/${url[0] === "/" ? url.substring(1) : url}`,
+      fetchOptions
+    );
+
+    if (!res.ok) {
+      const customError: ICustomError = await res.json();
+      const errorApi: IErrorAPI = {
+        status: res.status,
+        success: false,
+        error: customError,
+      };
+      return errorApi;
+    }
+    const response: Interface = await res.json();
+    const result: ISuccessAPI<Interface> = {
+      status: res.status,
+      success: true,
+      data: response,
+    };
+    return result;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Something went wrong during Fetch Data");
+  }
+}
 
 function getFetchOptions({
   method,
   body,
   isMultipartFormData,
   isProtected,
-}: Omit<TFetchDataProps, "url" | "body" | "tags"> & { body?: FormData }) {
+  tags,
+  cache,
+}: Omit<TFetchDataProps, "url" | "body"> & { body?: FormData }) {
   let options: {
     method: THttpMethod;
     body?: THttpBody;
@@ -27,6 +75,8 @@ function getFetchOptions({
       "Content-Type"?: "application/json";
       Authorization?: string;
     };
+    next?: { tags?: string[] };
+    cache?: "no-store";
   } = { method: "GET" };
   if (method) options.method = method;
 
@@ -50,51 +100,15 @@ function getFetchOptions({
     if (body)
       options.body = JSON.stringify(Object.fromEntries(filterDataForm(body)));
   }
+
+  if (tags) {
+    options.next = { tags: tags };
+  }
+
+  if (!cache) {
+    options.cache = "no-store";
+  }
+
   // console.log(options);
   return options;
-}
-
-export async function fetchData<Interface>({
-  url,
-  method = "GET",
-  body = undefined,
-  isMultipartFormData = false,
-  isProtected = false,
-  tags,
-}: TFetchDataProps) {
-  const fetchOptions = getFetchOptions({
-    method,
-    body,
-    isMultipartFormData,
-    isProtected,
-  });
-  const nextOptions: { tags: string[] } = {};
-  if (tags) nextOptions.tags = tags;
-  try {
-    const res = await fetch(
-      `${process.env.BASE_URL}/${url[0] === "/" ? url.substring(1) : url}`,
-      fetchOptions,
-      nextOptions
-    );
-
-    if (!res.ok) {
-      const customError: ICustomError = await res.json();
-      const errorApi: IErrorAPI = {
-        status: res.status,
-        success: false,
-        error: customError,
-      };
-      return errorApi;
-    }
-    const response: Interface = await res.json();
-    const result: ISuccessAPI<Interface> = {
-      status: res.status,
-      success: true,
-      data: response,
-    };
-    return result;
-  } catch (error) {
-    console.error(error);
-    throw new Error("Something went wrong during Fetch Data");
-  }
 }

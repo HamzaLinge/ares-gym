@@ -11,7 +11,7 @@ export default function MainLayout({
       <NavigationLayout />
       <main
         className={
-          "ml-0 mt-20 flex flex-1 flex-col overflow-auto p-2 transition-margin md:ml-64"
+          "ml-0 mt-20 flex flex-1 flex-col overflow-auto p-2 transition-margin lg:ml-64"
         }
       >
         {children}

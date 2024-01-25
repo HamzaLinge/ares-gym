@@ -23,14 +23,14 @@ export default function Aside({ isOpen, setIsOpen, links }: AsideProps) {
   return (
     <aside
       className={cn(
-        "absolute left-0 top-0 flex h-screen -translate-x-full transition-transform md:top-20 md:h-[calc(100vh_-_4rem)] md:translate-x-0",
+        "absolute left-0 top-0 flex h-screen -translate-x-full transition-transform lg:top-20 lg:h-[calc(100vh_-_4rem)] lg:translate-x-0",
         isOpen ? "translate-x-0" : "-translate-x-full"
       )}
       aria-label="Sidebar"
     >
       <nav
         className={cn(
-          "absolute left-0 top-0 z-10 flex h-full w-2/3 flex-col justify-between overflow-auto border-[1px] border-b border-r border-b-bg-300 border-r-bg-300 bg-bg-200 transition-transform md:w-64 md:translate-x-0",
+          "absolute left-0 top-0 z-10 flex h-full w-2/3 flex-col justify-between overflow-auto border-[1px] border-b border-r border-b-bg-300 border-r-bg-300 bg-bg-200 transition-transform lg:w-64 lg:translate-x-0",
           isOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
