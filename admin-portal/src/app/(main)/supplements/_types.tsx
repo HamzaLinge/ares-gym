@@ -6,6 +6,7 @@ export interface ISupplement {
   category: string | ICategory;
   price: number;
   stock: number;
+  description?: string;
   thumbnails?: string[];
   createdAt: string;
   updatedAt: string;

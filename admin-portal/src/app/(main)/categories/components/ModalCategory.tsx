@@ -45,7 +45,7 @@ type TModalCategory = TypesModalCategory;
 
 interface IModalCategoryProps {
   type?: TModalCategory;
-  category: ICategory;
+  category?: ICategory;
 }
 
 export default function ModalCategory({

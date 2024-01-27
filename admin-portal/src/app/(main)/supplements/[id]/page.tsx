@@ -1,7 +1,12 @@
+import DeleteSupplement from "@/app/(main)/supplements/_components/DeleteSupplement";
+
 import {
   getSupplementById,
   getSupplements,
 } from "@/app/(main)/supplements/_actions";
+import Link from "next/link";
+import { routePaths } from "@/utils/route-paths";
+import { Button } from "@/components/ui/button";
 
 interface ProductPageProps {
   params: { id: string };
@@ -18,16 +23,15 @@ export async function generateStaticParams() {
 }
 
 export default async function SupplementPage({ params }: ProductPageProps) {
-  const fetchSupplement = await getSupplementById(params.id);
-  if (!fetchSupplement.success) {
-    console.error(fetchSupplement);
-    throw new Error(fetchSupplement.error.message);
-  }
-  const supplement = fetchSupplement.data.supplement;
+  const supplement = await getSupplementById(params.id);
+
   return (
     <section>
       <h1>{supplement.name}</h1>
-      <p></p>
+      <Link href={routePaths.supplements.children.update.path(supplement._id)}>
+        <Button>Update Supplement</Button>
+      </Link>
+      <DeleteSupplement supplement={supplement} />
     </section>
   );
 }

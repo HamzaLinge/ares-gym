@@ -11,11 +11,14 @@ import {
 
 import { fetchData } from "@/utils/fetch-data";
 import { routePaths } from "@/utils/route-paths";
+import { ClassErrorApi } from "@/lib/exceptions";
+
+const tag_revalidate_categories_list_after_mutation = "supplements";
 
 export async function getSupplements() {
   const res = await fetchData<{ supplements: ISupplement[] }>({
     url: "/supplement",
-    tags: ["supplements"],
+    tags: [tag_revalidate_categories_list_after_mutation],
   });
   return res;
 }
@@ -25,7 +28,11 @@ export async function getSupplementById(idSupplement: string) {
     url: `/supplement?idSupplement=${idSupplement}`,
     cache: false,
   });
-  return res;
+  if (!res.success) {
+    console.error(res);
+    throw new ClassErrorApi(res);
+  }
+  return res.data.supplement;
 }
 
 export async function createSupplement(stateFormProduct, formData: FormData) {
@@ -39,6 +46,39 @@ export async function createSupplement(stateFormProduct, formData: FormData) {
   if (!res.success) {
     return res;
   }
-  revalidateTag("supplements");
+  revalidateTag(tag_revalidate_categories_list_after_mutation);
   redirect(routePaths.supplements.path);
+}
+
+export async function deleteSupplement(idSupplement: string) {
+  const res = await fetchData<{ deletedIdSupplement: string }>({
+    url: `/supplement/${idSupplement}`,
+    method: "DELETE",
+    isProtected: true,
+  });
+  if (!res.success) {
+    return res;
+  }
+  revalidateTag(tag_revalidate_categories_list_after_mutation);
+  redirect(routePaths.supplements.path);
+}
+
+export async function updateSupplement(
+  stateFormProduct: { idSupplement: string },
+  formData: FormData
+) {
+  const res = await fetchData<{ supplement: ISupplement }>({
+    url: `/supplement/${stateFormProduct.idSupplement}`,
+    method: "PUT",
+    body: formData,
+    isProtected: true,
+  });
+  if (!res.success) {
+    console.error(res);
+    return res;
+  }
+  revalidateTag(tag_revalidate_categories_list_after_mutation);
+  redirect(
+    routePaths.supplements.children.update.path(stateFormProduct.idSupplement)
+  );
 }

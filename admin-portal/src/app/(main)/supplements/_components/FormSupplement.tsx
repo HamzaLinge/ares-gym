@@ -16,21 +16,40 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import FormError from "@/components/ui/FormError";
-import { ICategoryTree } from "@/app/(main)/categories/utils/types";
+import { ICategory, ICategoryTree } from "@/app/(main)/categories/utils/types";
 import { cn } from "@/lib/utils";
-import { createSupplement } from "@/app/(main)/supplements/_actions";
 import { Textarea } from "@/components/ui/textarea";
+import { IErrorAPI } from "@/utils/global-types";
+import { ISupplement } from "@/app/(main)/supplements/_types";
 
 interface IFormProductProps {
   categories: ICategoryTree[];
+  actionSupplement: (
+    state: { idSupplement?: string },
+    formData: FormData
+  ) => Promise<IErrorAPI>;
+  supplement?: ISupplement;
 }
 
-export default function FormSupplement({ categories }: IFormProductProps) {
-  const [stateFormProduct, actionFormProduct] = useFormState(
-    createSupplement,
-    null
+export default function FormSupplement({
+  categories,
+  actionSupplement,
+  supplement,
+}: IFormProductProps) {
+  const [stateFormProduct, actionFormProduct] = useFormState<
+    IErrorAPI,
+    FormData
+  >(actionSupplement, supplement ? { idSupplement: supplement._id } : null);
+
+  const isICategory = (value: any): value is ICategory => {
+    return !!value?._id;
+  };
+
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    supplement && isICategory(supplement.category)
+      ? supplement.category._id
+      : ""
   );
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   function renderCategoryOptions(categoryOptions: ICategoryTree[]) {
     return categoryOptions.map((option) => (
@@ -48,16 +67,22 @@ export default function FormSupplement({ categories }: IFormProductProps) {
 
   return (
     <form className={"w-full"} action={actionFormProduct}>
-      <h1>Insert a new product</h1>
       <div className={"relative grid w-full gap-y-1.5"}>
         <Input
           type={"text"}
           name={"name"}
           placeholder={"Name"}
           className={"text-text-100"}
+          defaultValue={supplement ? supplement.name : ""}
+          autoFocus
+          onFocus={(e) => {
+            const tmpValue = e.target.value;
+            e.target.value = "";
+            e.target.value = tmpValue;
+          }}
         />
         <FormError
-          messageError={stateFormProduct?.error.errors?.name}
+          messageError={stateFormProduct?.error?.errors?.name}
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
         />
       </div>
@@ -85,7 +110,7 @@ export default function FormSupplement({ categories }: IFormProductProps) {
           </DropdownMenuContent>
         </DropdownMenu>
         <FormError
-          messageError={stateFormProduct?.error.errors?.category}
+          messageError={stateFormProduct?.error?.errors?.category}
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
         />
       </div>
@@ -95,9 +120,10 @@ export default function FormSupplement({ categories }: IFormProductProps) {
           name={"price"}
           placeholder={"Price"}
           className={"text-text-100"}
+          defaultValue={supplement ? supplement.price : ""}
         />
         <FormError
-          messageError={stateFormProduct?.error.errors?.price}
+          messageError={stateFormProduct?.error?.errors?.price}
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
         />
       </div>
@@ -107,9 +133,10 @@ export default function FormSupplement({ categories }: IFormProductProps) {
           name={"stock"}
           placeholder={"Stock"}
           className={"text-text-100"}
+          defaultValue={supplement ? supplement.stock : ""}
         />
         <FormError
-          messageError={stateFormProduct?.error.errors?.stock}
+          messageError={stateFormProduct?.error?.errors?.stock}
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
         />
       </div>
@@ -118,9 +145,12 @@ export default function FormSupplement({ categories }: IFormProductProps) {
           name={"description"}
           placeholder={"Description"}
           className={"text-text-100"}
+          defaultValue={
+            supplement && supplement.description ? supplement.description : ""
+          }
         />
         <FormError
-          messageError={stateFormProduct?.error.errors?.description}
+          messageError={stateFormProduct?.error?.errors?.description}
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
         />
       </div>
@@ -133,14 +163,14 @@ export default function FormSupplement({ categories }: IFormProductProps) {
           className={"text-text-100"}
         />
         <FormError
-          messageError={stateFormProduct?.error.errors?.files}
+          messageError={stateFormProduct?.error?.errors?.files}
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
         />
       </div>
       <div className={"relative my-4 grid w-full gap-y-1.5"}>
         <Button variant={"primary"}>Save</Button>
         <FormError
-          messageError={stateFormProduct?.error.message}
+          messageError={stateFormProduct?.error?.message}
           withIcon
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
         />

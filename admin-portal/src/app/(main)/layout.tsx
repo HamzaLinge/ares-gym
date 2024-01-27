@@ -1,5 +1,6 @@
 import React from "react";
-import NavigationLayout from "@/app/(main)/components/NavigationLayout";
+import NavigationLayout from "@/app/(main)/_components/NavigationLayout";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function MainLayout({
   children,
@@ -16,6 +17,7 @@ export default function MainLayout({
       >
         {children}
       </main>
+      <Toaster richColors />
     </section>
   );
 }

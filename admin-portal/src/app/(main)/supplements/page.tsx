@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 import { routePaths } from "@/utils/route-paths";
-import HeaderSupplements from "@/app/(main)/supplements/components/HeaderSupplements";
+import HeaderSupplements from "@/app/(main)/supplements/_components/HeaderSupplements";
 import { getSupplements } from "@/app/(main)/supplements/_actions";
-import Supplements from "@/app/(main)/supplements/components/Supplements";
+import Supplements from "@/app/(main)/supplements/_components/Supplements";
 
 export const metadata: Metadata = {
   title: routePaths.supplements.title,

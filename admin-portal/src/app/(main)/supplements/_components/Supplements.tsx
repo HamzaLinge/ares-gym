@@ -1,6 +1,6 @@
 import { ISupplement } from "@/app/(main)/supplements/_types";
-import CardSupplement from "@/app/(main)/supplements/components/CardSupplement";
-import FilterSupplements from "@/app/(main)/supplements/components/FilterSupplements";
+import CardSupplement from "@/app/(main)/supplements/_components/CardSupplement";
+import FilterSupplements from "@/app/(main)/supplements/_components/FilterSupplements";
 
 interface SupplementsProps {
   supplements: ISupplement[];

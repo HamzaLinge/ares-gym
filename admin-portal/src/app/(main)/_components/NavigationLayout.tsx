@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 
-import Header from "@/app/(main)/components/Header";
-import Aside from "@/app/(main)/components/Aside";
+import Header from "@/app/(main)/_components/Header";
+import Aside from "@/app/(main)/_components/Aside";
 import { routePaths } from "@/utils/route-paths";
 
 export default function NavigationLayout() {
@@ -11,7 +11,7 @@ export default function NavigationLayout() {
 
   const links = [
     { title: "Dashboard", path: routePaths.dashboard.path },
-    { title: "Products", path: routePaths.supplements.path },
+    { title: "Supplements", path: routePaths.supplements.path },
     { title: "Commands", path: routePaths.commands.path },
     { title: "Discounts", path: routePaths.discounts.path },
     { title: "Categories", path: routePaths.categories.path },

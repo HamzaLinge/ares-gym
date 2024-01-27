@@ -1,36 +1,22 @@
 "use server";
 
-import { cookies } from "next/headers";
 import { revalidateTag } from "next/cache";
 
 import { getAccessToken } from "@/lib/auth";
-import { TError, TToken, TUser } from "@/app/auth/utils/types";
-import { ICustomError, TStateAction } from "@/utils/global-types";
+import { ICustomError } from "@/utils/global-types";
 import {
   ICategory,
   ICategoryTree,
   TStateActionModalCategory,
 } from "@/app/(main)/categories/utils/types";
+import { fetchData } from "@/utils/fetch-data";
 
 export async function getCategories() {
-  const res = await fetch(`${process.env.BASE_URL}/category`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    next: { tags: ["category"] },
+  const res = await fetchData<{ categoryTree: ICategoryTree[] }>({
+    url: "/category",
+    tags: ["categories"],
   });
-
-  if (!res.ok) {
-    const error: ICustomError = await res.json();
-    if (res.status === 404) {
-      const emptyCategories: ICategoryTree[] = [];
-      return emptyCategories;
-    }
-    throw error;
-  }
-  const { categoryTree }: { categoryTree: ICategoryTree[] } = await res.json();
-  return categoryTree;
+  return res;
 }
 
 export async function createCategory(
@@ -65,7 +51,7 @@ export async function createCategory(
       return { error };
     }
     const category: { category: ICategory } = await res.json();
-    revalidateTag("category");
+    revalidateTag("categories");
     return { category };
   } catch (error: Error) {
     console.error(error);
@@ -102,7 +88,7 @@ export async function editCategory(
       return { error };
     }
     const category: { category: ICategory } = await res.json();
-    revalidateTag("category");
+    revalidateTag("categories");
     return { category };
   } catch (error) {
     console.error(error);
@@ -135,7 +121,7 @@ export async function deleteCategory(
     }
     const { idDeletedCategory }: { idDeletedCategory: string } =
       await res.json();
-    revalidateTag("category");
+    revalidateTag("categories");
     return { idDeletedCategory };
   } catch (error) {
     console.error(error);
