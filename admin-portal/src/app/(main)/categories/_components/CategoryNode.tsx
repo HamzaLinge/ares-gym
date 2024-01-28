@@ -1,11 +1,10 @@
-"use client";
-
 import React from "react";
-import { MoveIcon } from "@radix-ui/react-icons";
+import { MoveIcon, Pencil2Icon, PlusIcon } from "@radix-ui/react-icons";
 
-import CategoryTree from "@/app/(main)/categories/components/CategoryTree";
-import ModalCategory from "@/app/(main)/categories/components/ModalCategory";
-import AlertCategory from "@/app/(main)/categories/components/AlertCategory";
+import CategoryTree from "@/app/(main)/categories/_components/CategoryTree";
+import Link from "next/link";
+import { routePaths } from "@/utils/route-paths";
+import DeleteCategory from "@/app/(main)/categories/_components/DeleteCategory";
 
 export default function CategoryNode({ category }) {
   return (
@@ -22,17 +21,29 @@ export default function CategoryNode({ category }) {
           </div>
         </div>
         <div className={"flex gap-x-2"}>
-          <ModalCategory category={category} />
-          <ModalCategory type={"EDIT"} category={category} />
+          <Link href={routePaths.categories.children.create.path(category._id)}>
+            <PlusIcon
+              className={
+                "h-7 w-7 rounded-full p-1 text-primary-300 hover:cursor-pointer hover:bg-primary-300 hover:bg-opacity-25"
+              }
+            />
+          </Link>
+          <Link href={routePaths.categories.children.update.path(category._id)}>
+            <Pencil2Icon
+              className={
+                "h-7 w-7 rounded-full p-1 text-text-200 hover:cursor-pointer hover:bg-text-200 hover:bg-opacity-25"
+              }
+            />
+          </Link>
+
           <MoveIcon
             className={
               "h-7 w-7 rounded-full p-1 text-text-200 hover:cursor-pointer hover:bg-text-200 hover:bg-opacity-25"
             }
           />
-          <AlertCategory category={category} />
+          <DeleteCategory category={category} />
         </div>
       </div>
-
       {category.children && category.children.length > 0 && (
         <div className={"ml-6 border-l border-l-bg-300"}>
           <CategoryTree categories={category.children} />

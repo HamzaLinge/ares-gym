@@ -1,4 +1,4 @@
-import { ICategory } from "@/app/(main)/categories/utils/types";
+import { ICategory } from "@/app/(main)/categories/_utils/types";
 
 export interface ISupplement {
   _id: string;

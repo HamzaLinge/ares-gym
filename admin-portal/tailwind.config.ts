@@ -20,6 +20,7 @@ const config = {
     extend: {
       transitionProperty: {
         margin: "margin",
+        height: "height",
       },
       colors: {
         primary: {

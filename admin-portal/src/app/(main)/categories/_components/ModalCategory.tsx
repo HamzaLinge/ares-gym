@@ -29,12 +29,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import {
   createCategory,
-  editCategory,
-} from "@/app/(main)/categories/utils/actions";
+  updateCategory,
+} from "@/app/(main)/categories/_utils/actions";
 import {
   ICategory,
   TStateActionModalCategory,
-} from "@/app/(main)/categories/utils/types";
+} from "@/app/(main)/categories/_utils/types";
 
 const enum TypesModalCategory {
   create = "CREATE",
@@ -55,7 +55,7 @@ export default function ModalCategory({
   const refModalCategory = useRef<HTMLDialogElement>(null);
 
   const actionCategory =
-    type === TypesModalCategory.create ? createCategory : editCategory;
+    type === TypesModalCategory.create ? createCategory : updateCategory;
 
   const prevStateModalCategory: TStateActionModalCategory = {
     id: category ? category._id : undefined,

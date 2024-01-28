@@ -21,7 +21,21 @@ export const routePaths = {
     },
   },
   commands: { title: "Commands List", path: "/commands" },
-  categories: { title: "Categories List", path: "/categories" },
+  categories: {
+    title: "Categories List",
+    path: "/categories",
+    children: {
+      create: {
+        title: "Create New Category",
+        path: (idCategory?: string) =>
+          `/categories/create/${idCategory ? idCategory : ""}`,
+      },
+      update: {
+        title: "Update Category",
+        path: (idCategory: string) => `/categories/update/${idCategory}`,
+      },
+    },
+  },
   discounts: { title: "Discounts List", path: "/discounts" },
   settings: { title: "Settings", path: "/settings" },
 };

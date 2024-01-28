@@ -16,11 +16,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import FormError from "@/components/ui/FormError";
-import { ICategory, ICategoryTree } from "@/app/(main)/categories/utils/types";
+import { ICategory, ICategoryTree } from "@/app/(main)/categories/_utils/types";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import { IErrorAPI } from "@/utils/global-types";
-import { ISupplement } from "@/app/(main)/supplements/_types";
+import { ISupplement } from "@/app/(main)/supplements/_utils/types";
 
 interface IFormProductProps {
   categories: ICategoryTree[];

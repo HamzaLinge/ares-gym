@@ -6,9 +6,9 @@ import {
   IRequest_category_put_body,
   IRequest_category_put_params,
   IResponse_category_delete,
-  IResponse_category_get,
   IResponse_category_post,
   IResponse_category_put,
+  TResponse_category_get,
 } from "./category.type";
 import CategoryModel, { ICategory } from "../../models/Category";
 import { CustomError } from "../../types/global.type";
@@ -26,7 +26,7 @@ export async function category_post_controller(
   if (categoryWithSameName) {
     return next(
       new CustomError(
-        "There is already a category with the same name",
+        "There is already a category with the same name, please choose another name",
         HttpStatusCodes.CONFLICT
       )
     );
@@ -50,17 +50,35 @@ export async function category_post_controller(
 
 export async function category_get_controller(
   req: Request<any, any, any, IRequest_category_get>,
-  res: Response<IResponse_category_get>,
+  res: Response<TResponse_category_get>,
   next: NextFunction
 ) {
-  const categories: ICategory[] = await CategoryModel.find().sort({ name: 1 });
-  let categoryTree = buildCategoryTree(categories);
-  if (categoryTree.length === 0) {
-    return next(
-      new CustomError("No categories found", HttpStatusCodes.NOT_FOUND)
+  if (req.query.idCategory) {
+    const category: ICategory | null = await CategoryModel.findById(
+      req.query.idCategory
     );
+    if (!category) {
+      next(
+        new CustomError(
+          "No category found for this id",
+          HttpStatusCodes.NOT_FOUND
+        )
+      );
+    } else {
+      res.status(HttpStatusCodes.OK).send({ category });
+    }
+  } else {
+    const categories: ICategory[] = await CategoryModel.find().sort({
+      name: 1,
+    });
+    let categoryTree = buildCategoryTree(categories);
+    if (categoryTree.length === 0) {
+      return next(
+        new CustomError("No categories found", HttpStatusCodes.NOT_FOUND)
+      );
+    }
+    res.status(HttpStatusCodes.OK).send({ categoryTree });
   }
-  res.status(HttpStatusCodes.OK).send({ categoryTree });
 }
 
 export async function category_put_controller(
@@ -78,12 +96,13 @@ export async function category_put_controller(
   }
   if (req.body.name) {
     const categorySameName: ICategory | null = await CategoryModel.findOne({
+      _id: { $ne: req.params.idCategory },
       name: req.body.name,
     });
     if (categorySameName) {
       return next(
         new CustomError(
-          "There already a category with this name",
+          "There is already a category with this name, please choose another name",
           HttpStatusCodes.CONFLICT
         )
       );

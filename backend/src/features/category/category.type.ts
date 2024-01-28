@@ -22,11 +22,17 @@ export interface ICategoryTree {
   children: ICategoryTree[];
 }
 export interface IRequest_category_get {
-  name?: string;
+  idCategory?: string;
 }
-export interface IResponse_category_get {
+interface IResponse_category_getOne {
+  category: ICategory;
+}
+interface IResponse_category_getAll {
   categoryTree: ICategoryTree[];
 }
+export type TResponse_category_get =
+  | IResponse_category_getOne
+  | IResponse_category_getAll;
 
 /**
  PUT /discount/:idDiscount

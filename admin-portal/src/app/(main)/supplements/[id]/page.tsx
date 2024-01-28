@@ -3,7 +3,7 @@ import DeleteSupplement from "@/app/(main)/supplements/_components/DeleteSupplem
 import {
   getSupplementById,
   getSupplements,
-} from "@/app/(main)/supplements/_actions";
+} from "@/app/(main)/supplements/_utils/actions";
 import Link from "next/link";
 import { routePaths } from "@/utils/route-paths";
 import { Button } from "@/components/ui/button";

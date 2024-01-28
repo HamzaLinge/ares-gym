@@ -7,11 +7,11 @@ import { revalidateTag } from "next/cache";
 import {
   ICreatedSupplementResponse,
   ISupplement,
-} from "@/app/(main)/supplements/_types";
+} from "@/app/(main)/supplements/_utils/types";
 
 import { fetchData } from "@/utils/fetch-data";
 import { routePaths } from "@/utils/route-paths";
-import { ClassErrorApi } from "@/lib/exceptions";
+import { CustomClassErrorApi } from "@/lib/exceptions";
 
 const tag_revalidate_categories_list_after_mutation = "supplements";
 
@@ -30,7 +30,7 @@ export async function getSupplementById(idSupplement: string) {
   });
   if (!res.success) {
     console.error(res);
-    throw new ClassErrorApi(res);
+    throw new CustomClassErrorApi(res);
   }
   return res.data.supplement;
 }

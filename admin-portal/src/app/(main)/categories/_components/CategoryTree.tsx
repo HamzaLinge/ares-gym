@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import CategoryNode from "@/app/(main)/categories/components/CategoryNode";
+import CategoryNode from "@/app/(main)/categories/_components/CategoryNode";
 
 export default function CategoryTree({ categories }) {
   return (

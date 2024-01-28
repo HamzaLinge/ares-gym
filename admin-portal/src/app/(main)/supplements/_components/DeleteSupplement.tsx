@@ -3,9 +3,9 @@
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import { ISupplement } from "@/app/(main)/supplements/_types";
+import { ISupplement } from "@/app/(main)/supplements/_utils/types";
 
-import { deleteSupplement } from "@/app/(main)/supplements/_actions";
+import { deleteSupplement } from "@/app/(main)/supplements/_utils/actions";
 
 interface IDeleteSupplementProps {
   supplement: ISupplement;

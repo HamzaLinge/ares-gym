@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ISupplement } from "@/app/(main)/supplements/_types";
+import { ISupplement } from "@/app/(main)/supplements/_utils/types";
 import Link from "next/link";
 import { routePaths } from "@/utils/route-paths";
 

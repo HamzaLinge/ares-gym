@@ -40,7 +40,6 @@ export const validateRules = (
   next: NextFunction
 ) => {
   const errors = myValidationResult(req);
-  console.log(errors);
   if (!errors.isEmpty()) {
     const arrErrors = errors.array();
     const combinedObject = arrErrors.reduce((accumulator, currentObject) => {

@@ -1,4 +1,4 @@
-import { ISupplement } from "@/app/(main)/supplements/_types";
+import { ISupplement } from "@/app/(main)/supplements/_utils/types";
 import CardSupplement from "@/app/(main)/supplements/_components/CardSupplement";
 import FilterSupplements from "@/app/(main)/supplements/_components/FilterSupplements";
 
