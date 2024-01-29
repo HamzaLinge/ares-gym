@@ -1,13 +1,13 @@
 import jwt from "jsonwebtoken";
 
 import { getEnv } from "./env.util";
-import { TTokens } from "../features/authentication/auth.type";
+import { TToken } from "../features/authentication/auth.type";
 
 // Consider moving these to a configuration file or environment variables
 const expiresInAccessToken = 30 * 24 * 60 * 60; // 30 days in seconds
 const expiresInRefreshToken = 40 * 24 * 60 * 60; // 40 days in seconds
 
-export function getTokens(idUser: string): TTokens {
+export function getTokens(idUser: string): TToken {
   let accessToken: string;
   let refreshToken: string;
 

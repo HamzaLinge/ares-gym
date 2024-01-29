@@ -50,20 +50,15 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const { pending } = useFormStatus();
     const Comp = asChild ? Slot : "button";
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}
-        disabled={props.disabled || pending}
+        disabled={props.disabled}
       >
-        {pending ? (
-          <ClipLoader color={colors.bg["100"]} size={25} />
-        ) : (
-          props.children
-        )}
+        {props.children}
       </Comp>
     );
   }

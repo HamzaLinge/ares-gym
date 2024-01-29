@@ -8,17 +8,15 @@ import DeleteCategory from "@/app/(main)/categories/_components/DeleteCategory";
 
 export default function CategoryNode({ category }) {
   return (
-    <div className={"flex w-full flex-col p-2 pr-0"}>
+    <div className={"flex w-full flex-col"}>
       <div
         className={
-          "flex w-full items-center gap-x-4 rounded p-1 hover:bg-accent-200 hover:shadow"
+          "my-1 flex h-16 w-full items-center border border-bg-300 px-2 py-1 hover:bg-accent-200 hover:shadow"
         }
       >
         <div className={"grow"}>
-          <div className="">{category.name}</div>
-          <div className={"border-l border-l-bg-300 pl-2 text-xs font-light"}>
-            {category.description}
-          </div>
+          <div className={"capitalize"}>{category.name}</div>
+          <div className={"text-xs font-light"}>{category.description}</div>
         </div>
         <div className={"flex gap-x-2"}>
           <Link href={routePaths.categories.children.create.path(category._id)}>
@@ -45,7 +43,7 @@ export default function CategoryNode({ category }) {
         </div>
       </div>
       {category.children && category.children.length > 0 && (
-        <div className={"ml-6 border-l border-l-bg-300"}>
+        <div className={"ml-6"}>
           <CategoryTree categories={category.children} />
         </div>
       )}

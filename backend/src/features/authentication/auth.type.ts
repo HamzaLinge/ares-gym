@@ -38,7 +38,7 @@ export type TUserData = {
 };
 
 // TOKENS ---------------------------------------------------------------------------------------------
-export type TTokens = {
+export type TToken = {
   accessToken: string;
   refreshToken: string;
   expiresAccessToken?: number;
@@ -85,6 +85,6 @@ export interface IRequest_auth_local_register {
 }
 
 export interface IResponse_auth_logged {
-  user: Omit<IUser, "password">;
-  tokens: TTokens;
+  user: TUserData;
+  tokens: TToken;
 }

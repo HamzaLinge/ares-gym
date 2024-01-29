@@ -28,14 +28,14 @@ enum Roles {
 }
 
 type TRole = Roles;
-// TOKEN --------------------------------------------------------------------------------------
+// TOKEN Type --------------------------------------------------------------------------------------
 export type TToken = {
   accessToken: string;
   refreshToken: string;
   expiresAccessToken: number;
   expiresRefreshToken: number;
 };
-// USER DATA ------------------------------------------------------------------------------------------
+// USER Type ------------------------------------------------------------------------------------------
 export type TUser = {
   _id: string;
   credentialsProvider: TCredentialsProviders;
@@ -52,4 +52,16 @@ export type TUser = {
 export type TError = {
   message: string;
   errors?: TErrorValidation[];
+};
+
+// USER LOGGED DATA ---------------------------------------------------------------------------------------
+type TUserData = {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  picture?: string;
+};
+export type TUserLogged = {
+  user: TUserData;
+  tokens: TToken;
 };

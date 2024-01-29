@@ -11,6 +11,7 @@ import {
   IResponse_auth_checkEmail,
   IResponse_auth_logged,
   Roles,
+  TUserData,
 } from "./auth.type";
 import { CustomError } from "../../types/global.type";
 import { HttpStatusCodes } from "../../utils/error.util";
@@ -51,8 +52,17 @@ export const auth_local_login_controller = async (
     );
   }
   const tokens = getTokens(user._id.toString());
-  delete user.password;
-  res.status(HttpStatusCodes.OK).send({ user, tokens });
+  let response: IResponse_auth_logged = {
+    user: { _id: user._id, firstName: user.firstName, lastName: user.lastName },
+    tokens: tokens,
+  };
+  if (user.picture) {
+    response = {
+      ...response,
+      user: { ...response.user, picture: user.picture },
+    };
+  }
+  res.status(HttpStatusCodes.OK).send({ ...response });
 };
 
 export const auth_local_register_controller = async (
@@ -78,8 +88,17 @@ export const auth_local_register_controller = async (
     ...req.body,
   });
   const tokens = getTokens(user._id.toString());
-  delete user.password;
-  res.status(HttpStatusCodes.OK).send({ user, tokens });
+  let response: IResponse_auth_logged = {
+    user: { _id: user._id, firstName: user.firstName, lastName: user.lastName },
+    tokens: tokens,
+  };
+  if (user.picture) {
+    response = {
+      ...response,
+      user: { ...response.user, picture: user.picture },
+    };
+  }
+  res.status(HttpStatusCodes.OK).send({ ...response });
 };
 
 /*

@@ -12,13 +12,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { PersonIcon } from "@radix-ui/react-icons";
 
-import { signOut } from "@/app/(main)/actions";
+import { signOut } from "@/app/auth/_utils/actions";
 
-interface HeaderProps {
+interface IHeaderProps {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function Header({ setIsOpen }: HeaderProps) {
+export default function Header({ setIsOpen }: IHeaderProps) {
   return (
     <header
       className={
@@ -42,7 +42,7 @@ export default function Header({ setIsOpen }: HeaderProps) {
           <DropdownMenuItem>Profile</DropdownMenuItem>
           <DropdownMenuItem>Lang</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => signOut()}>
+          <DropdownMenuItem onClick={async () => await signOut()}>
             Sign Out
           </DropdownMenuItem>
         </DropdownMenuContent>

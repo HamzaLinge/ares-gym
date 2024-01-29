@@ -5,22 +5,18 @@ import { useFormState } from "react-dom";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import FormError from "@/components/ui/FormError";
 import { ICategory, ICategoryTree } from "@/app/(main)/categories/_utils/types";
-import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import { IErrorAPI } from "@/utils/global-types";
 import { ISupplement } from "@/app/(main)/supplements/_utils/types";
+import { Select, SelectGroup, SelectValue } from "@radix-ui/react-select";
+import {
+  SelectContent,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+} from "@/components/ui/select";
 
 interface IFormProductProps {
   categories: ICategoryTree[];
@@ -52,17 +48,20 @@ export default function FormSupplement({
   );
 
   function renderCategoryOptions(categoryOptions: ICategoryTree[]) {
-    return categoryOptions.map((option) => (
-      <DropdownMenuGroup key={option._id} className={"ml-4 first:ml-0"}>
-        <DropdownMenuRadioItem
-          value={option._id}
-          className={cn(option._id === selectedCategory && "bg-bg-200")}
-        >
+    return categoryOptions.map((option) =>
+      option.children && option.children.length > 0 ? (
+        <SelectGroup key={option._id}>
+          <SelectLabel>{option.name}</SelectLabel>
+          <SelectGroup className={"ml-2 border-l"}>
+            {renderCategoryOptions(option.children)}
+          </SelectGroup>
+        </SelectGroup>
+      ) : (
+        <SelectItem key={option._id} value={option._id}>
           {option.name}
-        </DropdownMenuRadioItem>
-        {option.children ? renderCategoryOptions(option.children) : undefined}
-      </DropdownMenuGroup>
-    ));
+        </SelectItem>
+      )
+    );
   }
 
   return (
@@ -87,28 +86,31 @@ export default function FormSupplement({
         />
       </div>
       <div className={"relative grid w-full gap-y-1.5"}>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Input
-              type={"text"}
-              readOnly
-              value={selectedCategory}
-              name={"category"}
-              placeholder={"Category"}
-              className={"text-text-100"}
+        <Select
+          name={"category"}
+          defaultValue={
+            supplement?.category
+              ? isICategory(supplement.category)
+                ? supplement.category._id
+                : supplement.category
+              : ""
+          }
+        >
+          <SelectTrigger className={"w-full"}>
+            <SelectValue
+              className={"capitalize"}
+              placeholder={"Select a category"}
             />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel>Categories</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuRadioGroup
-              value={selectedCategory}
-              onValueChange={setSelectedCategory}
-            >
-              {renderCategoryOptions(categories)}
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          </SelectTrigger>
+          <SelectContent className={"capitalize"}>
+            <SelectGroup>
+              <SelectLabel className={"border-b"}>Categories</SelectLabel>
+              <SelectGroup className={"ml-2"}>
+                {renderCategoryOptions(categories)}
+              </SelectGroup>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
         <FormError
           messageError={stateFormProduct?.error?.errors?.category}
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}

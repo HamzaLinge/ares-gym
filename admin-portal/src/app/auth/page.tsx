@@ -1,13 +1,15 @@
 "use client";
+
 import { useFormState } from "react-dom";
 
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { login } from "@/app/auth/utils/actions";
+import { login } from "@/app/auth/_utils/actions";
 import FormError from "@/components/ui/FormError";
+import BtnSubmit from "@/components/custom/BtnSubmit";
+import { IErrorAPI } from "@/utils/global-types";
 
 export default function AuthPage() {
-  const [state, loginAction] = useFormState(login, null);
+  const [state, loginAction] = useFormState<IErrorAPI, FormData>(login, null);
 
   return (
     <form
@@ -26,7 +28,7 @@ export default function AuthPage() {
           className={"text-text-100"}
         />
         <FormError
-          messageError={state?.errors?.email}
+          messageError={state?.error?.errors?.email}
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
         />
       </div>
@@ -40,14 +42,14 @@ export default function AuthPage() {
           className={"text-text-100"}
         />
         <FormError
-          messageError={state?.errors?.password}
+          messageError={state?.error?.errors?.password}
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
         />
       </div>
       <div className={"relative my-4 grid w-full gap-y-1.5"}>
-        <Button variant={"primary"}>Login</Button>
+        <BtnSubmit text={"login"} />
         <FormError
-          messageError={state?.message}
+          messageError={state?.error?.message}
           withIcon
           className={"absolute bottom-0 translate-y-[calc(100%_+_2px)]"}
         />

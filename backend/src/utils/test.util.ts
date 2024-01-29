@@ -3,12 +3,12 @@ import { getTokens } from "./jwt.util";
 import {
   CredentialsProviders,
   Roles,
-  TTokens,
+  TToken,
 } from "../features/authentication/auth.type";
 
 export async function getSubscriberTest(): Promise<{
   user: Omit<IUser, "password">;
-  tokens: TTokens;
+  tokens: TToken;
 }> {
   try {
     const user: IUser | null = await UserModel.findOne({
@@ -44,7 +44,7 @@ export async function getSubscriberTest(): Promise<{
 
 export async function getAdminTest(): Promise<{
   user: Omit<IUser, "password">;
-  tokens: TTokens;
+  tokens: TToken;
 }> {
   try {
     let user: IUser | null = await UserModel.findOne({
