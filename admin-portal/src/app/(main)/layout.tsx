@@ -1,6 +1,7 @@
 import React from "react";
 import NavigationLayout from "@/app/(main)/_components/NavigationLayout";
 import { Toaster } from "@/components/ui/sonner";
+import NavigationPage from "@/app/(main)/_components/NavigationPage";
 
 export default function MainLayout({
   children,
@@ -15,6 +16,7 @@ export default function MainLayout({
           "ml-0 mt-20 flex flex-1 flex-col overflow-auto p-2 transition-margin lg:ml-64"
         }
       >
+        <NavigationPage />
         {children}
       </main>
       <Toaster richColors />

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useFormState } from "react-dom";
 
 import { Input } from "@/components/ui/input";
@@ -40,12 +40,6 @@ export default function FormSupplement({
   const isICategory = (value: any): value is ICategory => {
     return !!value?._id;
   };
-
-  const [selectedCategory, setSelectedCategory] = useState<string>(
-    supplement && isICategory(supplement.category)
-      ? supplement.category._id
-      : ""
-  );
 
   function renderCategoryOptions(categoryOptions: ICategoryTree[]) {
     return categoryOptions.map((option) =>

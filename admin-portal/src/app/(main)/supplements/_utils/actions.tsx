@@ -79,6 +79,8 @@ export async function updateSupplement(
   }
   revalidateTag(tag_revalidate_categories_list_after_mutation);
   redirect(
-    routePaths.supplements.children.update.path(stateFormProduct.idSupplement)
+    routePaths.supplements.children.supplement.path(
+      stateFormProduct.idSupplement
+    )
   );
 }

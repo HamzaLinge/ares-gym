@@ -20,7 +20,7 @@ export default async function CategoriesPage() {
     categories = fetchedCategories.data.categoryTree;
   }
   return (
-    <section className={"flex flex-1 flex-col"}>
+    <section>
       <HeaderCategories />
       <Categories categories={categories} />
     </section>

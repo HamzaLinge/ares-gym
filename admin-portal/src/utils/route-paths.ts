@@ -36,6 +36,12 @@ export const routePaths = {
       },
     },
   },
-  discounts: { title: "Discounts List", path: "/discounts" },
+  discounts: {
+    title: "Discounts List",
+    path: "/discounts",
+    children: {
+      create: { title: "Create New Discount", path: "/discounts/create" },
+    },
+  },
   settings: { title: "Settings", path: "/settings" },
 };

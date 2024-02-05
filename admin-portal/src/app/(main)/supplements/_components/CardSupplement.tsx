@@ -15,7 +15,9 @@ export default function CardSupplement({ supplement }: ICardSupplementProps) {
     srcImg = "default-supplement-thumbnails.jpeg";
   }
   return (
-    <Link href={`${routePaths.supplements.path}/${supplement._id}`}>
+    <Link
+      href={routePaths.supplements.children.supplement.path(supplement._id)}
+    >
       <div className={"flex w-full flex-col"}>
         <Image
           className={"mx-0 h-auto w-full"}

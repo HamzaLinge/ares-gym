@@ -17,7 +17,7 @@ export async function generateStaticParams() {
 
   if (res.success)
     return res.data.supplements.map((supplement) => ({
-      is: supplement._id,
+      id: supplement._id,
     }));
   else return null;
 }

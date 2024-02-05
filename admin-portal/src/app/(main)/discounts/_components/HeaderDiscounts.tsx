@@ -1,18 +1,17 @@
 import React from "react";
-
 import { routePaths } from "@/utils/route-paths";
 import HeaderPage from "@/components/custom/HeaderPage";
 
-export default async function HeaderCategories() {
+export default function HeaderDiscounts() {
   return (
     <HeaderPage
-      listTitle={"categories"}
       addBtnLink={{
-        path: routePaths.categories.children.create.path(),
-        label: "New Category!",
+        path: routePaths.discounts.children.create.path,
+        label: "New Discount!",
       }}
+      listTitle={"Discounts"}
     >
-      Dashboard Categories
+      Supplements Dashboard
     </HeaderPage>
   );
 }

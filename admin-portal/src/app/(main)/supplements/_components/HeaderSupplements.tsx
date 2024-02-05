@@ -1,12 +1,16 @@
-import Link from "next/link";
+import HeaderPage from "@/components/custom/HeaderPage";
+import { routePaths } from "@/utils/route-paths";
 
 export default function HeaderSupplements() {
   return (
-    <header className={"flex w-full items-center justify-center gap-x-4 p-2"}>
-      <p>Dashboard Products</p>
-      <Link href={"/supplements/create"}>
-        <button className={"btn_nav"}>New</button>
-      </Link>
-    </header>
+    <HeaderPage
+      addBtnLink={{
+        path: routePaths.supplements.children.create.path,
+        label: "New Supplement!",
+      }}
+      listTitle={"Supplements"}
+    >
+      Supplements Dashboard
+    </HeaderPage>
   );
 }

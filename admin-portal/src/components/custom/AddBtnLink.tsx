@@ -1,9 +1,10 @@
+import React from "react";
 import Link from "next/link";
-import { routePaths } from "@/utils/route-paths";
+
+import { PlusIcon } from "@radix-ui/react-icons";
+
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { PlusIcon } from "@radix-ui/react-icons";
-import React from "react";
 
 type TAddBtnLinkProps = {
   path: string;

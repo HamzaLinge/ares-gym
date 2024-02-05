@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-import plugin from "tailwindcss/plugin";
+
 const { fontFamily } = require("tailwindcss/defaultTheme");
 
 /** @type import("tailwindcss").Config */
