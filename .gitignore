@@ -44,3 +44,5 @@ package-lock.json
 
 /admin-portal/.next/
 /admin-portal/node_modules/
+
+.vscode
