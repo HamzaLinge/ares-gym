@@ -1,11 +1,12 @@
 "use client";
 
-import React from "react";
+import { useFormState } from "react-dom";
 
 import { TDiscount } from "@/app/(main)/discounts/_utils/types";
+
 import { IErrorAPI } from "@/utils/global-types";
-import { useFormState } from "react-dom";
 import FormField from "@/components/custom/FormField";
+import BtnSubmit from "@/components/custom/BtnSubmit";
 
 type TFormDiscountProps = {
   actionDiscount: (
@@ -27,37 +28,38 @@ export default function FormDiscount({
   return (
     <form className={"w-full"} action={actionFormDiscount}>
       <FormField
-        typeField={"input"}
+        typeField="input"
         name={"title"}
         placeholder={"Title"}
         messageError={stateFormDiscount?.error?.errors?.title}
       />
       <FormField
-        typeField={"input"}
+        typeField="input"
         name={"percentage"}
         placeholder={"Percentage"}
         messageError={stateFormDiscount?.error?.errors?.percentage}
       />
       <FormField
-        typeField={"input"}
-        type={"date"}
+        typeField="input"
+        type="date"
         name={"dateBegin"}
         placeholder={"Start from"}
         messageError={stateFormDiscount?.error?.errors?.dateBegin}
       />
       <FormField
-        typeField={"input"}
-        type={"date"}
+        typeField="input"
+        type="date"
         name={"dateEnd"}
         placeholder={"End at"}
         messageError={stateFormDiscount?.error?.errors?.dateEnd}
       />
       <FormField
-        typeField={"input"}
+        typeField="textarea"
         name={"description"}
         placeholder={"Description"}
         messageError={stateFormDiscount?.error?.errors?.description}
       />
+      <BtnSubmit text="Save" />
     </form>
   );
 }

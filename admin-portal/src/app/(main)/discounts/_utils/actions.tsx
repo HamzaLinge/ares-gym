@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 
 import { routePaths } from "@/utils/route-paths";
 import { TDiscount } from "@/app/(main)/discounts/_utils/types";
+import { log } from "console";
 
 const tag_revalidate_discounts_list_after_mutation = "discounts";
 
@@ -23,4 +24,12 @@ export async function createDiscount(_, formData: FormData) {
   }
   revalidateTag(tag_revalidate_discounts_list_after_mutation);
   redirect(routePaths.discounts.path);
+}
+
+export async function getDiscounts() {
+  const res = await fetchData<{ discounts: TDiscount[] }>({
+    url: "/discount",
+    tags: [tag_revalidate_discounts_list_after_mutation],
+  });
+  return res;
 }
