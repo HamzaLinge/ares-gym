@@ -8,7 +8,7 @@ export interface IRequest_discount_post {
   percentage: number;
   dateBegin: Date;
   dateEnd: Date;
-  description: string;
+  description?: string;
 }
 
 export interface IResponse_discount_post {

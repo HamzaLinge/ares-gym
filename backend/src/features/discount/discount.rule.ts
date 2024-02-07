@@ -40,8 +40,7 @@ export const discount_post_rules = [
       return true;
     }),
   body("description")
-    .notEmpty()
-    .withMessage(errorMessageValidator.notEmpty("description"))
+    .optional({ values: "falsy" })
     .isString()
     .withMessage(errorMessageValidator.isString("description")),
 ];

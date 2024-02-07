@@ -4,10 +4,13 @@ import FormError from "@/components/ui/FormError";
 import { TFormFieldProps } from "./types";
 import {
   renderDatePicker,
+  renderFilePicker,
   renderInput,
   renderSelect,
+  renderSubmitButton,
   renderTextarea,
 } from "./utils";
+import { cn } from "@/lib/utils";
 
 // FormField component definition
 function FormField(props: TFormFieldProps): ReactElement {
@@ -21,21 +24,20 @@ function FormField(props: TFormFieldProps): ReactElement {
         return renderSelect(props);
       case "datepicker":
         return renderDatePicker(props);
+      case "filepicker":
+        return renderFilePicker(props);
+      case "submit":
+        return renderSubmitButton();
       default:
         return null;
     }
   };
 
   return (
-    <div className={`relative grid w-full gap-y-1.5 ${props.className}`}>
+    <>
       {renderField()}
-      {props.messageError && (
-        <FormError
-          messageError={props.messageError}
-          className="absolute bottom-0 translate-y-[calc(100%_+_2px)]"
-        />
-      )}
-    </div>
+      {props.messageError && <FormError messageError={props.messageError} />}
+    </>
   );
 }
 

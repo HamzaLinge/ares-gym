@@ -5,7 +5,7 @@ export interface IDiscount extends Document {
   percentage: number;
   dateBegin: Date;
   dateEnd: Date;
-  description: string;
+  description?: string;
   thumbnail?: string;
 }
 
@@ -43,7 +43,7 @@ const discountSchema = new Schema<IDiscount, TDiscountModel>(
         );
       },
     },
-    description: { type: String, required: true },
+    description: { type: String, required: false },
     thumbnail: { type: String, required: false },
   },
   { timestamps: true }
@@ -53,7 +53,7 @@ discountSchema.pre<IDiscount>(
   "save",
   async function (next: (error?: CallbackError) => void) {
     this.title = this.title.toLowerCase();
-    this.description = this.description.toLowerCase();
+    if (this.description) this.description = this.description.toLowerCase();
     next();
   }
 );

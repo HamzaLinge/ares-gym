@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 type TBtnSubmitProps = {
-  text: string;
+  text?: string;
   className?: string;
 };
 
@@ -17,7 +17,13 @@ export default function BtnSubmit({ text, className }: TBtnSubmitProps) {
   const { pending } = useFormStatus();
   return (
     <Button variant={"primary"} disabled={pending} className={cn(className)}>
-      {pending ? <ClipLoader color={colors.bg["100"]} size={25} /> : text}
+      {pending ? (
+        <ClipLoader color={colors.bg["100"]} size={25} />
+      ) : text ? (
+        text
+      ) : (
+        "Save"
+      )}
     </Button>
   );
 }

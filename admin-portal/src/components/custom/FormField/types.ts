@@ -4,6 +4,7 @@ import { TextareaProps } from "@/components/ui/textarea";
 export type TBaseProps = {
   name: string;
   placeholder: string;
+  required?: boolean;
   defaultValue?: string;
   className?: string;
   messageError?: string;
@@ -26,8 +27,24 @@ export type TSelectFieldProps = { typeField: "select" } & TBaseProps & {
 
 export type TDatePickerFieldProps = { typeField: "datepicker" } & TBaseProps;
 
+export type TFilePickerFieldProps = { typeField: "filepicker" } & Omit<
+  TBaseProps,
+  "name"
+> & {
+    multiple?: boolean;
+    accept?: string;
+    noSelectionText?: string;
+  };
+
+export type TSubmitButtomProps = { typeField: "submit" } & Pick<
+  TBaseProps,
+  "messageError" | "className"
+>;
+
 export type TFormFieldProps =
   | TInputFieldProps
   | TTextareaFieldProps
   | TSelectFieldProps
-  | TDatePickerFieldProps;
+  | TDatePickerFieldProps
+  | TFilePickerFieldProps
+  | TSubmitButtomProps;

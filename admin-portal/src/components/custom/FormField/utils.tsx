@@ -1,50 +1,61 @@
-import {
-  SelectGroup,
-  SelectLabel,
-  SelectItem,
-  Select,
-  SelectContent,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  TSelectOption,
-  TInputFieldProps,
-  TTextareaFieldProps,
-  TSelectFieldProps,
-  TFormFieldProps,
-  TDatePickerFieldProps,
-} from "./types";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { returnFileSize } from "@/utils/helpers";
 import { CalendarIcon } from "@radix-ui/react-icons";
-import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { useState } from "react";
-import { log } from "console";
+import {
+  TDatePickerFieldProps,
+  TFilePickerFieldProps,
+  TInputFieldProps,
+  TSelectFieldProps,
+  TSelectOption,
+  TTextareaFieldProps,
+} from "./types";
+import BtnSubmit from "../BtnSubmit";
 
 // Helper functions for rendering each field type
-
-const excludeUnwantedProps = (props: TFormFieldProps) => {
-  const { typeField, messageError, ...fieldProps } = props;
-  return fieldProps;
-};
-
 export const renderInput = (props: TInputFieldProps) => {
   const { typeField, messageError, ...inputProps } = props;
-  return <Input {...inputProps} />;
+  return (
+    <div className="w-full">
+      <Label htmlFor={props.name} className="capitalize">
+        {props.placeholder}
+        {props.required && <span className="text-accent-100"> *</span>}
+      </Label>
+      <Input id={props.name} className="bg-white" {...inputProps} />
+    </div>
+  );
 };
 
 export const renderTextarea = (props: TTextareaFieldProps) => {
   const { typeField, messageError, ...textareaProps } = props;
-  return <Textarea {...textareaProps} />;
+  return (
+    <div className="w-full">
+      <Label htmlFor={props.name} className="capitalize">
+        {props.placeholder}
+        {props.required && <span className="text-accent-100"> *</span>}
+      </Label>
+      <Textarea id={props.name} className="bg-white" {...textareaProps} />
+    </div>
+  );
 };
 
 const renderOptions = (options: TSelectOption[]): React.ReactNode => {
@@ -83,34 +94,36 @@ export const renderSelect = (props: TSelectFieldProps) => (
 export const renderDatePicker = (props: TDatePickerFieldProps) => {
   const { typeField, messageError, ...datepickerProps } = props;
   const [date, setDate] = useState<Date>();
-  // console.log(date);
 
   return (
     <>
-      <Input
+      <Label htmlFor={props.name} className="font-base">
+        {props.placeholder}
+        {props.required && <span className="text-accent-100"> *</span>}
+      </Label>
+      <input
+        hidden
+        readOnly
         type={"date"}
-        defaultValue={String(date)}
-        name={props.name}
-        className={"hidden"}
+        value={date ? format(date, "yyyy-MM-dd") : ""}
+        {...datepickerProps}
       />
-      {/* <Popover>
+      <Popover>
         <PopoverTrigger asChild>
           <Button
+            id={props.name}
             variant={"outline"}
-            className={cn(
-              "w-[280px] justify-start text-left font-normal",
-              !date && "text-muted-foreground"
-            )}
+            className={"w-full justify-start"}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {props.defaultValue ? (
-              format(props.defaultValue, "PPP")
+            {date ? (
+              format(date, "PPP")
             ) : (
-              <span>{props.placeholder}</span>
+              <span>{datepickerProps.placeholder}</span>
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0">
+        <PopoverContent className="w-auto p-0" align="start">
           <Calendar
             mode="single"
             selected={date}
@@ -118,7 +131,57 @@ export const renderDatePicker = (props: TDatePickerFieldProps) => {
             initialFocus
           />
         </PopoverContent>
-      </Popover> */}
+      </Popover>
     </>
   );
 };
+
+export const renderFilePicker = (props: TFilePickerFieldProps) => {
+  const [currrentFiles, setCurrentFiles] = useState<File[]>([]);
+  return (
+    <div className="self-start">
+      <Label htmlFor="filepicker" className="capitalize">
+        {props.placeholder}
+        {props.required && <span className="text-accent-100"> *</span>}
+      </Label>
+      <input
+        hidden
+        id="filepicker"
+        type="file"
+        name={props.multiple ? "files" : "file"}
+        multiple={props.multiple ? props.multiple : false}
+        accept={props.accept ? props.accept : "*"}
+        onChange={(e) => setCurrentFiles(Array.from(e.target.files || []))}
+      />
+      <Label htmlFor="filepicker">
+        {currrentFiles.length > 0 ? (
+          <ul>
+            {currrentFiles.map((file, index) => (
+              <li
+                key={file.name}
+                className="flex items-center w-full gap-x-2 p-1 rounded"
+              >
+                <img
+                  alt={file.name}
+                  src={URL.createObjectURL(file)}
+                  className="w-12"
+                />
+                <p className="italic text-sm">
+                  {`${file.name}, ${returnFileSize(file.size)}.`}
+                </p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="italic text-sm font-normal shadow p-1 w-fit">
+            {props.noSelectionText}
+          </p>
+        )}
+      </Label>
+    </div>
+  );
+};
+
+export const renderSubmitButton = () => (
+  <BtnSubmit className="w-full max-w-xl self-center" />
+);

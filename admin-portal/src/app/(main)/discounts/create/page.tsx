@@ -5,7 +5,10 @@ import { createDiscount } from "@/app/(main)/discounts/_utils/actions";
 export default function CreateDiscountPage() {
   return (
     <section>
-      <FormDiscount actionDiscount={createDiscount} />
+      <FormDiscount
+        actionDiscount={createDiscount}
+        title={"Create New Discount"}
+      />
     </section>
   );
 }
