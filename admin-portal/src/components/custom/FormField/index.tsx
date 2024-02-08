@@ -10,13 +10,12 @@ import {
   renderSubmitButton,
   renderTextarea,
 } from "./utils";
-import { cn } from "@/lib/utils";
 
 // FormField component definition
 function FormField(props: TFormFieldProps): ReactElement {
   const renderField = (): ReactElement | null => {
     switch (props.typeField) {
-      case "input":
+      case "text":
         return renderInput(props);
       case "textarea":
         return renderTextarea(props);

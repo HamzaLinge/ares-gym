@@ -246,7 +246,7 @@ export async function discount_delete_controller(
   if (discountExists.thumbnail) await deleteFile(discountExists.thumbnail);
   await DiscountModel.findOneAndDelete({ _id: req.params.idDiscount });
   res.status(HttpStatusCodes.OK).send({
-    idDeletedDiscount: discountExists._id,
+    deletedDiscount: discountExists,
   });
 }
 

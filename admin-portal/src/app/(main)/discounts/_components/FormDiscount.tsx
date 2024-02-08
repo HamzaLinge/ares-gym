@@ -29,29 +29,29 @@ export default function FormDiscount({
 
   return (
     <form
-      className={"w-full flex flex-col gap-y-4"}
+      className={"flex w-full flex-col gap-y-4 md:gap-y-8"}
       action={actionFormDiscount}
     >
       {title ? (
-        <h1 className="text-xl capitalize font-semibold">{title}</h1>
+        <h1 className="text-xl font-semibold capitalize">{title}</h1>
       ) : null}
-      <div className="flex flex-col gap-y-2 w-full">
+      <div className="flex w-full flex-col gap-y-2 md:flex-row md:gap-x-2">
         <FormField
-          typeField="input"
+          typeField="text"
           name={"title"}
           placeholder={"Title"}
           required={true}
           messageError={stateFormDiscount?.error?.errors?.title}
         />
         <FormField
-          typeField="input"
+          typeField="text"
           name={"percentage"}
           placeholder={"Percentage"}
           required={true}
           messageError={stateFormDiscount?.error?.errors?.percentage}
         />
       </div>
-      <div className="flex flex-col gap-y-2 w-full">
+      <div className="flex w-full flex-col gap-y-2 md:flex-row md:gap-x-2">
         <FormField
           typeField="datepicker"
           name={"dateBegin"}

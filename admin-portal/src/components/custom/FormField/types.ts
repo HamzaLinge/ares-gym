@@ -5,12 +5,12 @@ export type TBaseProps = {
   name: string;
   placeholder: string;
   required?: boolean;
-  defaultValue?: string;
+  defaultValue?: string | undefined;
   className?: string;
-  messageError?: string;
+  messageError?: string | undefined;
 };
 
-export type TInputFieldProps = { typeField: "input" } & TBaseProps &
+export type TTextFieldProps = { typeField: "text" } & TBaseProps &
   Omit<InputProps, "name" | "placeholder" | "defaultValue">;
 
 export type TTextareaFieldProps = { typeField: "textarea" } & TBaseProps &
@@ -36,15 +36,15 @@ export type TFilePickerFieldProps = { typeField: "filepicker" } & Omit<
     noSelectionText?: string;
   };
 
-export type TSubmitButtomProps = { typeField: "submit" } & Pick<
+export type TSubmitButtonProps = { typeField: "submit" } & Pick<
   TBaseProps,
   "messageError" | "className"
 >;
 
 export type TFormFieldProps =
-  | TInputFieldProps
+  | TTextFieldProps
   | TTextareaFieldProps
   | TSelectFieldProps
   | TDatePickerFieldProps
   | TFilePickerFieldProps
-  | TSubmitButtomProps;
+  | TSubmitButtonProps;

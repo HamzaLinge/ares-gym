@@ -34,10 +34,9 @@ import {
 
 const discountRoutes = Router();
 
-discountRoutes.use(jwtAuthMiddleware);
-
 discountRoutes.post(
   "",
+  jwtAuthMiddleware,
   singleFileMiddleware,
   processSingleFileUpload,
   ...discount_post_rules,
@@ -54,6 +53,7 @@ discountRoutes.get(
 );
 discountRoutes.put(
   "/:idDiscount",
+  jwtAuthMiddleware,
   ...discount_put_rules,
   validateRules,
   asyncHandler(discount_put_permission),
@@ -61,6 +61,7 @@ discountRoutes.put(
 );
 discountRoutes.put(
   "/file/:idDiscount",
+  jwtAuthMiddleware,
   singleFileMiddleware,
   processSingleFileUpload,
   ...discount_file_put_rules,
@@ -70,6 +71,7 @@ discountRoutes.put(
 );
 discountRoutes.delete(
   "/:idDiscount",
+  jwtAuthMiddleware,
   discount_delete_rules,
   validateRules,
   asyncHandler(discount_delete_permission),
@@ -77,6 +79,7 @@ discountRoutes.delete(
 );
 discountRoutes.delete(
   "/file/:idDiscount",
+  jwtAuthMiddleware,
   discount_file_delete_rules,
   validateRules,
   asyncHandler(discount_file_delete_permission),

@@ -51,9 +51,9 @@ export const discount_get_rules = [
     .isMongoId()
     .withMessage(errorMessageValidator.isMongoId("id discount"))
     .custom((value, { req }) => {
-      if (value && req.query?.idDiscount) {
+      if (value && req.query?.title) {
         throw new Error(
-          "Only one of Id Discount or Title should be provided, not both"
+          'Only "Id Discount" or "Title" must be indicated, not both.'
         );
       }
       return true;
@@ -67,7 +67,7 @@ export const discount_get_rules = [
     .custom((value, { req }) => {
       if (value && req.query?.idDiscount) {
         throw new Error(
-          "Only one of Id Discount or Title should be provided, not both"
+          'Only "Id Discount" or "Title" must be indicated, not both.'
         );
       }
       return true;

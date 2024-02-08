@@ -20,7 +20,6 @@ export default function AddBtnLink({
   return (
     <Link href={path}>
       <Button
-        variant={"primary"}
         type={"button"}
         className={cn("flex items-center gap-x-2", className)}
       >

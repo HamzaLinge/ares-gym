@@ -16,7 +16,7 @@ type TBtnSubmitProps = {
 export default function BtnSubmit({ text, className }: TBtnSubmitProps) {
   const { pending } = useFormStatus();
   return (
-    <Button variant={"primary"} disabled={pending} className={cn(className)}>
+    <Button disabled={pending} className={cn(className)}>
       {pending ? (
         <ClipLoader color={colors.bg["100"]} size={25} />
       ) : text ? (

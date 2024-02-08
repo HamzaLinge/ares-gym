@@ -24,7 +24,7 @@ import { useState } from "react";
 import {
   TDatePickerFieldProps,
   TFilePickerFieldProps,
-  TInputFieldProps,
+  TTextFieldProps,
   TSelectFieldProps,
   TSelectOption,
   TTextareaFieldProps,
@@ -32,7 +32,7 @@ import {
 import BtnSubmit from "../BtnSubmit";
 
 // Helper functions for rendering each field type
-export const renderInput = (props: TInputFieldProps) => {
+export const renderInput = (props: TTextFieldProps) => {
   const { typeField, messageError, ...inputProps } = props;
   return (
     <div className="w-full">
@@ -64,7 +64,9 @@ const renderOptions = (options: TSelectOption[]): React.ReactNode => {
       return (
         <SelectGroup key={option.value}>
           <SelectLabel>{option.label}</SelectLabel>
-          {renderOptions(option.children)}
+          <SelectGroup className={"ml-2 border-l"}>
+            {renderOptions(option.children)}
+          </SelectGroup>
         </SelectGroup>
       );
     } else {
@@ -78,17 +80,26 @@ const renderOptions = (options: TSelectOption[]): React.ReactNode => {
 };
 
 export const renderSelect = (props: TSelectFieldProps) => (
-  <Select name={props.name} defaultValue={props.defaultValue}>
-    <SelectTrigger className={"w-full"}>
-      <SelectValue
-        className={"capitalize"}
-        placeholder={props.placeholder || "Select an option"}
-      />
-    </SelectTrigger>
-    <SelectContent className={"capitalize"}>
-      {renderOptions(props.options)}
-    </SelectContent>
-  </Select>
+  <div className={"w-full"}>
+    <Label htmlFor={props.name} className="capitalize">
+      {props.placeholder}
+      {props.required && <span className="text-accent-100"> *</span>}
+    </Label>
+    <Select
+      name={props.name}
+      defaultValue={props.defaultValue ? props.defaultValue : ""}
+    >
+      <SelectTrigger id={props.name} className={"w-full bg-white"}>
+        <SelectValue
+          className={"capitalize"}
+          placeholder={props.placeholder || "Select an option"}
+        />
+      </SelectTrigger>
+      <SelectContent className={"capitalize"}>
+        {renderOptions(props.options)}
+      </SelectContent>
+    </Select>
+  </div>
 );
 
 export const renderDatePicker = (props: TDatePickerFieldProps) => {
@@ -96,7 +107,7 @@ export const renderDatePicker = (props: TDatePickerFieldProps) => {
   const [date, setDate] = useState<Date>();
 
   return (
-    <>
+    <div className={"w-full"}>
       <Label htmlFor={props.name} className="font-base">
         {props.placeholder}
         {props.required && <span className="text-accent-100"> *</span>}
@@ -132,7 +143,7 @@ export const renderDatePicker = (props: TDatePickerFieldProps) => {
           />
         </PopoverContent>
       </Popover>
-    </>
+    </div>
   );
 };
 
@@ -159,21 +170,21 @@ export const renderFilePicker = (props: TFilePickerFieldProps) => {
             {currrentFiles.map((file, index) => (
               <li
                 key={file.name}
-                className="flex items-center w-full gap-x-2 p-1 rounded"
+                className="flex w-full items-center gap-x-2 rounded p-1"
               >
                 <img
                   alt={file.name}
                   src={URL.createObjectURL(file)}
                   className="w-12"
                 />
-                <p className="italic text-sm">
+                <p className="text-sm italic">
                   {`${file.name}, ${returnFileSize(file.size)}.`}
                 </p>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="italic text-sm font-normal shadow p-1 w-fit">
+          <p className="w-fit p-1 text-sm font-normal italic shadow">
             {props.noSelectionText}
           </p>
         )}

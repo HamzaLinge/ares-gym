@@ -13,8 +13,8 @@ export default async function CreateSupplementPage() {
   const categories = fetchedCategories.data.categoryTree;
   return (
     <section>
-      <h1>Create New Supplement</h1>
       <FormSupplement
+        title={"Create New Supplement"}
         actionSupplement={createSupplement}
         categories={categories}
       />

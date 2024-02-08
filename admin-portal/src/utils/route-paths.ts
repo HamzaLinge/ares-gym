@@ -40,7 +40,15 @@ export const routePaths = {
     title: "Discounts List",
     path: "/discounts",
     children: {
+      discount: {
+        title: "Discount",
+        path: (idDiscount: string) => `/discounts/${idDiscount}`,
+      },
       create: { title: "Create New Discount", path: "/discounts/create" },
+      edit: {
+        title: "Edit Discount",
+        path: (idDiscount: string) => `/discounts/edit/${idDiscount}`,
+      },
     },
   },
   settings: { title: "Settings", path: "/settings" },
