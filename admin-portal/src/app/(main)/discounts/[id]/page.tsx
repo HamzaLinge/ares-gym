@@ -1,14 +1,11 @@
 import React from "react";
 import { getDiscountById } from "@/app/(main)/discounts/_utils/actions";
 import Image from "next/image";
+import { getFileUrl } from "@/utils/helpers";
 
 type TDiscountPageProps = {
   params: { id: string };
 };
-
-function getFileUrl(idFile) {
-  return `${process.env.BASE_URL}/file/${idFile}`;
-}
 
 export default async function DiscountPage({
   params: { id },

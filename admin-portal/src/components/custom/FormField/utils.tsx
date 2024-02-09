@@ -32,15 +32,15 @@ import {
 import BtnSubmit from "../BtnSubmit";
 
 // Helper functions for rendering each field type
-export const renderInput = (props: TTextFieldProps) => {
-  const { typeField, messageError, ...inputProps } = props;
+export const renderText = (props: TTextFieldProps) => {
+  const { typeField, messageError, ...textProps } = props;
   return (
     <div className="w-full">
       <Label htmlFor={props.name} className="capitalize">
         {props.placeholder}
         {props.required && <span className="text-accent-100"> *</span>}
       </Label>
-      <Input id={props.name} className="bg-white" {...inputProps} />
+      <Input id={props.name} className="bg-white" {...textProps} />
     </div>
   );
 };

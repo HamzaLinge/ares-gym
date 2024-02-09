@@ -5,7 +5,7 @@ import { TFormFieldProps } from "./types";
 import {
   renderDatePicker,
   renderFilePicker,
-  renderInput,
+  renderText,
   renderSelect,
   renderSubmitButton,
   renderTextarea,
@@ -16,7 +16,7 @@ function FormField(props: TFormFieldProps): ReactElement {
   const renderField = (): ReactElement | null => {
     switch (props.typeField) {
       case "text":
-        return renderInput(props);
+        return renderText(props);
       case "textarea":
         return renderTextarea(props);
       case "select":

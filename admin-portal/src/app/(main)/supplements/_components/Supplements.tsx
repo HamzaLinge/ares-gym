@@ -10,7 +10,11 @@ export default function Supplements({ supplements }: SupplementsProps) {
   return (
     <div>
       <FilterSupplements />
-      <div className={"grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"}>
+      <div
+        className={
+          "grid grid-cols-1 gap-y-4 gap-x-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+        }
+      >
         {supplements.map((product) => (
           <CardSupplement key={product._id} supplement={product} />
         ))}

@@ -16,3 +16,15 @@ export function returnFileSize(nbr: number) {
     return `${(nbr / 1048576).toFixed(1)} MB`;
   }
 }
+
+export function getFileUrl(idFile: string | string[] | undefined) {
+  if (typeof idFile === "string")
+    return `${process.env.BASE_URL}/file/${idFile}`;
+  if (
+    Array.isArray(idFile) &&
+    idFile.length > 0 &&
+    typeof idFile[0] === "string"
+  )
+    return `${process.env.BASE_URL}/file/${idFile[0]}`;
+  return "/default-supplement-thumbnail.jpg";
+}
