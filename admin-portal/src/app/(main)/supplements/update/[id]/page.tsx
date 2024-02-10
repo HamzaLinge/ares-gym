@@ -4,7 +4,7 @@ import {
   getSupplementById,
   updateSupplement,
 } from "@/app/(main)/supplements/_utils/actions";
-import FormSupplement from "@/app/(main)/supplements/_components/FormSupplement";
+import FormSupplement from "@/utils/helpers";
 import { CustomClassErrorApi } from "@/lib/exceptions";
 
 interface IUpdateSupplementPage {

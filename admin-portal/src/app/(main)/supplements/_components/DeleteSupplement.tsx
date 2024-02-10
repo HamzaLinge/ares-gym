@@ -1,6 +1,7 @@
 "use client";
 
 import { toast } from "sonner";
+import { TrashIcon } from "@radix-ui/react-icons";
 
 import { Button } from "@/components/ui/button";
 import { ISupplement } from "@/app/(main)/supplements/_utils/types";
@@ -23,5 +24,10 @@ export default function DeleteSupplement({
       });
     }
   };
-  return <Button onClick={handleDeleteSupplement}>Delete Supplement</Button>;
+  return (
+    <Button variant={"destructive"} onClick={handleDeleteSupplement}>
+      <TrashIcon className="mr-2 h-4 w-4" />
+      Delete
+    </Button>
+  );
 }

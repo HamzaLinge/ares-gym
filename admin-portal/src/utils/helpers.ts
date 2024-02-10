@@ -1,3 +1,5 @@
+import { ICategory } from "@/app/(main)/categories/_utils/types";
+
 export const isArrayOfStrings = (arr: any): arr is string[] => {
   if (Array.isArray(arr)) {
     if (arr.length > 0) {
@@ -28,3 +30,7 @@ export function getFileUrl(idFile: string | string[] | undefined) {
     return `${process.env.BASE_URL}/file/${idFile[0]}`;
   return "/default-supplement-thumbnail.jpg";
 }
+
+export const isCategory = (value: any): value is ICategory => {
+  return !!value?._id;
+};

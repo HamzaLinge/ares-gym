@@ -1,4 +1,4 @@
-import FormSupplement from "@/app/(main)/supplements/_components/FormSupplement";
+import FormSupplement from "@/utils/helpers";
 
 import { getCategories } from "@/app/(main)/categories/_utils/actions";
 import { createSupplement } from "@/app/(main)/supplements/_utils/actions";

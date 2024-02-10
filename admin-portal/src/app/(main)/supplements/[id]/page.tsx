@@ -4,19 +4,12 @@ import {
   getSupplementById,
   getSupplements,
 } from "@/app/(main)/supplements/_utils/actions";
-import Link from "next/link";
-import { routePaths } from "@/utils/route-paths";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselPrevious,
-  CarouselNext,
-} from "@/components/ui/carousel";
-import { getFileUrl } from "@/utils/helpers";
-import Image from "next/image";
+import { routePaths } from "@/utils/route-paths";
+import { Pencil1Icon } from "@radix-ui/react-icons";
+import Link from "next/link";
+import CardInfoSupplement from "./_components/CardDetailSupplement";
+import CarouselThumbnailsSupplement from "./_components/CarouselThumbnailsSupplement";
 
 interface ProductPageProps {
   params: { id: string };
@@ -36,30 +29,23 @@ export default async function SupplementPage({ params }: ProductPageProps) {
   const supplement = await getSupplementById(params.id);
 
   return (
-    <section className={"w-full flex flex-col items-center"}>
-      <Carousel className="w-full max-w-xs">
-        <CarouselContent>
-          {supplement.thumbnails &&
-            supplement.thumbnails.map((thumbnail, index) => (
-              <CarouselItem key={index}>
-                <Image
-                  src={getFileUrl(thumbnail)}
-                  alt={`${supplement.name}-thumbnail-${index}`}
-                  width={600}
-                  height={600}
-                />
-              </CarouselItem>
-            ))}
-        </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
-      </Carousel>
+    <section className={"flex-1 flex flex-col items-center gap-y-4"}>
+      <div>Supplement Statistics</div>
 
-      <h1>{supplement.name}</h1>
-      <Link href={routePaths.supplements.children.update.path(supplement._id)}>
-        <Button>Update Supplement</Button>
-      </Link>
-      <DeleteSupplement supplement={supplement} />
+      <CardInfoSupplement {...supplement} />
+
+      <div className={"w-full flex items-center justify-center gap-x-2"}>
+        <Link
+          href={routePaths.supplements.children.update.path(supplement._id)}
+        >
+          <Button>
+            <Pencil1Icon className="mr-2 h-4 w-4" /> Update
+          </Button>
+        </Link>
+        <DeleteSupplement supplement={supplement} />
+      </div>
+
+      <CarouselThumbnailsSupplement thumbnails={supplement.thumbnails} />
     </section>
   );
 }

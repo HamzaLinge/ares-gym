@@ -8,6 +8,7 @@ import { IErrorAPI } from "@/utils/global-types";
 import { ISupplement } from "@/app/(main)/supplements/_utils/types";
 import FormField from "@/components/custom/FormField";
 import { TSelectOption } from "@/components/custom/FormField/types";
+import { isCategory } from "@/utils/helpers";
 
 interface IFormProductProps {
   categories: ICategoryTree[];
@@ -29,10 +30,6 @@ export default function FormSupplement({
     IErrorAPI,
     FormData
   >(actionSupplement, supplement ? { idSupplement: supplement._id } : null);
-
-  const isICategory = (value: any): value is ICategory => {
-    return !!value?._id;
-  };
 
   // function renderCategoryOptions(categoryOptions: ICategoryTree[]) {
   //   return categoryOptions.map((option) =>
@@ -83,7 +80,7 @@ export default function FormSupplement({
           options={categories.map(transformCategoryTreeToSelectOption)}
           defaultValue={
             supplement?.category
-              ? isICategory(supplement.category)
+              ? isCategory(supplement.category)
                 ? supplement.category._id
                 : supplement.category
               : ""
