@@ -13,7 +13,7 @@ type TBackBtnProps = {
 export default function BackBtn({ href, className = "" }: TBackBtnProps) {
   return (
     <Link href={href}>
-      <Button variant={"default"} className={className}>
+      <Button variant={"outline"} className={className}>
         <ChevronLeftIcon />
       </Button>
     </Link>

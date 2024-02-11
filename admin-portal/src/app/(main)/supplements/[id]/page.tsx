@@ -36,7 +36,11 @@ export default async function SupplementPage({ params }: ProductPageProps) {
 
       <div className={"w-full flex items-center justify-center gap-x-2"}>
         <Link
-          href={routePaths.supplements.children.update.path(supplement._id)}
+          href={{
+            pathname: routePaths.supplements.children.update.path(
+              supplement._id
+            ),
+          }}
         >
           <Button>
             <Pencil1Icon className="mr-2 h-4 w-4" /> Update

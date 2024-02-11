@@ -1,17 +1,13 @@
 "use server";
 
-import React from "react";
-import { redirect } from "next/navigation";
 import { revalidateTag } from "next/cache";
+import { redirect } from "next/navigation";
 
-import {
-  ICreatedSupplementResponse,
-  ISupplement,
-} from "@/app/(main)/supplements/_utils/types";
+import { ISupplement } from "@/app/(main)/supplements/_utils/types";
 
+import { CustomClassErrorApi } from "@/lib/exceptions";
 import { fetchData } from "@/utils/fetch-data";
 import { routePaths } from "@/utils/route-paths";
-import { CustomClassErrorApi } from "@/lib/exceptions";
 
 const tag_revalidate_categories_list_after_mutation = "supplements";
 
@@ -35,8 +31,8 @@ export async function getSupplementById(idSupplement: string) {
   return res.data.supplement;
 }
 
-export async function createSupplement(stateFormProduct, formData: FormData) {
-  const res = await fetchData<ICreatedSupplementResponse>({
+export async function createSupplement(_: any, formData: FormData) {
+  const res = await fetchData<{ supplement: ISupplement }>({
     url: "/supplement",
     method: "POST",
     body: formData,

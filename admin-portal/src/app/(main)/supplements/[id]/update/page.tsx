@@ -4,8 +4,8 @@ import {
   getSupplementById,
   updateSupplement,
 } from "@/app/(main)/supplements/_utils/actions";
-import FormSupplement from "@/utils/helpers";
 import { CustomClassErrorApi } from "@/lib/exceptions";
+import FormSupplement from "@/app/(main)/supplements/_components/FormSupplement";
 
 interface IUpdateSupplementPage {
   params: { id: string };
@@ -14,6 +14,8 @@ interface IUpdateSupplementPage {
 export default async function UpdateSupplementPage({
   params,
 }: IUpdateSupplementPage) {
+  console.log(params);
+
   const fetchedCategories = await getCategories();
   if (!fetchedCategories.success) {
     console.error(fetchedCategories);
@@ -23,8 +25,8 @@ export default async function UpdateSupplementPage({
   const supplement = await getSupplementById(params.id);
   return (
     <section>
-      <h1>Update {supplement.name}</h1>
       <FormSupplement
+        title={`Update ${supplement.name} Supplement`}
         actionSupplement={updateSupplement}
         categories={categories}
         supplement={supplement}

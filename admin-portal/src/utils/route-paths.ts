@@ -16,7 +16,7 @@ export const routePaths = {
       },
       update: {
         title: "Update Supplement",
-        path: (idSupplement: string) => `/supplements/update/${idSupplement}`,
+        path: (idSupplement: string) => `/supplements/${idSupplement}/update`,
       },
     },
   },

@@ -148,7 +148,7 @@ export const renderDatePicker = (props: TDatePickerFieldProps) => {
 };
 
 export const renderFilePicker = (props: TFilePickerFieldProps) => {
-  const [currrentFiles, setCurrentFiles] = useState<File[]>([]);
+  const [currentFiles, setCurrentFiles] = useState<File[]>([]);
   return (
     <div className="self-start">
       <Label htmlFor="filepicker" className="capitalize">
@@ -165,9 +165,9 @@ export const renderFilePicker = (props: TFilePickerFieldProps) => {
         onChange={(e) => setCurrentFiles(Array.from(e.target.files || []))}
       />
       <Label htmlFor="filepicker">
-        {currrentFiles.length > 0 ? (
+        {currentFiles.length > 0 ? (
           <ul>
-            {currrentFiles.map((file, index) => (
+            {currentFiles.map((file, index) => (
               <li
                 key={file.name}
                 className="flex w-full items-center gap-x-2 rounded p-1"

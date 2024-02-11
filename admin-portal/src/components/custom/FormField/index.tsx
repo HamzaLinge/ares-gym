@@ -33,10 +33,10 @@ function FormField(props: TFormFieldProps): ReactElement {
   };
 
   return (
-    <>
+    <div className={"w-auto"}>
       {renderField()}
       {props.messageError && <FormError messageError={props.messageError} />}
-    </>
+    </div>
   );
 }
 

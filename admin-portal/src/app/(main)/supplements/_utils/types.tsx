@@ -11,7 +11,3 @@ export interface ISupplement {
   createdAt: string;
   updatedAt: string;
 }
-
-export interface ICreatedSupplementResponse {
-  supplement: ISupplement;
-}

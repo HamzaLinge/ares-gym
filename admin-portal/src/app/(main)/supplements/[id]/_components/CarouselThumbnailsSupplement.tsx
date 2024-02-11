@@ -19,8 +19,12 @@ export default function CarouselThumbnailsSupplement({
           <Image
             src={getFileUrl(thumbnail)}
             alt={""}
-            width={600}
-            height={600}
+            width={1280}
+            height={1080}
+            sizes={
+              "(max-width: 640px) 100vw, (max-width: 1080px) 66.66vw, 50vw"
+            }
+            className={"border-[4px] border-white rounded"}
           />
         </CarouselItem>
       ))}

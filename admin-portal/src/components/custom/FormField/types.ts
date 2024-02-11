@@ -5,7 +5,7 @@ export type TBaseProps = {
   name: string;
   placeholder: string;
   required?: boolean;
-  defaultValue?: string | undefined;
+  defaultValue?: string | number | undefined | null;
   className?: string;
   messageError?: string | undefined;
 };
