@@ -19,7 +19,7 @@ const FormError: React.FC<FormErrorProps> = ({
     <div
       role={"alert"}
       className={cn(
-        "absolute bottom-0 flex w-full translate-y-[calc(100%_+_2px)] flex-col items-center justify-center gap-x-2 text-xs text-error",
+        "flex w-full items-center justify-center text-xs text-error",
         className ? className : ""
       )}
     >

@@ -45,59 +45,74 @@ export default function FormSupplement({
       <div className={"flex w-full flex-col gap-y-2 md:flex-row md:gap-x-2"}>
         <FormField
           typeField={"text"}
-          name={"name"}
-          placeholder={"Name"}
-          required={true}
-          defaultValue={supplement ? supplement.name : ""}
           messageError={stateFormProduct?.error?.errors?.name}
+          textProps={{
+            name: "name",
+            placeholder: "Name",
+            required: true,
+            defaultValue: supplement ? supplement.name : undefined,
+          }}
         />
         <FormField
           typeField={"select"}
-          name={"category"}
-          placeholder={"Category"}
-          required={true}
-          options={categories.map(transformCategoryTreeToSelectOption)}
-          defaultValue={
-            supplement?.category
+          messageError={stateFormProduct?.error?.errors?.category}
+          selectProps={{
+            options: categories.map(transformCategoryTreeToSelectOption),
+            name: "category",
+            placeholder: "Select Category",
+            label: "Category",
+            required: true,
+            defaultValue: supplement?.category
               ? isCategory(supplement.category)
                 ? supplement.category._id
                 : supplement.category
-              : ""
-          }
-          messageError={stateFormProduct?.error?.errors?.category}
+              : undefined,
+          }}
         />
       </div>
       <div className={"flex w-full flex-col gap-y-2 md:flex-row md:gap-x-2"}>
         <FormField
           typeField={"text"}
-          name={"price"}
-          placeholder={"Price"}
-          required={true}
-          defaultValue={supplement ? supplement.price : null}
           messageError={stateFormProduct?.error?.errors?.price}
+          textProps={{
+            name: "price",
+            placeholder: "Price",
+            required: true,
+            defaultValue: supplement ? supplement.price : undefined,
+          }}
         />
         <FormField
           typeField={"text"}
-          name={"stock"}
-          placeholder={"Stock"}
-          defaultValue={supplement ? supplement.stock : null}
           messageError={stateFormProduct?.error?.errors?.stock}
+          textProps={{
+            name: "stock",
+            placeholder: "Stock",
+            defaultValue: supplement ? supplement.stock : undefined,
+          }}
         />
       </div>
       <FormField
         typeField={"textarea"}
-        name={"description"}
-        placeholder={"Description"}
-        defaultValue={supplement ? supplement.description : null}
         messageError={stateFormProduct?.error?.errors?.description}
+        textareaProps={{
+          name: "description",
+          placeholder: "Description",
+          defaultValue: supplement ? supplement.description : undefined,
+        }}
       />
-      <FormField
-        typeField={"filepicker"}
-        placeholder={"Thumbnails"}
-        multiple={true}
-        accept={"image/*"}
-        noSelectionText={"No Thumbnails Selected"}
-      />
+      {!supplement && (
+        <FormField
+          typeField={"filepicker"}
+          filepickerProps={{
+            name: "files",
+            label: "Thumbnails",
+            placeholder: "Select Thumbnail",
+            multiple: true,
+            accept: "image/*",
+          }}
+        />
+      )}
+
       <FormField
         typeField={"submit"}
         messageError={stateFormProduct?.error?.message}

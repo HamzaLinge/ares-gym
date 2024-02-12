@@ -18,42 +18,61 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { returnFileSize } from "@/utils/helpers";
-import { CalendarIcon } from "@radix-ui/react-icons";
+import {
+  CalendarIcon,
+  PlusIcon,
+  MinusCircledIcon,
+  MinusIcon,
+} from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { useState } from "react";
+import BtnSubmit from "../BtnSubmit";
 import {
   TDatePickerFieldProps,
   TFilePickerFieldProps,
-  TTextFieldProps,
   TSelectFieldProps,
   TSelectOption,
+  TTextFieldProps,
   TTextareaFieldProps,
 } from "./types";
-import BtnSubmit from "../BtnSubmit";
 
 // Helper functions for rendering each field type
-export const renderText = (props: TTextFieldProps) => {
-  const { typeField, messageError, ...textProps } = props;
+export const renderText = ({
+  textProps,
+}: Pick<TTextFieldProps, "textProps">) => {
   return (
     <div className="w-full">
-      <Label htmlFor={props.name} className="capitalize">
-        {props.placeholder}
-        {props.required && <span className="text-accent-100"> *</span>}
+      <Label htmlFor={textProps.name} className="capitalize">
+        {textProps.label
+          ? textProps.label
+          : textProps.placeholder
+          ? textProps.placeholder
+          : null}
+        {textProps.required && <span className="text-accent-100"> *</span>}
       </Label>
-      <Input id={props.name} className="bg-white" {...textProps} />
+      <Input id={textProps.name} className="bg-white" {...textProps} />
     </div>
   );
 };
 
-export const renderTextarea = (props: TTextareaFieldProps) => {
-  const { typeField, messageError, ...textareaProps } = props;
+export const renderTextarea = ({
+  textareaProps,
+}: Pick<TTextareaFieldProps, "textareaProps">) => {
   return (
     <div className="w-full">
-      <Label htmlFor={props.name} className="capitalize">
-        {props.placeholder}
-        {props.required && <span className="text-accent-100"> *</span>}
+      <Label htmlFor={textareaProps.name} className="capitalize">
+        {textareaProps.label
+          ? textareaProps.label
+          : textareaProps.placeholder
+          ? textareaProps.placeholder
+          : null}
+        {textareaProps.required && <span className="text-accent-100"> *</span>}
       </Label>
-      <Textarea id={props.name} className="bg-white" {...textareaProps} />
+      <Textarea
+        id={textareaProps.name}
+        className="bg-white"
+        {...textareaProps}
+      />
     </div>
   );
 };
@@ -79,50 +98,67 @@ const renderOptions = (options: TSelectOption[]): React.ReactNode => {
   });
 };
 
-export const renderSelect = (props: TSelectFieldProps) => (
+export const renderSelect = ({
+  selectProps,
+}: Pick<TSelectFieldProps, "selectProps">) => (
   <div className={"w-full"}>
-    <Label htmlFor={props.name} className="capitalize">
-      {props.placeholder}
-      {props.required && <span className="text-accent-100"> *</span>}
+    <Label htmlFor={selectProps.name} className="capitalize">
+      {selectProps.label
+        ? selectProps.label
+        : selectProps.placeholder
+        ? selectProps.placeholder
+        : null}
+      {selectProps.required && <span className="text-accent-100"> *</span>}
     </Label>
     <Select
-      name={props.name}
-      defaultValue={props.defaultValue ? props.defaultValue : ""}
+      name={selectProps.name}
+      defaultValue={
+        selectProps.defaultValue
+          ? (selectProps.defaultValue as string)
+          : undefined
+      }
     >
-      <SelectTrigger id={props.name} className={"w-full bg-white"}>
+      <SelectTrigger id={selectProps.name} className={"w-full bg-white"}>
         <SelectValue
           className={"capitalize"}
-          placeholder={props.placeholder || "Select an option"}
+          placeholder={selectProps.placeholder || "Select an option"}
         />
       </SelectTrigger>
       <SelectContent className={"capitalize"}>
-        {renderOptions(props.options)}
+        {renderOptions(selectProps.options)}
       </SelectContent>
     </Select>
   </div>
 );
 
-export const renderDatePicker = (props: TDatePickerFieldProps) => {
-  const { typeField, messageError, ...datepickerProps } = props;
+export const renderDatePicker = ({
+  datepickerProps,
+}: Pick<TDatePickerFieldProps, "datepickerProps">) => {
   const [date, setDate] = useState<Date>();
 
   return (
     <div className={"w-full"}>
-      <Label htmlFor={props.name} className="font-base">
-        {props.placeholder}
-        {props.required && <span className="text-accent-100"> *</span>}
+      <Label htmlFor={datepickerProps.name} className="font-base">
+        {datepickerProps.label
+          ? datepickerProps.label
+          : datepickerProps.placeholder
+          ? datepickerProps.placeholder
+          : null}
+        {datepickerProps.required && (
+          <span className="text-accent-100"> *</span>
+        )}
       </Label>
       <input
         hidden
         readOnly
         type={"date"}
         value={date ? format(date, "yyyy-MM-dd") : ""}
-        {...datepickerProps}
+        name={datepickerProps.name}
       />
       <Popover>
         <PopoverTrigger asChild>
           <Button
-            id={props.name}
+            id={datepickerProps.name}
             variant={"outline"}
             className={"w-full justify-start"}
           >
@@ -147,48 +183,112 @@ export const renderDatePicker = (props: TDatePickerFieldProps) => {
   );
 };
 
-export const renderFilePicker = (props: TFilePickerFieldProps) => {
-  const [currentFiles, setCurrentFiles] = useState<File[]>([]);
+function InputFile({
+  index,
+  name,
+  accept,
+  placeholder,
+}: {
+  index: number;
+  name: string;
+  accept?: string;
+  placeholder?: string;
+}) {
+  const [currentFile, setCurrentFile] = useState<File | undefined>(undefined);
+
   return (
-    <div className="self-start">
-      <Label htmlFor="filepicker" className="capitalize">
-        {props.placeholder}
-        {props.required && <span className="text-accent-100"> *</span>}
-      </Label>
+    <Label htmlFor={`filepicker-${index}`}>
       <input
         hidden
-        id="filepicker"
-        type="file"
-        name={props.multiple ? "files" : "file"}
-        multiple={props.multiple ? props.multiple : false}
-        accept={props.accept ? props.accept : "*"}
-        onChange={(e) => setCurrentFiles(Array.from(e.target.files || []))}
+        id={`filepicker-${index}`}
+        type={"file"}
+        name={name}
+        accept={accept ? accept : "*"}
+        onChange={(e) =>
+          setCurrentFile(e.target.files ? e.target.files[0] : undefined)
+        }
       />
-      <Label htmlFor="filepicker">
-        {currentFiles.length > 0 ? (
-          <ul>
-            {currentFiles.map((file, index) => (
-              <li
-                key={file.name}
-                className="flex w-full items-center gap-x-2 rounded p-1"
-              >
-                <img
-                  alt={file.name}
-                  src={URL.createObjectURL(file)}
-                  className="w-12"
-                />
-                <p className="text-sm italic">
-                  {`${file.name}, ${returnFileSize(file.size)}.`}
-                </p>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="w-fit p-1 text-sm font-normal italic shadow">
-            {props.noSelectionText}
+      {!currentFile ? (
+        <p className="w-fit p-1 text-sm font-normal italic shadow">
+          {placeholder ? (
+            <span className={"capitalize"}>{placeholder}</span>
+          ) : (
+            "Select File"
+          )}
+        </p>
+      ) : (
+        <div className="flex w-full items-center gap-x-2 rounded p-1">
+          <img
+            alt={currentFile.name}
+            src={URL.createObjectURL(currentFile)}
+            className="w-12"
+          />
+          <p className="text-sm italic">
+            {`${currentFile.name}, ${returnFileSize(currentFile.size)}.`}
           </p>
+        </div>
+      )}
+    </Label>
+  );
+}
+
+export const renderFilePicker = ({
+  filepickerProps,
+}: Pick<TFilePickerFieldProps, "filepickerProps">) => {
+  const [nbrInputFile, setNbrInputFile] = useState<number[]>([0]);
+
+  const handleAddInput = () => {
+    const copyNbrInputFile = [...nbrInputFile];
+    copyNbrInputFile.push(copyNbrInputFile.length);
+    setNbrInputFile(copyNbrInputFile);
+  };
+
+  const handleRemoveInput = (index: number) => {
+    const filteredNbrInputFile = nbrInputFile.filter(
+      (_, indexInput) => indexInput !== index
+    );
+    setNbrInputFile(filteredNbrInputFile);
+  };
+
+  return (
+    <div className="self-start">
+      <Label className={"flex items-center"}>
+        {filepickerProps.label ? (
+          <span className={"capitalize"}>{filepickerProps.label}</span>
+        ) : null}
+        {filepickerProps.required && (
+          <span className="text-accent-100"> *</span>
         )}
+        {nbrInputFile.length < 1 ||
+        (nbrInputFile.length >= 1 && filepickerProps.multiple) ? (
+          <PlusIcon
+            className={
+              "w-5 h-5 rounded-full ml-4 bg-slate-300 text-slate-800 hover:bg-slate-800 hover:text-bg-100 p-1"
+            }
+            onClick={handleAddInput}
+          />
+        ) : null}
       </Label>
+
+      {nbrInputFile.map((_, index) => (
+        <div
+          key={`filepicker-${index}`}
+          className={"flex items-center gap-x-2"}
+        >
+          <InputFile
+            index={index}
+            name={filepickerProps.name}
+            accept={filepickerProps.accept}
+            placeholder={filepickerProps.placeholder}
+          />
+          <MinusIcon
+            className={
+              "w-5 h-5 rounded-full bg-red-300 text-red-800 hover:bg-red-400 hover:text-bg-100 p-1"
+            }
+            onClick={() => handleRemoveInput(index)}
+          />
+        </div>
+      ))}
     </div>
   );
 };

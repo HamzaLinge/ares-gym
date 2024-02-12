@@ -19,9 +19,7 @@ type TDeleteCategoryProps = {
   category: ICategory;
 };
 
-export default async function DeleteCategory({
-  category,
-}: TDeleteCategoryProps) {
+export default function DeleteCategory({ category }: TDeleteCategoryProps) {
   return (
     <AlertDialog>
       <AlertDialogTrigger>

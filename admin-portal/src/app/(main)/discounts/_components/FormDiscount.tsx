@@ -38,45 +38,61 @@ export default function FormDiscount({
       <div className="flex w-full flex-col gap-y-2 md:flex-row md:gap-x-2">
         <FormField
           typeField="text"
-          name={"title"}
-          placeholder={"Title"}
-          required={true}
           messageError={stateFormDiscount?.error?.errors?.title}
+          textProps={{
+            name: "title",
+            placeholder: "Put Title for Discount",
+            required: true,
+            label: "Title",
+          }}
         />
         <FormField
           typeField="text"
-          name={"percentage"}
-          placeholder={"Percentage"}
-          required={true}
           messageError={stateFormDiscount?.error?.errors?.percentage}
+          textProps={{
+            name: "percentage",
+            placeholder: "Percentage",
+            required: true,
+          }}
         />
       </div>
       <div className="flex w-full flex-col gap-y-2 md:flex-row md:gap-x-2">
         <FormField
           typeField="datepicker"
-          name={"dateBegin"}
-          placeholder={"Start from"}
-          required={true}
           messageError={stateFormDiscount?.error?.errors?.dateBegin}
+          datepickerProps={{
+            name: "dateBegin",
+            placeholder: "Select Date Begin",
+            label: "Start from",
+            required: true,
+          }}
         />
         <FormField
           typeField="datepicker"
-          name={"dateEnd"}
-          placeholder={"End at"}
           messageError={stateFormDiscount?.error?.errors?.dateEnd}
+          datepickerProps={{
+            name: "dateEnd",
+            placeholder: "End at",
+            required: true,
+          }}
         />
       </div>
       <FormField
         typeField="textarea"
-        name={"description"}
-        placeholder={"Description"}
         messageError={stateFormDiscount?.error?.errors?.description}
+        textareaProps={{
+          name: "description",
+          placeholder: "Description",
+        }}
       />
       <FormField
         typeField="filepicker"
-        placeholder={"Thumbnail"}
-        accept={"image/*"}
-        noSelectionText={"No Selected Thumbnail"}
+        filepickerProps={{
+          name: "file",
+          label: "Thumbnail",
+          accept: "image/*",
+          placeholder: "Select Thumbnail",
+        }}
       />
       <FormField
         typeField="submit"

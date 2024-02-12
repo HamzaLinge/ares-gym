@@ -24,7 +24,7 @@ export default function CardInfoSupplement(props: TCardIntoSupplement) {
   ];
 
   return (
-    <Card className={"w-full"}>
+    <Card className={"w-full  max-w-lg "}>
       <CardHeader>
         <CardTitle className={"capitalize"}>{props.name}</CardTitle>
         {props.description && (

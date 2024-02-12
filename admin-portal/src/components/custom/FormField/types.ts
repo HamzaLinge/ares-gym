@@ -1,45 +1,53 @@
-import { InputProps } from "@/components/ui/input";
-import { TextareaProps } from "@/components/ui/textarea";
-
-export type TBaseProps = {
-  name: string;
-  placeholder: string;
-  required?: boolean;
-  defaultValue?: string | number | undefined | null;
-  className?: string;
+type TErrorProps = {
   messageError?: string | undefined;
 };
 
-export type TTextFieldProps = { typeField: "text" } & TBaseProps &
-  Omit<InputProps, "name" | "placeholder" | "defaultValue">;
+export type TCommonProps = {
+  name: string;
+  placeholder?: string;
+  label?: string;
+  required?: boolean;
+  defaultValue?: string | string[] | number | undefined;
+};
 
-export type TTextareaFieldProps = { typeField: "textarea" } & TBaseProps &
-  Omit<TextareaProps, "name" | "placeholder" | "defaultValue">;
+export type TTextFieldProps = {
+  typeField: "text";
+  textProps: TCommonProps;
+} & TErrorProps;
+
+export type TTextareaFieldProps = {
+  typeField: "textarea";
+  textareaProps: TCommonProps;
+} & TErrorProps;
 
 export type TSelectOption = {
   value: string;
   label: string;
   children?: TSelectOption[];
 };
-export type TSelectFieldProps = { typeField: "select" } & TBaseProps & {
+export type TSelectFieldProps = {
+  typeField: "select";
+  selectProps: {
     options: TSelectOption[];
-  };
+  } & TCommonProps;
+} & TErrorProps;
 
-export type TDatePickerFieldProps = { typeField: "datepicker" } & TBaseProps;
+export type TDatePickerFieldProps = {
+  typeField: "datepicker";
+  datepickerProps: TCommonProps;
+} & TErrorProps;
 
-export type TFilePickerFieldProps = { typeField: "filepicker" } & Omit<
-  TBaseProps,
-  "name"
-> & {
+export type TFilePickerFieldProps = {
+  typeField: "filepicker";
+  filepickerProps: {
     multiple?: boolean;
     accept?: string;
-    noSelectionText?: string;
-  };
+  } & TCommonProps;
+};
 
-export type TSubmitButtonProps = { typeField: "submit" } & Pick<
-  TBaseProps,
-  "messageError" | "className"
->;
+export type TSubmitButtonProps = {
+  typeField: "submit";
+} & TErrorProps;
 
 export type TFormFieldProps =
   | TTextFieldProps

@@ -16,13 +16,13 @@ function FormField(props: TFormFieldProps): ReactElement {
   const renderField = (): ReactElement | null => {
     switch (props.typeField) {
       case "text":
-        return renderText(props);
+        return renderText({ textProps: props.textProps });
       case "textarea":
-        return renderTextarea(props);
+        return renderTextarea({ textareaProps: props.textareaProps });
       case "select":
-        return renderSelect(props);
+        return renderSelect({ selectProps: props.selectProps });
       case "datepicker":
-        return renderDatePicker(props);
+        return renderDatePicker({ datepickerProps: props.datepickerProps });
       case "filepicker":
         return renderFilePicker(props);
       case "submit":
@@ -33,7 +33,7 @@ function FormField(props: TFormFieldProps): ReactElement {
   };
 
   return (
-    <div className={"w-auto"}>
+    <div className={"w-full"}>
       {renderField()}
       {props.messageError && <FormError messageError={props.messageError} />}
     </div>
