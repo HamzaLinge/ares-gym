@@ -1,5 +1,3 @@
-import DeleteSupplement from "@/app/(main)/supplements/_components/DeleteSupplement";
-
 import {
   getSupplementById,
   getSupplements,
@@ -10,6 +8,7 @@ import { Pencil1Icon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import CardInfoSupplement from "./_components/CardDetailSupplement";
 import CarouselThumbnailsSupplement from "./_components/CarouselThumbnailsSupplement";
+import DeleteSupplement from "./_components/DeleteSupplement";
 
 interface ProductPageProps {
   params: { id: string };
@@ -49,7 +48,7 @@ export default async function SupplementPage({ params }: ProductPageProps) {
         <DeleteSupplement supplement={supplement} />
       </div>
 
-      <CarouselThumbnailsSupplement thumbnails={supplement.thumbnails} />
+      <CarouselThumbnailsSupplement supplement={supplement} />
     </section>
   );
 }

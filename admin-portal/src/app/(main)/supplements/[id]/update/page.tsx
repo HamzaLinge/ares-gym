@@ -14,8 +14,6 @@ interface IUpdateSupplementPage {
 export default async function UpdateSupplementPage({
   params,
 }: IUpdateSupplementPage) {
-  console.log(params);
-
   const fetchedCategories = await getCategories();
   if (!fetchedCategories.success) {
     console.error(fetchedCategories);

@@ -32,7 +32,7 @@ export const errorMessageValidator = {
   isBool: (name: string): string => `${capitalize(name)} must be true or false`,
   // isLengthMin: (name: string, minEqual: number): string =>
   //   `${stringUtil(name)} length must exceed ${minEqual - 1}`,
-  isFilesUploaded: () => "You need to upload files",
+  isFilesUploaded: () => "There are no files found",
   isFileUploaded: () => "You need to upload a file",
   isArray: (name: string): string => `${capitalize(name)} must be an array`,
   isObject: (name: string): string => `${capitalize(name)} must be an object`,

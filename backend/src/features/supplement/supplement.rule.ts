@@ -106,6 +106,7 @@ export const supplement_files_put_rules = [
     .withMessage(errorMessageValidator.notEmpty("id supplement"))
     .isMongoId()
     .withMessage(errorMessageValidator.isMongoId("id supplement")),
+
   check("files").custom((value, { req }) => {
     if (!req.files || req.files.length === 0) {
       throw new Error(errorMessageValidator.isFilesUploaded());

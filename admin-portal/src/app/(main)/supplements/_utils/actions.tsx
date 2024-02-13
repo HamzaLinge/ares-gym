@@ -9,12 +9,12 @@ import { CustomClassErrorApi } from "@/lib/exceptions";
 import { fetchData } from "@/utils/fetch-data";
 import { routePaths } from "@/utils/route-paths";
 
-const tag_revalidate_categories_list_after_mutation = "supplements";
+const tag_revalidate_supplements_list_after_mutation = "supplements";
 
 export async function getSupplements() {
   const res = await fetchData<{ supplements: ISupplement[] }>({
     url: "/supplement",
-    tags: [tag_revalidate_categories_list_after_mutation],
+    tags: [tag_revalidate_supplements_list_after_mutation],
   });
   return res;
 }
@@ -42,7 +42,7 @@ export async function createSupplement(_: any, formData: FormData) {
   if (!res.success) {
     return res;
   }
-  revalidateTag(tag_revalidate_categories_list_after_mutation);
+  revalidateTag(tag_revalidate_supplements_list_after_mutation);
   redirect(routePaths.supplements.path);
 }
 
@@ -55,8 +55,27 @@ export async function deleteSupplement(idSupplement: string) {
   if (!res.success) {
     return res;
   }
-  revalidateTag(tag_revalidate_categories_list_after_mutation);
+  revalidateTag(tag_revalidate_supplements_list_after_mutation);
   redirect(routePaths.supplements.path);
+}
+
+export async function deleteThumbnailSupplement({
+  idSupplement,
+  idThumbnail,
+}: {
+  idSupplement: string;
+  idThumbnail: string;
+}) {
+  const res = await fetchData<{ deletedIdThumbnail: string }>({
+    url: `/supplement/${idSupplement}/file/${idThumbnail}`,
+    method: "DELETE",
+    isProtected: true,
+  });
+  if (!res.success) {
+    return res;
+  }
+  revalidateTag(tag_revalidate_supplements_list_after_mutation);
+  redirect(routePaths.supplements.children.supplement.path(idSupplement));
 }
 
 export async function updateSupplement(
@@ -73,10 +92,29 @@ export async function updateSupplement(
     console.error(res);
     return res;
   }
-  revalidateTag(tag_revalidate_categories_list_after_mutation);
+  revalidateTag(tag_revalidate_supplements_list_after_mutation);
   redirect(
     routePaths.supplements.children.supplement.path(
       stateFormProduct.idSupplement
     )
   );
+}
+
+export async function updateThumbnailsSupplement(
+  { idSupplement }: { idSupplement: string },
+  formData: FormData
+) {
+  const res = await fetchData<{ supplement: ISupplement }>({
+    url: `/supplement/files/${idSupplement}`,
+    method: "PUT",
+    body: formData,
+    isMultipartFormData: true,
+    isProtected: true,
+  });
+  if (!res.success) {
+    console.error(res);
+    return res;
+  }
+  revalidateTag(tag_revalidate_supplements_list_after_mutation);
+  redirect(routePaths.supplements.children.supplement.path(idSupplement));
 }

@@ -24,7 +24,7 @@ function FormField(props: TFormFieldProps): ReactElement {
       case "datepicker":
         return renderDatePicker({ datepickerProps: props.datepickerProps });
       case "filepicker":
-        return renderFilePicker(props);
+        return renderFilePicker({ filepickerProps: props.filepickerProps });
       case "submit":
         return renderSubmitButton();
       default:

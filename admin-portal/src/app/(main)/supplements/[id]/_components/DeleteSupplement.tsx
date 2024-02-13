@@ -22,8 +22,8 @@ export default function DeleteSupplement({
 
   return (
     <DeleteAlert
-      id={supplement._id}
-      name={supplement.name}
+      input={supplement._id}
+      deleteWhat={`${supplement.name} Supplement`}
       deleteAction={deleteSupplement}
       triggerElement={triggerElement}
     />

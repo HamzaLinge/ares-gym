@@ -22,7 +22,7 @@ export default function FormSupplement({
   supplement,
   title,
 }: IFormProductProps) {
-  const [stateFormProduct, actionFormProduct] = useFormState<
+  const [stateFormSupplement, actionFormSupplement] = useFormState<
     IErrorAPI,
     FormData
   >(actionSupplement, supplement ? { idSupplement: supplement._id } : null);
@@ -38,14 +38,17 @@ export default function FormSupplement({
   }
 
   return (
-    <form className={"flex w-full flex-col gap-y-4"} action={actionFormProduct}>
+    <form
+      className={"flex w-full flex-col gap-y-4"}
+      action={actionFormSupplement}
+    >
       {title ? (
         <h1 className="text-xl font-semibold capitalize">{title}</h1>
       ) : null}
       <div className={"flex w-full flex-col gap-y-2 md:flex-row md:gap-x-2"}>
         <FormField
           typeField={"text"}
-          messageError={stateFormProduct?.error?.errors?.name}
+          messageError={stateFormSupplement?.error?.errors?.name}
           textProps={{
             name: "name",
             placeholder: "Name",
@@ -55,7 +58,7 @@ export default function FormSupplement({
         />
         <FormField
           typeField={"select"}
-          messageError={stateFormProduct?.error?.errors?.category}
+          messageError={stateFormSupplement?.error?.errors?.category}
           selectProps={{
             options: categories.map(transformCategoryTreeToSelectOption),
             name: "category",
@@ -73,7 +76,7 @@ export default function FormSupplement({
       <div className={"flex w-full flex-col gap-y-2 md:flex-row md:gap-x-2"}>
         <FormField
           typeField={"text"}
-          messageError={stateFormProduct?.error?.errors?.price}
+          messageError={stateFormSupplement?.error?.errors?.price}
           textProps={{
             name: "price",
             placeholder: "Price",
@@ -83,7 +86,7 @@ export default function FormSupplement({
         />
         <FormField
           typeField={"text"}
-          messageError={stateFormProduct?.error?.errors?.stock}
+          messageError={stateFormSupplement?.error?.errors?.stock}
           textProps={{
             name: "stock",
             placeholder: "Stock",
@@ -93,7 +96,7 @@ export default function FormSupplement({
       </div>
       <FormField
         typeField={"textarea"}
-        messageError={stateFormProduct?.error?.errors?.description}
+        messageError={stateFormSupplement?.error?.errors?.description}
         textareaProps={{
           name: "description",
           placeholder: "Description",
@@ -115,7 +118,7 @@ export default function FormSupplement({
 
       <FormField
         typeField={"submit"}
-        messageError={stateFormProduct?.error?.message}
+        messageError={stateFormSupplement?.error?.message}
       />
     </form>
   );

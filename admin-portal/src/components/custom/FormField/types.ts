@@ -43,7 +43,7 @@ export type TFilePickerFieldProps = {
     multiple?: boolean;
     accept?: string;
   } & TCommonProps;
-};
+} & TErrorProps;
 
 export type TSubmitButtonProps = {
   typeField: "submit";
