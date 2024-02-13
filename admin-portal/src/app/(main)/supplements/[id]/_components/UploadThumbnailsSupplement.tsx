@@ -18,6 +18,7 @@ import { useFormState } from "react-dom";
 import { toast } from "sonner";
 import { updateThumbnailsSupplement } from "../../_utils/actions";
 import { ISupplement } from "../../_utils/types";
+import { CameraIcon, Pencil2Icon } from "@radix-ui/react-icons";
 
 export default function UploadThumbnailsSupplement({
   supplement,
@@ -44,7 +45,12 @@ export default function UploadThumbnailsSupplement({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>Open</DialogTrigger>
+      <DialogTrigger asChild>
+        <Button variant={"outline"}>
+          <CameraIcon />
+          <span className={"ml-2"}>Upload Thumbnails</span>
+        </Button>
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Want more Thumbnails?</DialogTitle>
