@@ -9,6 +9,7 @@ import {
   renderSelect,
   renderSubmitButton,
   renderTextarea,
+  renderPassword,
 } from "./utils";
 
 // FormField component definition
@@ -17,6 +18,8 @@ function FormField(props: TFormFieldProps): ReactElement {
     switch (props.typeField) {
       case "text":
         return renderText({ textProps: props.textProps });
+      case "password":
+        return renderPassword({ passwordProps: props.passwordProps });
       case "textarea":
         return renderTextarea({ textareaProps: props.textareaProps });
       case "select":

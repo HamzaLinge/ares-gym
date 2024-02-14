@@ -1,12 +1,16 @@
-import React from "react";
 import { MoveIcon, Pencil2Icon, PlusIcon } from "@radix-ui/react-icons";
 
 import CategoryTree from "@/app/(main)/categories/_components/CategoryTree";
-import Link from "next/link";
-import { routePaths } from "@/utils/route-paths";
 import DeleteCategory from "@/app/(main)/categories/_components/DeleteCategory";
+import { routePaths } from "@/utils/route-paths";
+import Link from "next/link";
+import { ICategoryTree } from "../_utils/types";
 
-export default function CategoryNode({ category }) {
+export default function CategoryNode({
+  category,
+}: {
+  category: ICategoryTree;
+}) {
   return (
     <div className={"flex w-full flex-col"}>
       <div

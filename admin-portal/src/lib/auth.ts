@@ -13,11 +13,10 @@ export function isAuthenticated(request: NextRequest) {
 }
 
 export function getAccessToken() {
-  if (!cookies().has(process.env.USER_KEY_COOKIE)) {
+  if (!cookies().has("AresGymStore")) {
     return null;
   }
-  const userCookieStr = cookies().get(process.env.USER_KEY_COOKIE)
-    ?.value as string;
+  const userCookieStr = cookies().get("AresGymStore")?.value as string;
   const userCookieObj: TUserLogged = JSON.parse(userCookieStr);
   return userCookieObj.tokens.accessToken;
 }

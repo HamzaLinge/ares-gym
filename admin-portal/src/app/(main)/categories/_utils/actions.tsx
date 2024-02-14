@@ -9,6 +9,7 @@ import { fetchData } from "@/utils/fetch-data";
 import { CustomClassErrorApi } from "@/lib/exceptions";
 import { redirect } from "next/navigation";
 import { routePaths } from "@/utils/route-paths";
+import { statusCodeApi } from "@/utils/status-code-api";
 
 const tag_revalidate_categories_list = "categories";
 
@@ -17,7 +18,16 @@ export async function getCategories() {
     url: "/category",
     tags: [tag_revalidate_categories_list],
   });
-  return res;
+  const categories: ICategoryTree[] = [];
+  if (!res.success) {
+    if (res.status === statusCodeApi.NOT_FOUND) {
+      return categories;
+    } else {
+      console.error(res);
+      throw new CustomClassErrorApi(res);
+    }
+  }
+  return res.data.categoryTree;
 }
 
 export async function getCategoryById(idCategory: string) {

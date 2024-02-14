@@ -15,6 +15,11 @@ export type TTextFieldProps = {
   textProps: TCommonProps;
 } & TErrorProps;
 
+export type TPasswordFieldProps = {
+  typeField: "password";
+  passwordProps: TCommonProps;
+} & TErrorProps;
+
 export type TTextareaFieldProps = {
   typeField: "textarea";
   textareaProps: TCommonProps;
@@ -51,6 +56,7 @@ export type TSubmitButtonProps = {
 
 export type TFormFieldProps =
   | TTextFieldProps
+  | TPasswordFieldProps
   | TTextareaFieldProps
   | TSelectFieldProps
   | TDatePickerFieldProps

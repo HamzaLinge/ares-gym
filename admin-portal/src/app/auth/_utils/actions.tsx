@@ -7,7 +7,7 @@ import { TUserLogged } from "@/app/auth/_utils/types";
 import { fetchData } from "@/utils/fetch-data";
 import { routePaths } from "@/utils/route-paths";
 
-export async function login(_, formData: FormData) {
+export async function login(_: any, formData: FormData) {
   const res = await fetchData<TUserLogged>({
     url: "/auth/local/login",
     method: "POST",
@@ -22,6 +22,8 @@ export async function login(_, formData: FormData) {
 }
 
 export async function signOut() {
-  if (cookies().has("AresGymStore")) cookies().delete("AresGymStore");
+  if (cookies().has("AresGymStore")) {
+    cookies().delete("AresGymStore");
+  }
   redirect(routePaths.auth.path);
 }

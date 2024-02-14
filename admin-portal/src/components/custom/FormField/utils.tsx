@@ -30,6 +30,7 @@ import BtnSubmit from "../BtnSubmit";
 import {
   TDatePickerFieldProps,
   TFilePickerFieldProps,
+  TPasswordFieldProps,
   TSelectFieldProps,
   TSelectOption,
   TTextFieldProps,
@@ -51,6 +52,29 @@ export const renderText = ({
         {textProps.required && <span className="text-accent-100"> *</span>}
       </Label>
       <Input id={textProps.name} className="bg-white" {...textProps} />
+    </div>
+  );
+};
+
+export const renderPassword = ({
+  passwordProps,
+}: Pick<TPasswordFieldProps, "passwordProps">) => {
+  return (
+    <div className="w-full">
+      {passwordProps.label && (
+        <Label htmlFor={passwordProps.name} className="capitalize">
+          {passwordProps.label}
+          {passwordProps.required && (
+            <span className="text-accent-100"> *</span>
+          )}
+        </Label>
+      )}
+      <Input
+        id={passwordProps.name}
+        type={"password"}
+        className="bg-white"
+        {...passwordProps}
+      />
     </div>
   );
 };

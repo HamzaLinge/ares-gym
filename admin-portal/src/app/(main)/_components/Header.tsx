@@ -1,24 +1,19 @@
 "use client";
 
-import React, { Dispatch, SetStateAction } from "react";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { PersonIcon } from "@radix-ui/react-icons";
+import { Dispatch, SetStateAction } from "react";
 
 import { signOut } from "@/app/auth/_utils/actions";
+import { Button } from "@/components/ui/button";
 
 interface IHeaderProps {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function Header({ setIsOpen }: IHeaderProps) {
+  const handleSignOut = async () => {
+    await signOut();
+  };
   return (
     <header
       className={
@@ -32,21 +27,9 @@ export default function Header({ setIsOpen }: IHeaderProps) {
         onClick={() => setIsOpen((prev) => !prev)}
       />
       <p className={""}>Logo</p>
-      <DropdownMenu>
-        <DropdownMenuTrigger>
-          <PersonIcon />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className={"text-center"}>
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-          <DropdownMenuItem>Lang</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={async () => await signOut()}>
-            Sign Out
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <Button variant={"secondary"} onClick={handleSignOut}>
+        Sign Out
+      </Button>
     </header>
   );
 }
