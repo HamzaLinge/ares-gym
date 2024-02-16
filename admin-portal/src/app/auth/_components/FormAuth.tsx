@@ -4,9 +4,10 @@ import FormField from "@/components/custom/FormField";
 import { IErrorAPI } from "@/utils/global-types";
 import { useFormState } from "react-dom";
 import { login } from "../_utils/actions";
+import { signIn } from "@/auth";
 
 export default function FormAuth() {
-  const [state, loginAction] = useFormState<IErrorAPI, FormData>(login, null);
+  const [state, loginAction] = useFormState(login, null);
 
   return (
     <form
@@ -17,7 +18,7 @@ export default function FormAuth() {
     >
       <FormField
         typeField={"text"}
-        messageError={state?.error?.errors?.email}
+        // messageError={state?.error?.errors?.email}
         textProps={{
           name: "email",
           label: "Email",
@@ -28,7 +29,7 @@ export default function FormAuth() {
 
       <FormField
         typeField={"password"}
-        messageError={state?.error?.errors?.password}
+        // messageError={state?.error?.errors?.password}
         passwordProps={{
           name: "password",
           label: "Password",
@@ -37,7 +38,8 @@ export default function FormAuth() {
         }}
       />
 
-      <FormField typeField={"submit"} messageError={state?.error?.message} />
+      {/* <button type="submit">Login</button> */}
+      <FormField typeField={"submit"} messageError={state?.error} />
     </form>
   );
 }

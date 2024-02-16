@@ -55,7 +55,7 @@ export type TError = {
 };
 
 // USER LOGGED DATA ---------------------------------------------------------------------------------------
-type TUserData = {
+export type TUserData = {
   _id: string;
   firstName: string;
   lastName: string;

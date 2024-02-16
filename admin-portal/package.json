@@ -27,6 +27,7 @@
     "embla-carousel-react": "^8.0.0-rc22",
     "lucide-react": "^0.323.0",
     "next": "14.0.4",
+    "next-auth": "^5.0.0-beta.11",
     "next-themes": "^0.2.1",
     "react": "^18",
     "react-day-picker": "^8.10.0",

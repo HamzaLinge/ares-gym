@@ -3,7 +3,7 @@ import { ICustomError, IErrorAPI, ISuccessAPI } from "@/utils/global-types";
 import { filterDataForm } from "@/utils/data-form";
 
 type THttpMethod = "GET" | "POST" | "PUT" | "DELETE";
-type THttpBody = string | FormData;
+type THttpBody = string | FormData | {};
 
 type TFetchDataProps = {
   url: string;
@@ -97,8 +97,13 @@ function getFetchOptions({
       ...options.headers,
       "Content-Type": "application/json",
     };
-    if (body)
-      options.body = JSON.stringify(Object.fromEntries(filterDataForm(body)));
+    if (body) {
+      if (body instanceof FormData) {
+        options.body = JSON.stringify(Object.fromEntries(filterDataForm(body)));
+      } else {
+        options.body = JSON.stringify(body);
+      }
+    }
   }
 
   if (tags) {

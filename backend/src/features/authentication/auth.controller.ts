@@ -36,6 +36,9 @@ export const auth_local_login_controller = async (
   res: Response<IResponse_auth_logged>,
   next: NextFunction
 ) => {
+  console.log("Attempting to login ---------------------------");
+  console.log(req.body);
+
   const emailRegex = new RegExp(`^${req.body.email}$`, "i");
   let user: IUser | null = await UserModel.findOne({ email: emailRegex });
   if (!user)

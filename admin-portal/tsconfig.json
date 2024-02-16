@@ -19,7 +19,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "auth": ["./src/auth.ts"]
     },
     "types": ["react-dom/canary"]
   },

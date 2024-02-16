@@ -3,7 +3,7 @@
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { Dispatch, SetStateAction } from "react";
 
-import { signOut } from "@/app/auth/_utils/actions";
+import { logout } from "@/app/auth/_utils/actions";
 import { Button } from "@/components/ui/button";
 
 interface IHeaderProps {
@@ -12,7 +12,7 @@ interface IHeaderProps {
 
 export default function Header({ setIsOpen }: IHeaderProps) {
   const handleSignOut = async () => {
-    await signOut();
+    await logout();
   };
   return (
     <header

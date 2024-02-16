@@ -1,41 +1,42 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import NextAuth from "next-auth";
+import authConfig from "./auth.config";
 
-import { isAuthenticated } from "@/lib/auth";
-import { routePaths } from "@/utils/route-paths";
+import {
+  publicRoutes,
+  authRoutes,
+  apiAuthPrefix,
+  DEFAULT_LOGIN_REDIRECT,
+} from "@/routes";
 
-export function middleware(request: NextRequest) {
-  if (!isAuthenticated(request)) {
-    if (!request.nextUrl.pathname.startsWith("/auth")) {
-      return NextResponse.redirect(new URL(routePaths.auth.path, request.url));
-    }
-    console.log("Go to Auth page");
-  } else if (
-    request.nextUrl.pathname.startsWith("/auth") ||
-    request.nextUrl.pathname.length === 1
-  ) {
-    console.log("Go to Dashboard page");
-    return NextResponse.redirect(
-      new URL(routePaths.dashboard.path, request.url)
-    );
+const { auth } = NextAuth(authConfig);
+
+export default auth((req) => {
+  const { nextUrl } = req;
+  const isLoggedIn = !!req.auth;
+
+  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
+  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
+  const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+
+  if (isApiAuthRoute) {
+    return null;
   }
-}
 
+  if (isAuthRoute) {
+    if (isLoggedIn) {
+      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+    }
+    return null;
+  }
+
+  if (!isLoggedIn && !isPublicRoute) {
+    return Response.redirect(new URL("/auth", nextUrl));
+  }
+
+  return null;
+});
+
+// Optionally, don't invoke Middleware on some paths
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    {
-      source: "/((?!api|_next/static|_next/image|favicon.ico).*)",
-      missing: [
-        { type: "header", key: "next-router-prefetch" },
-        { type: "header", key: "purpose", value: "prefetch" },
-      ],
-    },
-  ],
+  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
 };
