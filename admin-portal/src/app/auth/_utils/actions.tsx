@@ -1,45 +1,28 @@
 "use server";
 
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-
-import { TUserLogged } from "@/app/auth/_utils/types";
-import { fetchData } from "@/utils/fetch-data";
-import { routePaths } from "@/utils/route-paths";
 import { signIn, signOut } from "@/auth";
-import { AuthError } from "next-auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { AuthSchema } from "@/schemas";
+import { AuthError } from "next-auth";
+import { z } from "zod";
 
-// export async function login(_: any, formData: FormData) {
-//   const res = await fetchData<TUserLogged>({
-//     url: "/auth/local/login",
-//     method: "POST",
-//     body: formData,
-//   });
-//   if (!res.success) {
-//     console.error(res);
-//     return res;
-//   }
-//   cookies().set("AresGymStore", JSON.stringify(res.data));
-//   redirect(routePaths.dashboard.path);
-// }
-
-export async function login(_: any, formData: FormData) {
+export async function login(values: z.infer<typeof AuthSchema>) {
+  const validatedFields = AuthSchema.safeParse(values);
+  if (!validatedFields.success) {
+    return { error: "Invalid Fields" };
+  }
   try {
     await signIn("credentials", {
-      email: formData.get("email"),
-      password: formData.get("password"),
+      email: validatedFields.data.email,
+      password: validatedFields.data.password,
       redirectTo: DEFAULT_LOGIN_REDIRECT,
     });
-    // redirect(routePaths.dashboard.path);
   } catch (error) {
-    // console.error(error);
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
+          // This error type is due `return null` from credentials `authorize` method
           return { error: "Invalid Credentials" };
-        case "CallbackRouteError":
-          return { error: "Cannot Finish Login" };
         default:
           return { error: "Something went wrong" };
       }

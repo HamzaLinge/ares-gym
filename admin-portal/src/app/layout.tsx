@@ -12,7 +12,7 @@ export const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: "Localhost",
+  title: "Ares Gym Store Nutrition",
   description: "",
 };
 
@@ -25,8 +25,8 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          "flex h-screen flex-col bg-bg-100 font-sans antialiased",
-          fontSans.variable
+          "bg-bg-100 flex h-screen flex-col font-sans antialiased",
+          fontSans.variable,
         )}
       >
         {children}

@@ -29,14 +29,6 @@ export enum Roles {
 
 export type TRole = Roles;
 
-// USER DATA which has to be returned after login or register ------------------------------------------
-export type TUserData = {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  picture?: string;
-};
-
 // TOKENS ---------------------------------------------------------------------------------------------
 export type TToken = {
   accessToken: string;
@@ -85,6 +77,6 @@ export interface IRequest_auth_local_register {
 }
 
 export interface IResponse_auth_logged {
-  user: TUserData;
+  dataUser: Omit<IUser, "password">;
   tokens: TToken;
 }

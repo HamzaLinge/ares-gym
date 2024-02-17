@@ -15,29 +15,27 @@ interface ProductPageProps {
 }
 
 export async function generateStaticParams() {
-  const res = await getSupplements();
+  const supplements = await getSupplements();
 
-  if (res.success)
-    return res.data.supplements.map((supplement) => ({
-      id: supplement._id,
-    }));
-  else return null;
+  return supplements.map((supplement) => ({
+    id: supplement._id,
+  }));
 }
 
 export default async function SupplementPage({ params }: ProductPageProps) {
   const supplement = await getSupplementById(params.id);
 
   return (
-    <section className={"flex-1 flex flex-col items-center gap-y-4"}>
+    <section className={"flex flex-1 flex-col items-center gap-y-4"}>
       <div>Supplement Statistics</div>
 
       <CardInfoSupplement {...supplement} />
 
-      <div className={"w-full flex items-center justify-center gap-x-2"}>
+      <div className={"flex w-full items-center justify-center gap-x-2"}>
         <Link
           href={{
             pathname: routePaths.supplements.children.update.path(
-              supplement._id
+              supplement._id,
             ),
           }}
         >

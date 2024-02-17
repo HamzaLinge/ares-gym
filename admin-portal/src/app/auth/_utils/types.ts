@@ -46,6 +46,7 @@ export type TUser = {
   phoneNumber?: string;
   gender?: TGenderUser;
   birthday?: string;
+  picture?: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -55,13 +56,7 @@ export type TError = {
 };
 
 // USER LOGGED DATA ---------------------------------------------------------------------------------------
-export type TUserData = {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  picture?: string;
-};
 export type TUserLogged = {
-  user: TUserData;
+  dataUser: TUser;
   tokens: TToken;
 };

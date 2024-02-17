@@ -1,8 +1,10 @@
-import FormAuth from "./_components/FormAuth";
+import FormAuth from "@/app/auth/_components/FormAuth";
 
 export default async function AuthPage() {
   return (
-    <section className={"flex-1 flex items-center justify-center"}>
+    <section
+      className={"bg-background flex flex-1 items-center justify-center"}
+    >
       <FormAuth />
     </section>
   );

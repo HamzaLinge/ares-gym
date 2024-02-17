@@ -15,12 +15,12 @@ export default function NavigationLayout() {
     { title: "Commands", path: routePaths.commands.path },
     { title: "Discounts", path: routePaths.discounts.path },
     { title: "Categories", path: routePaths.categories.path },
-    { title: "Users", path: routePaths.users.path },
-    { title: "Settings", path: routePaths.settings.path },
+    // { title: "Users", path: routePaths.users.path },
+    // { title: "Settings", path: routePaths.settings.path },
   ];
 
   return (
-    <div className={"fixed left-0 right-0 top-0"}>
+    <div className={"fixed left-0 right-0 top-0 z-10"}>
       <Header setIsOpen={setIsOpen} />
       <Aside isOpen={isOpen} setIsOpen={setIsOpen} links={links} />
     </div>

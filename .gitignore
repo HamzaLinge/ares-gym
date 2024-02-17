@@ -38,7 +38,6 @@ next-env.d.ts
 .idea
 
 #Node
-yarn.lock
 package-lock.json
 /dist
 
@@ -46,3 +45,6 @@ package-lock.json
 /admin-portal/node_modules/
 
 .vscode
+
+color-guide.txt
+.prettierrc

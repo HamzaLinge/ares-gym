@@ -1,15 +1,10 @@
 import { getCategories } from "@/app/(main)/categories/_utils/actions";
 import FormSupplement from "@/app/(main)/supplements/_components/FormSupplement";
 import { createSupplement } from "@/app/(main)/supplements/_utils/actions";
-import { CustomClassErrorApi } from "@/lib/exceptions";
 
 export default async function CreateSupplementPage() {
-  const fetchedCategories = await getCategories();
-  if (!fetchedCategories.success) {
-    console.error(fetchedCategories);
-    throw new CustomClassErrorApi(fetchedCategories);
-  }
-  const categories = fetchedCategories.data.categoryTree;
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+  const categories = await getCategories();
   return (
     <section>
       <FormSupplement

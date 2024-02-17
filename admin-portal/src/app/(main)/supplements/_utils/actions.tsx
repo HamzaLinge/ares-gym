@@ -8,6 +8,7 @@ import { ISupplement } from "@/app/(main)/supplements/_utils/types";
 import { CustomClassErrorApi } from "@/lib/exceptions";
 import { fetchData } from "@/utils/fetch-data";
 import { routePaths } from "@/utils/route-paths";
+import { statusCodeApi } from "@/utils/status-code-api";
 
 const tag_revalidate_supplements_list_after_mutation = "supplements";
 
@@ -16,7 +17,17 @@ export async function getSupplements() {
     url: "/supplement",
     tags: [tag_revalidate_supplements_list_after_mutation],
   });
-  return res;
+  let supplements: ISupplement[] = [];
+  if (!res.success) {
+    if (res.status !== statusCodeApi.NOT_FOUND) {
+      console.error(res);
+      throw new CustomClassErrorApi(res);
+    } else {
+      return supplements;
+    }
+  }
+  supplements = res.data.supplements;
+  return supplements;
 }
 
 export async function getSupplementById(idSupplement: string) {
@@ -80,7 +91,7 @@ export async function deleteThumbnailSupplement({
 
 export async function updateSupplement(
   stateFormProduct: { idSupplement: string },
-  formData: FormData
+  formData: FormData,
 ) {
   const res = await fetchData<{ supplement: ISupplement }>({
     url: `/supplement/${stateFormProduct.idSupplement}`,
@@ -95,14 +106,14 @@ export async function updateSupplement(
   revalidateTag(tag_revalidate_supplements_list_after_mutation);
   redirect(
     routePaths.supplements.children.supplement.path(
-      stateFormProduct.idSupplement
-    )
+      stateFormProduct.idSupplement,
+    ),
   );
 }
 
 export async function updateThumbnailsSupplement(
   { idSupplement }: { idSupplement: string },
-  formData: FormData
+  formData: FormData,
 ) {
   const res = await fetchData<{ supplement: ISupplement }>({
     url: `/supplement/files/${idSupplement}`,
