@@ -1,17 +1,13 @@
-import React from "react";
 import NavigationLayout from "@/app/(main)/_components/NavigationLayout";
-import { Toaster } from "@/components/ui/sonner";
 import NavigationPage from "@/app/(main)/_components/NavigationPage";
-import { auth } from "@/auth";
+import { Toaster } from "@/components/ui/sonner";
+import React from "react";
 
 export default async function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
-  console.log({ session });
-
   return (
     <section className={"text-foreground relative flex flex-1 flex-col"}>
       <NavigationLayout />

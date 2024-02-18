@@ -25,6 +25,10 @@ export const routePaths = {
     title: "Categories List",
     path: "/categories",
     children: {
+      category: {
+        title: "Category",
+        path: (idCategory: string) => `/categories/${idCategory}`,
+      },
       create: {
         title: "Create New Category",
         path: (idCategory?: string) =>

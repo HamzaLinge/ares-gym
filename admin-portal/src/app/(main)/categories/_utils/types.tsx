@@ -25,7 +25,7 @@ type TVariantFormCategory =
 
 export type TFormCategoryProps = {
   actionCategory: (state: any, formData: FormData) => Promise<IErrorAPI>; // createCategory or updateCategory action server
-  category?: { data: ICategory; variant: TVariantFormCategory }; // category is either the category to edit, or the parent category to create its child, where parent can be undefined
+  category?: { data: ICategory; variant: TVariantFormCategory }; // category is either the category to edit, or the parent category to create a new child, where parent can be undefined
 };
 
 export type TStateActionModalCategory = {

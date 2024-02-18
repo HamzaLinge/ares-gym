@@ -27,7 +27,10 @@ export default async function CreateCategoryPage({
   }
   return (
     <section>
-      <FormCategory {...formCategoryProps} />
+      <FormCategory
+        actionCategory={createCategory}
+        idCategoryParent={idParent}
+      />
     </section>
   );
 }

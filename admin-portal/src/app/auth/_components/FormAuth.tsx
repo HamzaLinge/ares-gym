@@ -45,7 +45,7 @@ export default function FormAuth() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="bg-card w-full max-w-md space-y-8 rounded p-4"
+        className="w-full max-w-md space-y-8 rounded p-4"
       >
         <div className="flex w-full flex-col items-center gap-y-2">
           <h1 className="flex w-full items-center justify-center gap-x-4 text-4xl font-semibold">

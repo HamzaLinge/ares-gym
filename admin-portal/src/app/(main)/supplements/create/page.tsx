@@ -3,7 +3,7 @@ import FormSupplement from "@/app/(main)/supplements/_components/FormSupplement"
 import { createSupplement } from "@/app/(main)/supplements/_utils/actions";
 
 export default async function CreateSupplementPage() {
-  await new Promise((resolve) => setTimeout(resolve, 3000));
+  // await new Promise((resolve) => setTimeout(resolve, 3000));
   const categories = await getCategories();
   return (
     <section>

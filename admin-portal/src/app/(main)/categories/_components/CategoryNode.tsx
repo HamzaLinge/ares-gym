@@ -15,7 +15,7 @@ export default function CategoryNode({
     <div className={"flex w-full flex-col"}>
       <div
         className={
-          "my-1 flex h-16 w-full items-center border border-bg-300 px-2 py-1 hover:bg-accent-200 hover:shadow"
+          "border-bg-300 hover:bg-accent-200 my-1 flex h-16 w-full items-center border px-2 py-1 hover:shadow"
         }
       >
         <div className={"grow"}>
@@ -26,21 +26,21 @@ export default function CategoryNode({
           <Link href={routePaths.categories.children.create.path(category._id)}>
             <PlusIcon
               className={
-                "h-7 w-7 rounded-full p-1 text-primary-300 hover:cursor-pointer hover:bg-primary-300 hover:bg-opacity-25"
+                "text-primary-300 hover:bg-primary-300 h-7 w-7 rounded-full p-1 hover:cursor-pointer hover:bg-opacity-25"
               }
             />
           </Link>
           <Link href={routePaths.categories.children.update.path(category._id)}>
             <Pencil2Icon
               className={
-                "h-7 w-7 rounded-full p-1 text-text-200 hover:cursor-pointer hover:bg-text-200 hover:bg-opacity-25"
+                "text-text-200 hover:bg-text-200 h-7 w-7 rounded-full p-1 hover:cursor-pointer hover:bg-opacity-25"
               }
             />
           </Link>
 
           <MoveIcon
             className={
-              "h-7 w-7 rounded-full p-1 text-text-200 hover:cursor-pointer hover:bg-text-200 hover:bg-opacity-25"
+              "text-text-200 hover:bg-text-200 h-7 w-7 rounded-full p-1 hover:cursor-pointer hover:bg-opacity-25"
             }
           />
           <DeleteCategory category={category} />

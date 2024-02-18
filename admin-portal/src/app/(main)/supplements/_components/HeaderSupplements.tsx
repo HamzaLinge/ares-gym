@@ -10,7 +10,7 @@ export default function HeaderSupplements() {
       }}
       listTitle={"Supplements"}
     >
-      Supplements Dashboard
+      Supplements Statistics
     </HeaderPage>
   );
 }
