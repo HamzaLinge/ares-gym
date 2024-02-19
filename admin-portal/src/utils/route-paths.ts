@@ -38,6 +38,10 @@ export const routePaths = {
         title: "Update Category",
         path: (idCategory: string) => `/categories/update/${idCategory}`,
       },
+      edit: {
+        title: "Edit Category",
+        path: (idCategory: string) => `/categories/${idCategory}/edit`,
+      },
     },
   },
   discounts: {

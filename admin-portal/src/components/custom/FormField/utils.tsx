@@ -36,6 +36,7 @@ import {
   TTextFieldProps,
   TTextareaFieldProps,
 } from "./types";
+import { renderCategoryOptions } from "@/app/(main)/categories/_utils/helpers";
 
 // Helper functions for rendering each field type
 export const renderText = ({
@@ -47,8 +48,8 @@ export const renderText = ({
         {textProps.label
           ? textProps.label
           : textProps.placeholder
-          ? textProps.placeholder
-          : null}
+            ? textProps.placeholder
+            : null}
         {textProps.required && <span className="text-accent-100"> *</span>}
       </Label>
       <Input id={textProps.name} className="bg-white" {...textProps} />
@@ -88,8 +89,8 @@ export const renderTextarea = ({
         {textareaProps.label
           ? textareaProps.label
           : textareaProps.placeholder
-          ? textareaProps.placeholder
-          : null}
+            ? textareaProps.placeholder
+            : null}
         {textareaProps.required && <span className="text-accent-100"> *</span>}
       </Label>
       <Textarea
@@ -101,27 +102,6 @@ export const renderTextarea = ({
   );
 };
 
-const renderOptions = (options: TSelectOption[]): React.ReactNode => {
-  return options.map((option) => {
-    if (option.children && option.children.length > 0) {
-      return (
-        <SelectGroup key={option.value}>
-          <SelectLabel>{option.label}</SelectLabel>
-          <SelectGroup className={"ml-2 border-l"}>
-            {renderOptions(option.children)}
-          </SelectGroup>
-        </SelectGroup>
-      );
-    } else {
-      return (
-        <SelectItem key={option.value} value={option.value}>
-          {option.label}
-        </SelectItem>
-      );
-    }
-  });
-};
-
 export const renderSelect = ({
   selectProps,
 }: Pick<TSelectFieldProps, "selectProps">) => (
@@ -130,8 +110,8 @@ export const renderSelect = ({
       {selectProps.label
         ? selectProps.label
         : selectProps.placeholder
-        ? selectProps.placeholder
-        : null}
+          ? selectProps.placeholder
+          : null}
       {selectProps.required && <span className="text-accent-100"> *</span>}
     </Label>
     <Select
@@ -149,7 +129,7 @@ export const renderSelect = ({
         />
       </SelectTrigger>
       <SelectContent className={"capitalize"}>
-        {renderOptions(selectProps.options)}
+        {renderCategoryOptions(selectProps.options)}
       </SelectContent>
     </Select>
   </div>
@@ -166,8 +146,8 @@ export const renderDatePicker = ({
         {datepickerProps.label
           ? datepickerProps.label
           : datepickerProps.placeholder
-          ? datepickerProps.placeholder
-          : null}
+            ? datepickerProps.placeholder
+            : null}
         {datepickerProps.required && (
           <span className="text-accent-100"> *</span>
         )}
@@ -269,7 +249,7 @@ export const renderFilePicker = ({
 
   const handleRemoveInput = (index: number) => {
     const filteredNbrInputFile = nbrInputFile.filter(
-      (_, indexInput) => indexInput !== index
+      (_, indexInput) => indexInput !== index,
     );
     setNbrInputFile(filteredNbrInputFile);
   };
@@ -287,7 +267,7 @@ export const renderFilePicker = ({
         (nbrInputFile.length >= 1 && filepickerProps.multiple) ? (
           <PlusIcon
             className={
-              "w-5 h-5 rounded-full ml-4 bg-slate-300 text-slate-800 hover:bg-slate-800 hover:text-bg-100 p-1"
+              "hover:text-bg-100 ml-4 h-5 w-5 rounded-full bg-slate-300 p-1 text-slate-800 hover:bg-slate-800"
             }
             onClick={handleAddInput}
           />
@@ -307,7 +287,7 @@ export const renderFilePicker = ({
           />
           <MinusIcon
             className={
-              "w-5 h-5 rounded-full bg-red-300 text-red-800 hover:bg-red-400 hover:text-bg-100 p-1"
+              "hover:text-bg-100 h-5 w-5 rounded-full bg-red-300 p-1 text-red-800 hover:bg-red-400"
             }
             onClick={() => handleRemoveInput(index)}
           />
@@ -317,6 +297,4 @@ export const renderFilePicker = ({
   );
 };
 
-export const renderSubmitButton = () => (
-  <BtnSubmit className="w-full max-w-xl self-center" />
-);
+export const renderSubmitButton = () => <BtnSubmit />;

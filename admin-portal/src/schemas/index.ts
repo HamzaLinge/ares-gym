@@ -12,4 +12,5 @@ export const CategorySchema = z.object({
     .string()
     .min(6, { message: "Make sure the description is properly provided" })
     .optional(),
+  parent: z.string().optional(),
 });

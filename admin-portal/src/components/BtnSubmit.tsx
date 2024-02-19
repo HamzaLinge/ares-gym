@@ -12,7 +12,7 @@ type TBtnSubmitProps = {
 export default function BtnSubmit({ text }: TBtnSubmitProps) {
   const { pending } = useFormStatus();
   return (
-    <Button disabled={pending}>
+    <Button disabled={pending} className="w-full">
       {pending ? (
         <ReloadIcon className="h-4 w-4 animate-spin" />
       ) : text ? (

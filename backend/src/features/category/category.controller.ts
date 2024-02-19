@@ -18,7 +18,7 @@ import { HttpStatusCodes } from "../../utils/error.util";
 export async function category_post_controller(
   req: Request<any, any, IRequest_category_post>,
   res: Response<IResponse_category_post>,
-  next: NextFunction
+  next: NextFunction,
 ) {
   const categoryWithSameName: ICategory | null = await CategoryModel.findOne({
     name: req.body.name,
@@ -27,20 +27,20 @@ export async function category_post_controller(
     return next(
       new CustomError(
         "There is already a category with the same name, please choose another name",
-        HttpStatusCodes.CONFLICT
-      )
+        HttpStatusCodes.CONFLICT,
+      ),
     );
   }
   if (req.body.parent) {
     const categoryParentExists: ICategory | null = await CategoryModel.findById(
-      req.body.parent
+      req.body.parent,
     );
     if (!categoryParentExists) {
       return next(
         new CustomError(
           "Category Parent doesn't exist for the given id",
-          HttpStatusCodes.NOT_FOUND
-        )
+          HttpStatusCodes.NOT_FOUND,
+        ),
       );
     }
   }
@@ -51,18 +51,18 @@ export async function category_post_controller(
 export async function category_get_controller(
   req: Request<any, any, any, IRequest_category_get>,
   res: Response<TResponse_category_get>,
-  next: NextFunction
+  next: NextFunction,
 ) {
   if (req.query.idCategory) {
     const category: ICategory | null = await CategoryModel.findById(
-      req.query.idCategory
+      req.query.idCategory,
     );
     if (!category) {
       next(
         new CustomError(
           "No category found for this id",
-          HttpStatusCodes.NOT_FOUND
-        )
+          HttpStatusCodes.NOT_FOUND,
+        ),
       );
     } else {
       res.status(HttpStatusCodes.OK).send({ category });
@@ -74,7 +74,7 @@ export async function category_get_controller(
     let categoryTree = buildCategoryTree(categories);
     if (categoryTree.length === 0) {
       return next(
-        new CustomError("No categories found", HttpStatusCodes.NOT_FOUND)
+        new CustomError("No categories found", HttpStatusCodes.NOT_FOUND),
       );
     }
     res.status(HttpStatusCodes.OK).send({ categoryTree });
@@ -84,14 +84,14 @@ export async function category_get_controller(
 export async function category_put_controller(
   req: Request<IRequest_category_put_params, any, IRequest_category_put_body>,
   res: Response<IResponse_category_put>,
-  next: NextFunction
+  next: NextFunction,
 ) {
   const categoryExists: ICategory | null = await CategoryModel.findById(
-    req.params.idCategory
+    req.params.idCategory,
   );
   if (!categoryExists) {
     return next(
-      new CustomError("Not Category found to edit", HttpStatusCodes.NOT_FOUND)
+      new CustomError("Not Category found to edit", HttpStatusCodes.NOT_FOUND),
     );
   }
   if (req.body.name) {
@@ -103,28 +103,50 @@ export async function category_put_controller(
       return next(
         new CustomError(
           "There is already a category with this name, please choose another name",
-          HttpStatusCodes.CONFLICT
-        )
+          HttpStatusCodes.CONFLICT,
+        ),
       );
     }
   }
-  if (req.body.parent) {
+  if (req.body.parent && req.body.parent.length !== 0) {
     const parentExists: ICategory | null = await CategoryModel.findById(
-      req.body.parent
+      req.body.parent,
     );
     if (!parentExists) {
       return next(
         new CustomError(
           "Category Parent doesn't exist",
-          HttpStatusCodes.NOT_FOUND
-        )
+          HttpStatusCodes.NOT_FOUND,
+        ),
+      );
+    }
+    if (parentExists._id.equals(categoryExists._id)) {
+      return next(
+        new CustomError(
+          "You can't put the actual category as its own parent category",
+          HttpStatusCodes.CONFLICT,
+        ),
       );
     }
   }
+
+  let parent: string | null | undefined = undefined;
+  if (req.body.parent) {
+    if (req.body.parent.length > 0) {
+      parent = req.body.parent;
+    } else {
+      parent = null;
+    }
+  }
+  console.log(req.body);
+  console.log(parent);
+
+  console.log({ ...req.body, parent });
+
   const updatedCategory = (await CategoryModel.findOneAndUpdate(
     { _id: req.params.idCategory },
-    req.body,
-    { new: true }
+    { ...req.body, parent: parent },
+    { new: true },
   )) as ICategory;
   res.status(HttpStatusCodes.OK).send({ category: updatedCategory });
 }
@@ -132,17 +154,17 @@ export async function category_put_controller(
 export async function category_delete_controller(
   req: Request<IRequest_category_delete>,
   res: Response<IResponse_category_delete>,
-  next: NextFunction
+  next: NextFunction,
 ) {
   const categoryExists: ICategory | null = await CategoryModel.findById(
-    req.params.idCategory
+    req.params.idCategory,
   );
   if (!categoryExists) {
     return next(
       new CustomError(
         "Not Category found for deleting",
-        HttpStatusCodes.NOT_FOUND
-      )
+        HttpStatusCodes.NOT_FOUND,
+      ),
     );
   }
   await CategoryModel.findOneAndDelete({ _id: categoryExists._id });

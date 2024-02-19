@@ -43,7 +43,7 @@ export interface IRequest_category_put_params {
 export interface IRequest_category_put_body {
   name?: string;
   description?: string;
-  parent?: string;
+  parent?: string | null;
 }
 export interface IResponse_category_put {
   category: ICategory;

@@ -3,7 +3,7 @@ import { ICustomError, IErrorAPI, ISuccessAPI } from "@/utils/global-types";
 import { filterDataForm } from "@/utils/data-form";
 
 type THttpMethod = "GET" | "POST" | "PUT" | "DELETE";
-type THttpBody = string | FormData | {};
+type THttpBody = string | FormData | Partial<Record<string, unknown>>;
 
 type TFetchDataProps = {
   url: string;
@@ -11,31 +11,17 @@ type TFetchDataProps = {
   body?: THttpBody;
   isMultipartFormData?: boolean;
   isProtected?: boolean;
+  accessToken?: string;
   tags?: string[];
   cache?: boolean;
 };
 
-export async function fetchData<Interface>({
-  url,
-  method = "GET",
-  body = undefined,
-  isMultipartFormData = false,
-  isProtected = false,
-  tags,
-  cache,
-}: TFetchDataProps) {
-  const fetchOptions = getFetchOptions({
-    method,
-    body,
-    isMultipartFormData,
-    isProtected,
-    tags,
-    cache,
-  });
+export async function fetchData<Interface>(props: TFetchDataProps) {
+  const fetchOptions = getFetchOptions(props);
   try {
     const res = await fetch(
-      `${process.env.BASE_URL}/${url[0] === "/" ? url.substring(1) : url}`,
-      fetchOptions
+      `${process.env.BASE_URL}/${props.url[0] === "/" ? props.url.substring(1) : props.url}`,
+      fetchOptions as any,
     );
 
     if (!res.ok) {
@@ -61,14 +47,14 @@ export async function fetchData<Interface>({
 }
 
 function getFetchOptions({
-  method,
+  method = "GET",
   body,
-  isMultipartFormData,
-  isProtected,
+  isMultipartFormData = false,
+  accessToken,
   tags,
   cache,
-}: Omit<TFetchDataProps, "url" | "body"> & { body?: FormData }) {
-  let options: {
+}: Omit<TFetchDataProps, "url">) {
+  const options: {
     method: THttpMethod;
     body?: THttpBody;
     headers?: {
@@ -80,18 +66,14 @@ function getFetchOptions({
   } = { method: "GET" };
   if (method) options.method = method;
 
-  if (isProtected) {
-    const accessToken = getAccessToken();
-    if (!accessToken) {
-      throw new Error("No access token found!");
-    }
+  if (accessToken) {
     options.headers = {
       Authorization: `Bearer ${accessToken}`,
     };
   }
 
   if (isMultipartFormData) {
-    if (body) options.body = filterDataForm(body);
+    if (body && body instanceof FormData) options.body = filterDataForm(body);
   } else {
     options.headers = {
       ...options.headers,
@@ -114,6 +96,6 @@ function getFetchOptions({
     options.cache = "no-store";
   }
 
-  // console.log(options);
+  console.log({ bodyOptions: options.body });
   return options;
 }

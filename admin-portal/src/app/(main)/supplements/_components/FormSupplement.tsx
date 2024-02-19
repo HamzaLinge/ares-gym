@@ -5,9 +5,11 @@ import { useFormState } from "react-dom";
 import { ICategoryTree } from "@/app/(main)/categories/_utils/types";
 import { ISupplement } from "@/app/(main)/supplements/_utils/types";
 import FormField from "@/components/custom/FormField";
-import { TSelectOption } from "@/components/custom/FormField/types";
 import { IErrorAPI } from "@/utils/global-types";
-import { isCategory } from "@/utils/helpers";
+import {
+  isCategory,
+  transformCategoryTreeToSelectOption,
+} from "@/utils/helpers";
 
 interface IFormProductProps {
   categories: ICategoryTree[];
@@ -26,16 +28,6 @@ export default function FormSupplement({
     IErrorAPI,
     FormData
   >(actionSupplement, supplement ? { idSupplement: supplement._id } : null);
-
-  function transformCategoryTreeToSelectOption(
-    category: ICategoryTree
-  ): TSelectOption {
-    return {
-      value: category._id,
-      label: category.name,
-      children: category.children?.map(transformCategoryTreeToSelectOption),
-    };
-  }
 
   return (
     <form

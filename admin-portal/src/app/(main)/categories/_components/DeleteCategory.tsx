@@ -14,33 +14,46 @@ import {
 } from "@/components/ui/alert-dialog";
 import { TrashIcon } from "@radix-ui/react-icons";
 import { deleteCategory } from "@/app/(main)/categories/_utils/actions";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { ReactNode } from "react";
 
-type TDeleteCategoryProps = {
+export default function DeleteCategory({
+  category,
+  children,
+}: {
   category: ICategory;
-};
-
-export default function DeleteCategory({ category }: TDeleteCategoryProps) {
+  children: ReactNode;
+}) {
+  const handleDeleteCategory = async () => {
+    deleteCategory(category._id).then((err) => {
+      if (err) {
+        toast.error(err.message);
+      } else {
+        toast.success(`${category.name} has been successfully deleted`);
+      }
+    });
+  };
   return (
     <AlertDialog>
-      <AlertDialogTrigger>
-        <TrashIcon
-          className={
-            "h-7 w-7 rounded-full p-1 text-error hover:cursor-pointer hover:bg-error hover:bg-opacity-25"
-          }
-        />
-      </AlertDialogTrigger>
+      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogTitle>
+            <span className="text-destructive">Are you absolutely sure?</span>
+          </AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete{" "}
-            <b>{category.name}</b> category.
+            You're about to delete{" "}
+            <span className="font-semibold capitalize">{category.name}</span>{" "}
+            category.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={() => deleteCategory(category._id)}>
-            Continue
+          <AlertDialogCancel>I changed your mind</AlertDialogCancel>
+          <AlertDialogAction asChild>
+            <Button variant={"destructive"} onClick={handleDeleteCategory}>
+              Confirm
+            </Button>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

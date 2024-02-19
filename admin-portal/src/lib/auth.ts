@@ -1,22 +1,6 @@
-import { NextRequest } from "next/server";
-import { cookies } from "next/headers";
-import { TToken, TUser, TUserLogged } from "@/app/auth/_utils/types";
+import { auth } from "@/auth";
 
-export function isAuthenticated(request: NextRequest) {
-  if (request.cookies.has("AresGymStore")) {
-    // const str = request.cookies.get("AresGymStore")?.value as string;
-    // const json = JSON.parse(str);
-    // console.log(json.tokens.accessToken);
-    return true;
-  }
-  return false;
-}
-
-export function getAccessToken() {
-  if (!cookies().has("AresGymStore")) {
-    return null;
-  }
-  const userCookieStr = cookies().get("AresGymStore")?.value as string;
-  const userCookieObj: TUserLogged = JSON.parse(userCookieStr);
-  return userCookieObj.tokens.accessToken;
+export async function getAccessToken() {
+  const session = await auth();
+  return session?.accessToken;
 }

@@ -1,11 +1,14 @@
 "use client";
 
-import { useFormState } from "react-dom";
+import { ICategory, ICategoryTree } from "@/app/(main)/categories/_utils/types";
+import { ICustomError } from "@/utils/global-types";
 
-import { ICategory } from "@/app/(main)/categories/_utils/types";
-import { IErrorAPI } from "@/utils/global-types";
-
-import BtnSubmit from "@/components/BtnSubmit";
+import {
+  renderCategoryOptions,
+  transformCategoryTreeToSelectOption,
+} from "@/app/(main)/categories/_utils/helpers";
+import FormError from "@/components/form-error";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -16,64 +19,156 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { CategorySchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { useRef, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 type TFormCategoryProps = {
-  actionCategory: (state: any, formData: FormData) => Promise<IErrorAPI>; // createCategory or updateCategory action server
-} & ({ idCategoryParent: string | undefined } | { categoryToEdit: ICategory });
+  title: string;
+  actionCategory: (
+    id: string | undefined,
+    input: z.infer<typeof CategorySchema>,
+  ) => Promise<ICustomError>; // createCategory or updateCategory action server
+} & (
+  | { idCategoryParent: string | undefined }
+  | { categoryToEdit: ICategory; categories: ICategoryTree[] }
+);
 
 export default function FormCategory(props: TFormCategoryProps) {
-  const [stateFormCategory, actionFormCategory] = useFormState<
-    IErrorAPI,
-    FormData
-  >(props.actionCategory, {
-    id:
-      "idCategoryParent" in props
-        ? props.idCategoryParent
-        : "categoryToEdit" in props
-          ? props.categoryToEdit._id
-          : undefined,
-  });
+  const [isPending, startTransition] = useTransition();
+  const [selectableParentCategory, setSelectableParentCategory] =
+    useState<boolean>(false);
+  const previousParentCategoryValue = useRef<string | undefined>("");
+  const [errorState, setErrorState] = useState<ICustomError | undefined>(
+    undefined,
+  );
+
+  const defaultValues: z.infer<typeof CategorySchema> = { name: "" };
+  if ("categoryToEdit" in props) {
+    defaultValues.name = props.categoryToEdit.name;
+    defaultValues.parent = props.categoryToEdit.parent
+      ? typeof props.categoryToEdit.parent === "string"
+        ? props.categoryToEdit.parent
+        : props.categoryToEdit.parent._id
+      : undefined;
+    defaultValues.description = props.categoryToEdit?.description;
+  }
 
   const form = useForm<z.infer<typeof CategorySchema>>({
     resolver: zodResolver(CategorySchema),
-    defaultValues: {
-      name: "",
-    },
+    defaultValues: defaultValues,
   });
+
+  async function onSubmit(values: z.infer<typeof CategorySchema>) {
+    setErrorState(undefined);
+    startTransition(() => {
+      const id =
+        "idCategoryParent" in props
+          ? props.idCategoryParent
+          : "categoryToEdit" in props
+            ? props.categoryToEdit._id
+            : undefined;
+      props.actionCategory(id, values).then((err) => setErrorState(err));
+    });
+  }
 
   return (
     <Form {...form}>
       <form
-        action={actionFormCategory}
-        className="w-full max-w-md space-y-8 rounded p-4"
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex w-full max-w-xl flex-col items-center gap-y-8 rounded p-4"
       >
-        <div>
+        <div className="flex w-full items-center justify-center">
+          <p className="text-3xl font-semibold capitalize">{props.title}</p>
+        </div>
+        <div className="w-full space-y-4">
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Name *</FormLabel>
                 <FormControl>
                   <Input
-                    // disabled={isPending}
+                    disabled={isPending}
                     placeholder="Whey"
                     type="text"
                     {...field}
                   />
                 </FormControl>
                 <FormDescription>
-                  Enter your admin email address.
+                  Try to give this category an appropriate name.
                 </FormDescription>
-                <FormMessage />
+                <FormMessage>{errorState?.errors?.name}</FormMessage>
               </FormItem>
             )}
           />
+          {"categories" in props && (
+            <FormField
+              control={form.control}
+              name="parent"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Parent Category</FormLabel>
+                  <div className="flex w-full items-center justify-between">
+                    <p className="text-xs">
+                      If you want to set this category to the highest level
+                      (without parent), activate this switch.
+                    </p>
+                    <Switch
+                      checked={selectableParentCategory}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          previousParentCategoryValue.current =
+                            form.getValues("parent");
+                          form.setValue("parent", "");
+                        } else {
+                          form.setValue(
+                            "parent",
+                            previousParentCategoryValue.current,
+                          );
+                        }
+                        setSelectableParentCategory(checked);
+                      }}
+                    />
+                  </div>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    disabled={selectableParentCategory}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Whey" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {renderCategoryOptions(
+                        props.categories.map(
+                          transformCategoryTreeToSelectOption,
+                        ),
+                      )}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription className="w-full">
+                    Select a parent for the current category.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
           <FormField
             control={form.control}
             name="description"
@@ -82,92 +177,29 @@ export default function FormCategory(props: TFormCategoryProps) {
                 <FormLabel>Description</FormLabel>
                 <FormControl>
                   <Textarea
+                    disabled={isPending}
                     placeholder="Whey protein is a high-quality, easily digestible supplement derived from milk, renowned for supporting muscle growth, recovery, and overall health."
                     {...field}
                   />
                 </FormControl>
                 <FormDescription>
-                  Enter your admin email address.
+                  A description would be useful to have a more precise idea of
+                  the type of food supplement.
                 </FormDescription>
-                <FormMessage />
+                <FormMessage>{errorState?.errors?.description}</FormMessage>
               </FormItem>
             )}
           />
         </div>
-        <BtnSubmit text="Save" />
+        <FormError message={errorState?.message} />
+        <Button disabled={isPending} className="w-full">
+          {isPending ? (
+            <ReloadIcon className="h-4 w-4 animate-spin" />
+          ) : (
+            "Create"
+          )}
+        </Button>
       </form>
     </Form>
   );
-
-  // return (
-  //   <form
-  //     action={actionFormCategory}
-  //     className={cn(
-  //       "border-l-bg-300 bg-bg-100 transition-height ml-6 flex w-full flex-col border-l transition-all duration-1000 ease-in-out",
-  //     )}
-  //   >
-  //     <h1 className={"text-lg font-semibold"}>
-  //       {!isToUpdate ? "create" : "edit"}
-  //     </h1>
-  //     <div className={"flex w-full flex-col gap-y-8"}>
-  //       <div className={"relative w-full "}>
-  //         <Input
-  //           autoFocus
-  //           onFocus={(e) => {
-  //             const tmpValue = e.target.value;
-  //             e.target.value = "";
-  //             e.target.value = tmpValue;
-  //           }}
-  //           type="text"
-  //           name="name"
-  //           placeholder="Name"
-  //           className={"bg-bg-100 text-text-100"}
-  //           defaultValue={updatedCategory ? updatedCategory.name : ""}
-  //         />
-  //         <FormError messageError={stateFormCategory?.error?.errors?.name} />
-  //       </div>
-  //       <div className={"relative w-full"}>
-  //         <Textarea
-  //           type="text"
-  //           name="description"
-  //           placeholder="Description"
-  //           className={"bg-bg-100 text-text-100"}
-  //           defaultValue={
-  //             updatedCategory
-  //               ? updatedCategory.description
-  //                 ? updatedCategory.description
-  //                 : ""
-  //               : ""
-  //           }
-  //         />
-  //         <FormError
-  //           messageError={stateFormCategory?.error?.errors?.description}
-  //         />
-  //       </div>
-  //     </div>
-  //     <div className={"relative w-full"}>
-  //       <div
-  //         className={"relative flex w-full items-center justify-center gap-x-4"}
-  //       >
-  //         <Button type={"submit"} className={"w-1/3"}>
-  //           Save
-  //         </Button>
-  //         <Button
-  //           variant={"outline"}
-  //           className={"absolute right-0"}
-  //           // onClick={() => props.close()}
-  //           type={"reset"}
-  //           formNoValidate={true}
-  //           aria-label="Cancel"
-  //         >
-  //           Cancel
-  //         </Button>
-  //       </div>
-  //       <FormError withIcon>
-  //         <p>{stateFormCategory?.error?.message}</p>
-  //         <p>{stateFormCategory?.error?.errors?.parent}</p>
-  //       </FormError>
-  //     </div>
-  //   </form>
-  // );
 }
