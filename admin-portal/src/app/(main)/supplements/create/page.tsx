@@ -6,7 +6,7 @@ export default async function CreateSupplementPage() {
   // await new Promise((resolve) => setTimeout(resolve, 3000));
   const categories = await getCategories();
   return (
-    <section>
+    <section className="flex w-full flex-col items-center">
       <FormSupplement
         title={"Create New Supplement"}
         actionSupplement={createSupplement}

@@ -1,11 +1,11 @@
 type FormDataFilterCallback = (
   name: string,
-  value: FormDataEntryValue
+  value: FormDataEntryValue,
 ) => boolean;
 
 function defaultFilteredFormDataCallback(
   name: string,
-  value: FormDataEntryValue
+  value: FormDataEntryValue,
 ) {
   if (value instanceof File && value.size === 0) {
     return false;
@@ -15,9 +15,9 @@ function defaultFilteredFormDataCallback(
   return true;
 }
 
-export function filterDataForm(
+export function filterEmptyDataFormFields(
   formData: FormData,
-  callback: FormDataFilterCallback = defaultFilteredFormDataCallback
+  callback: FormDataFilterCallback = defaultFilteredFormDataCallback,
 ): FormData {
   const filteredFormData = new FormData();
   for (const [key, value] of formData.entries()) {

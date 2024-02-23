@@ -8,6 +8,6 @@ export interface ISupplement {
   stock: number;
   description?: string;
   thumbnails?: string[];
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }

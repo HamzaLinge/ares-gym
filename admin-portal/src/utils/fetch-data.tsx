@@ -1,6 +1,6 @@
 import { getAccessToken } from "@/lib/auth";
 import { ICustomError, IErrorAPI, ISuccessAPI } from "@/utils/global-types";
-import { filterDataForm } from "@/utils/data-form";
+import { filterEmptyDataFormFields } from "@/utils/data-form";
 
 type THttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 type THttpBody = string | FormData | Partial<Record<string, unknown>>;
@@ -73,7 +73,8 @@ function getFetchOptions({
   }
 
   if (isMultipartFormData) {
-    if (body && body instanceof FormData) options.body = filterDataForm(body);
+    if (body && body instanceof FormData)
+      options.body = filterEmptyDataFormFields(body);
   } else {
     options.headers = {
       ...options.headers,
@@ -81,8 +82,11 @@ function getFetchOptions({
     };
     if (body) {
       if (body instanceof FormData) {
-        options.body = JSON.stringify(Object.fromEntries(filterDataForm(body)));
+        options.body = JSON.stringify(
+          Object.fromEntries(filterEmptyDataFormFields(body)),
+        );
       } else {
+        // console.log({ optionsBodyJsonObj: body });
         options.body = JSON.stringify(body);
       }
     }
@@ -95,7 +99,5 @@ function getFetchOptions({
   if (!cache) {
     options.cache = "no-store";
   }
-
-  console.log({ bodyOptions: options.body });
   return options;
 }

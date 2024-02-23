@@ -43,10 +43,11 @@ export async function getCategoryById(idCategory: string) {
   return res.data.category;
 }
 
-export async function createCategory(
-  id: string | undefined,
-  input: z.infer<typeof CategorySchema>,
-) {
+export async function createCategory({
+  input,
+}: {
+  input: z.infer<typeof CategorySchema>;
+}) {
   const validatedFields = CategorySchema.safeParse(input);
   if (!validatedFields.success) {
     const error: ICustomError = { message: "Fields are invalid" };
@@ -62,7 +63,7 @@ export async function createCategory(
     url: "/category",
     method: "POST",
     accessToken: accessToken,
-    body: { ...validatedFields.data, parent: id },
+    body: validatedFields.data,
   });
   if (!res.success) {
     console.error(res);
@@ -72,10 +73,13 @@ export async function createCategory(
   redirect(routePaths.categories.path);
 }
 
-export async function updateCategory(
-  id: string,
-  input: z.infer<typeof CategorySchema>,
-) {
+export async function updateCategory({
+  id,
+  input,
+}: {
+  id: string;
+  input: z.infer<typeof CategorySchema>;
+}) {
   const validatedFields = CategorySchema.safeParse(input);
   if (!validatedFields.success) {
     const error: ICustomError = { message: "Fields are invalid" };
@@ -86,7 +90,6 @@ export async function updateCategory(
     const error: ICustomError = { message: "You're unauthorized?" };
     return error;
   }
-  console.log({ validatedFields });
 
   const res = await fetchData<{ category: ICategory }>({
     url: `/category/${id}`,

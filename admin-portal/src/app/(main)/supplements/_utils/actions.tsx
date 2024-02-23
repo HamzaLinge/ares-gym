@@ -9,6 +9,8 @@ import { CustomClassErrorApi } from "@/lib/exceptions";
 import { fetchData } from "@/utils/fetch-data";
 import { routePaths } from "@/utils/route-paths";
 import { statusCodeApi } from "@/utils/status-code-api";
+import { SupplementSchema } from "@/schemas";
+import { z } from "zod";
 
 const tag_revalidate_supplements_list_after_mutation = "supplements";
 
@@ -42,16 +44,18 @@ export async function getSupplementById(idSupplement: string) {
   return res.data.supplement;
 }
 
-export async function createSupplement(_: any, formData: FormData) {
+export async function createSupplement(
+  input: z.infer<typeof SupplementSchema>,
+) {
   const res = await fetchData<{ supplement: ISupplement }>({
     url: "/supplement",
     method: "POST",
-    body: formData,
+    body: input,
     isMultipartFormData: true,
     isProtected: true,
   });
   if (!res.success) {
-    return res;
+    return res.error;
   }
   revalidateTag(tag_revalidate_supplements_list_after_mutation);
   redirect(routePaths.supplements.path);

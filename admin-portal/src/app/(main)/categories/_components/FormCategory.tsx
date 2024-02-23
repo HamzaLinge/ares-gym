@@ -36,26 +36,24 @@ import { z } from "zod";
 
 type TFormCategoryProps = {
   title: string;
-  actionCategory: (
-    id: string | undefined,
-    input: z.infer<typeof CategorySchema>,
-  ) => Promise<ICustomError>; // createCategory or updateCategory action server
-} & (
-  | { idCategoryParent: string | undefined }
-  | { categoryToEdit: ICategory; categories: ICategoryTree[] }
-);
+  actionCategory: (params: any) => Promise<ICustomError>; // createCategory or updateCategory action server
+  categories: ICategoryTree[];
+  categoryToEdit?: ICategory;
+};
 
 export default function FormCategory(props: TFormCategoryProps) {
   const [isPending, startTransition] = useTransition();
   const [selectableParentCategory, setSelectableParentCategory] =
-    useState<boolean>(false);
-  const previousParentCategoryValue = useRef<string | undefined>("");
+    useState<boolean>(
+      props.categoryToEdit && props.categoryToEdit.parent ? false : true,
+    );
+  const previousParentCategoryValue = useRef<string | null | undefined>(null);
   const [errorState, setErrorState] = useState<ICustomError | undefined>(
     undefined,
   );
 
   const defaultValues: z.infer<typeof CategorySchema> = { name: "" };
-  if ("categoryToEdit" in props) {
+  if (props.categoryToEdit) {
     defaultValues.name = props.categoryToEdit.name;
     defaultValues.parent = props.categoryToEdit.parent
       ? typeof props.categoryToEdit.parent === "string"
@@ -70,16 +68,11 @@ export default function FormCategory(props: TFormCategoryProps) {
     defaultValues: defaultValues,
   });
 
-  async function onSubmit(values: z.infer<typeof CategorySchema>) {
+  async function onSubmit(input: z.infer<typeof CategorySchema>) {
     setErrorState(undefined);
     startTransition(() => {
-      const id =
-        "idCategoryParent" in props
-          ? props.idCategoryParent
-          : "categoryToEdit" in props
-            ? props.categoryToEdit._id
-            : undefined;
-      props.actionCategory(id, values).then((err) => setErrorState(err));
+      const id = props.categoryToEdit ? props.categoryToEdit._id : undefined;
+      props.actionCategory({ id, input }).then((err) => setErrorState(err));
     });
   }
 
@@ -114,61 +107,57 @@ export default function FormCategory(props: TFormCategoryProps) {
               </FormItem>
             )}
           />
-          {"categories" in props && (
-            <FormField
-              control={form.control}
-              name="parent"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Parent Category</FormLabel>
-                  <div className="flex w-full items-center justify-between">
-                    <p className="text-xs">
-                      If you want to set this category to the highest level
-                      (without parent), activate this switch.
-                    </p>
-                    <Switch
-                      checked={selectableParentCategory}
-                      onCheckedChange={(checked) => {
-                        if (checked) {
-                          previousParentCategoryValue.current =
-                            form.getValues("parent");
-                          form.setValue("parent", "");
-                        } else {
-                          form.setValue(
-                            "parent",
-                            previousParentCategoryValue.current,
-                          );
-                        }
-                        setSelectableParentCategory(checked);
-                      }}
-                    />
-                  </div>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    disabled={selectableParentCategory}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Whey" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {renderCategoryOptions(
-                        props.categories.map(
-                          transformCategoryTreeToSelectOption,
-                        ),
-                      )}
-                    </SelectContent>
-                  </Select>
-                  <FormDescription className="w-full">
-                    Select a parent for the current category.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
+          <FormField
+            control={form.control}
+            name="parent"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Parent Category</FormLabel>
+                <div className="flex w-full items-center justify-between">
+                  <p className="text-xs">
+                    If you want to set this category to the highest level
+                    (without parent), activate this switch.
+                  </p>
+                  <Switch
+                    checked={selectableParentCategory}
+                    onCheckedChange={(checked) => {
+                      if (checked) {
+                        previousParentCategoryValue.current =
+                          form.getValues("parent");
+                        form.setValue("parent", null);
+                      } else {
+                        form.setValue(
+                          "parent",
+                          previousParentCategoryValue.current,
+                        );
+                      }
+                      setSelectableParentCategory(checked);
+                    }}
+                  />
+                </div>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value ? field.value : undefined}
+                  disabled={selectableParentCategory}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Whey" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {renderCategoryOptions(
+                      props.categories.map(transformCategoryTreeToSelectOption),
+                    )}
+                  </SelectContent>
+                </Select>
+                <FormDescription className="w-full">
+                  Select a parent for the current category.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="description"
@@ -193,11 +182,7 @@ export default function FormCategory(props: TFormCategoryProps) {
         </div>
         <FormError message={errorState?.message} />
         <Button disabled={isPending} className="w-full">
-          {isPending ? (
-            <ReloadIcon className="h-4 w-4 animate-spin" />
-          ) : (
-            "Create"
-          )}
+          {isPending ? <ReloadIcon className="h-4 w-4 animate-spin" /> : "Save"}
         </Button>
       </form>
     </Form>

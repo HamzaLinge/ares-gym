@@ -108,7 +108,7 @@ export async function category_put_controller(
       );
     }
   }
-  if (req.body.parent && req.body.parent.length !== 0) {
+  if (req.body.parent) {
     const parentExists: ICategory | null = await CategoryModel.findById(
       req.body.parent,
     );
@@ -130,22 +130,9 @@ export async function category_put_controller(
     }
   }
 
-  let parent: string | null | undefined = undefined;
-  if (req.body.parent) {
-    if (req.body.parent.length > 0) {
-      parent = req.body.parent;
-    } else {
-      parent = null;
-    }
-  }
-  console.log(req.body);
-  console.log(parent);
-
-  console.log({ ...req.body, parent });
-
   const updatedCategory = (await CategoryModel.findOneAndUpdate(
     { _id: req.params.idCategory },
-    { ...req.body, parent: parent },
+    req.body,
     { new: true },
   )) as ICategory;
   res.status(HttpStatusCodes.OK).send({ category: updatedCategory });

@@ -15,7 +15,7 @@ export const renderCategoryOptions = (
     if (option.children && option.children.length > 0) {
       return (
         <SelectGroup key={option.value}>
-          <SelectLabel>{option.label}</SelectLabel>
+          <SelectItem value={option.value}>{option.label}</SelectItem>
           <SelectGroup className={"ml-2 border-l"}>
             {renderCategoryOptions(option.children)}
           </SelectGroup>
