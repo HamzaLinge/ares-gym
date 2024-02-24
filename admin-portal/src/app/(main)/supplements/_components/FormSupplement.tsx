@@ -5,7 +5,6 @@ import { useFormState } from "react-dom";
 import { ICategoryTree } from "@/app/(main)/categories/_utils/types";
 import { ISupplement } from "@/app/(main)/supplements/_utils/types";
 import { ICustomError, IErrorAPI } from "@/utils/global-types";
-import { isCategory } from "@/utils/helpers";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { SupplementSchema } from "@/schemas";
@@ -58,8 +57,8 @@ export default function FormSupplement({
     defaultValues: {
       name: "",
       category: "",
-      price: "",
-      stock: "",
+      price: 0,
+      stock: 0,
     },
   });
 
@@ -74,7 +73,8 @@ export default function FormSupplement({
     startTransition(() => {
       let formData = new FormData();
       for (const [key, value] of Object.entries(input)) {
-        formData.append(key, value);
+        const data = typeof value === "number" ? String(value) : value;
+        formData.append(key, data);
       }
       inspectFormData(formData);
 
@@ -86,7 +86,7 @@ export default function FormSupplement({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex w-full max-w-xl flex-col items-center gap-y-8 rounded p-4"
+        className="flex w-full max-w-xl flex-col items-center gap-y-8 rounded p-4 lg:max-w-3xl"
       >
         <div className="flex w-full items-center justify-center">
           <p className="text-3xl font-semibold capitalize">{title}</p>
@@ -96,7 +96,7 @@ export default function FormSupplement({
             control={form.control}
             name="name"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="grow">
                 <FormLabel>Name</FormLabel>
                 <FormControl>
                   <Input disabled={isPending} placeholder="BCAA" {...field} />
@@ -112,7 +112,7 @@ export default function FormSupplement({
             control={form.control}
             name="category"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="grow">
                 <FormLabel>Category</FormLabel>
                 <Select onValueChange={field.onChange}>
                   <FormControl>
@@ -139,11 +139,12 @@ export default function FormSupplement({
             control={form.control}
             name="price"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="grow">
                 <FormLabel>Price</FormLabel>
                 <FormControl>
                   <Input
-                    // type="number"
+                    type="number"
+                    min={0}
                     disabled={isPending}
                     placeholder="4000"
                     {...field}
@@ -158,11 +159,13 @@ export default function FormSupplement({
             control={form.control}
             name="stock"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="grow">
                 <FormLabel>Stock</FormLabel>
                 <FormControl>
                   <Input
-                    // type="number"
+                    type="number"
+                    min={0}
+                    step={1}
                     disabled={isPending}
                     placeholder="10"
                     {...field}
@@ -201,86 +204,6 @@ export default function FormSupplement({
         <Button disabled={isPending} className="w-full">
           {isPending ? <ReloadIcon className="h-4 w-4 animate-spin" /> : "Save"}
         </Button>
-
-        {/* OLD */}
-        {/* {title ? (
-          <h1 className="text-xl font-semibold capitalize">{title}</h1>
-        ) : null}
-        <div className={"flex w-full flex-col gap-y-2 md:flex-row md:gap-x-2"}>
-          <FormField
-            typeField={"text"}
-            messageError={stateFormSupplement?.error?.errors?.name}
-            textProps={{
-              name: "name",
-              placeholder: "Name",
-              required: true,
-              defaultValue: supplement ? supplement.name : undefined,
-            }}
-          />
-          <FormField
-            typeField={"select"}
-            messageError={stateFormSupplement?.error?.errors?.category}
-            selectProps={{
-              options: categories.map(transformCategoryTreeToSelectOption),
-              name: "category",
-              placeholder: "Select Category",
-              label: "Category",
-              required: true,
-              defaultValue: supplement?.category
-                ? isCategory(supplement.category)
-                  ? supplement.category._id
-                  : supplement.category
-                : undefined,
-            }}
-          />
-        </div>
-        <div className={"flex w-full flex-col gap-y-2 md:flex-row md:gap-x-2"}>
-          <FormField
-            typeField={"text"}
-            messageError={stateFormSupplement?.error?.errors?.price}
-            textProps={{
-              name: "price",
-              placeholder: "Price",
-              required: true,
-              defaultValue: supplement ? supplement.price : undefined,
-            }}
-          />
-          <FormField
-            typeField={"text"}
-            messageError={stateFormSupplement?.error?.errors?.stock}
-            textProps={{
-              name: "stock",
-              placeholder: "Stock",
-              defaultValue: supplement ? supplement.stock : undefined,
-            }}
-          />
-        </div>
-        <FormField
-          typeField={"textarea"}
-          messageError={stateFormSupplement?.error?.errors?.description}
-          textareaProps={{
-            name: "description",
-            placeholder: "Description",
-            defaultValue: supplement ? supplement.description : undefined,
-          }}
-        />
-        {!supplement && (
-          <FormField
-            typeField={"filepicker"}
-            filepickerProps={{
-              name: "files",
-              label: "Thumbnails",
-              placeholder: "Select Thumbnail",
-              multiple: true,
-              accept: "image/*",
-            }}
-          />
-        )}
-
-        <FormField
-          typeField={"submit"}
-          messageError={stateFormSupplement?.error?.message}
-        /> */}
       </form>
     </Form>
   );
