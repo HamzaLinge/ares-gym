@@ -702,6 +702,97 @@
   dependencies:
     "@babel/runtime" "^7.13.10"
 
+"@rpldy/abort@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@rpldy/abort/-/abort-1.8.0.tgz#b0e17d1c1469439ef2475a5d87bc8332571733de"
+  integrity sha512-XETerikAfMzjmVYh1N8u9OQTGAiX8xuuRQ9ueAYlYpUfkqC8Hdymsb/VepPcBOQ4u4VdUX9PhODMggildQaSLA==
+  dependencies:
+    "@rpldy/raw-uploader" "^1.8.0"
+    "@rpldy/shared" "^1.8.0"
+    "@rpldy/simple-state" "^1.8.0"
+
+"@rpldy/life-events@1.8.0", "@rpldy/life-events@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@rpldy/life-events/-/life-events-1.8.0.tgz#eefa0fee111ed6e495f29e926e12447260608731"
+  integrity sha512-JxhLCBTvv7CnIZQ7iLwZzYuuyIb3aKzb1QRZk2a3z5inxrERzQma/Ql93Fy+NAYdX2zcZZCloPFpu2tPTJFB6A==
+  dependencies:
+    "@rpldy/shared" "^1.8.0"
+
+"@rpldy/raw-uploader@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@rpldy/raw-uploader/-/raw-uploader-1.8.0.tgz#0b77ca899eb235d9b41a2c4c429418196da66420"
+  integrity sha512-+lvolNfIQvemfL95dH+ZIwr5Ex3gBZj7AoxkvqG4lzKrrR2jjFWziOduo6H5NzWnoikbdSKj0F2TJWJ8Y+9tZA==
+  dependencies:
+    "@rpldy/life-events" "^1.8.0"
+    "@rpldy/shared" "^1.8.0"
+
+"@rpldy/sender@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@rpldy/sender/-/sender-1.8.0.tgz#e09c78222725070f29feb92269cdaec1a278f622"
+  integrity sha512-SosvU8T3/ZTHaJPoWz+/vC8D0+taPxUt44XnTEH7rLCX/2TM8LBSP1Co1X7wE/D/mxlUPXt7WaGBM3rKB31hag==
+  dependencies:
+    "@rpldy/shared" "^1.8.0"
+
+"@rpldy/shared-ui@1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@rpldy/shared-ui/-/shared-ui-1.8.0.tgz#6abc45357da47e72b10b1bfee6475fdc752351ec"
+  integrity sha512-/fZsYH1kYT/fu8zkoJwGkO7eQMt+h00DT1JSqbtqDvKLPlbdTCz5BlQK+eTwUs123FtPJpZIiranwJFUBIKg8g==
+  dependencies:
+    "@rpldy/shared" "1.8.0"
+    "@rpldy/uploader" "1.8.0"
+
+"@rpldy/shared@1.8.0", "@rpldy/shared@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@rpldy/shared/-/shared-1.8.0.tgz#59f296eeaac849eed64e4e981fa6e72eef76bf12"
+  integrity sha512-DDukY+dWTu8Lv0NI8SgGzK2oDbXPsXyL2ZoOXFSrir7+4Vkhg38zLXSu/130sUgLFWWQuo18zbsfRebKRxBaAQ==
+  dependencies:
+    invariant "^2.2.4"
+    just-throttle "^4.2.0"
+
+"@rpldy/simple-state@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@rpldy/simple-state/-/simple-state-1.8.0.tgz#0122555c2f60c3cb8c056618fc193348a98943fb"
+  integrity sha512-LellIBNeH4r3i/GahrZO1QbCRwRyraBKrdksF1ZLgXAFcd2beqPUXZMR1SUcdWEL1S/hHjgDZ92zl/wvV/SYoA==
+  dependencies:
+    "@rpldy/shared" "^1.8.0"
+
+"@rpldy/upload-button@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@rpldy/upload-button/-/upload-button-1.8.0.tgz#70870874075b2041b02ac40c2445db46ef50c700"
+  integrity sha512-xDwkA5Sbz53dKJzQPnzZXhRY2w/G1UfnpCPhtsZygciu1FgC1mTAPncptzgJLrEeTShnskJJguSrTsRkQq93xw==
+  dependencies:
+    "@rpldy/shared-ui" "1.8.0"
+
+"@rpldy/upload-preview@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@rpldy/upload-preview/-/upload-preview-1.8.0.tgz#457f40d5b1d747a3b09533f36b2b8bae1103a477"
+  integrity sha512-naHdsaEwgcedO+58qdllVqsZfU+iaZNK060JaNAv4E5P7PWUBnnJArVq+oI8IhuHuQk+bkck6cPMwhxxkGBHvg==
+  dependencies:
+    "@rpldy/shared" "1.8.0"
+    "@rpldy/shared-ui" "1.8.0"
+
+"@rpldy/uploader@1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@rpldy/uploader/-/uploader-1.8.0.tgz#e4a13875ec4c92c9c0bbbd33faf720f6f2bec66d"
+  integrity sha512-NX4SWIP9Fyl7hcdK8Qma0q4PNO/LwZ8lQzgt5ACKAFjmbCMf/GMn+Ds7JBLd0t0UIWgD8QOqb9OufWOAWpOBCw==
+  dependencies:
+    "@rpldy/abort" "^1.8.0"
+    "@rpldy/life-events" "^1.8.0"
+    "@rpldy/raw-uploader" "^1.8.0"
+    "@rpldy/sender" "^1.8.0"
+    "@rpldy/shared" "^1.8.0"
+    "@rpldy/simple-state" "^1.8.0"
+
+"@rpldy/uploady@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@rpldy/uploady/-/uploady-1.8.0.tgz#6badd40601de55c40a8110ef137ff55169b77a75"
+  integrity sha512-eSaZvF2fMUnlMrM9/RAPDSjkYL0j9cq8qX4P8/tE0FvJ4+5MXb4XUKgdhSMtvbSVBXpaeWFQ6rexbVSd0qU1nA==
+  dependencies:
+    "@rpldy/life-events" "1.8.0"
+    "@rpldy/shared" "1.8.0"
+    "@rpldy/shared-ui" "1.8.0"
+    "@rpldy/uploader" "1.8.0"
+
 "@rushstack/eslint-patch@^1.3.3":
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.6.1.tgz#9ab8f811930d7af3e3d549183a50884f9eb83f36"
@@ -2223,6 +2314,11 @@ json5@^1.0.2:
     array.prototype.flat "^1.3.1"
     object.assign "^4.1.4"
     object.values "^1.1.6"
+
+just-throttle@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/just-throttle/-/just-throttle-4.2.0.tgz#5a22da10a4bdb906d2583400eff2fe3fbd9f9662"
+  integrity sha512-/iAZv1953JcExpvsywaPKjSzfTiCLqeguUTE6+VmK15mOcwxBx7/FHrVvS4WEErMR03TRazH8kcBSHqMagYIYg==
 
 keyv@^4.5.3:
   version "4.5.4"

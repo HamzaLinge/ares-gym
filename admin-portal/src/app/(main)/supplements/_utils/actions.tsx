@@ -11,6 +11,9 @@ import { routePaths } from "@/utils/route-paths";
 import { statusCodeApi } from "@/utils/status-code-api";
 import { SupplementSchema } from "@/schemas";
 import { z } from "zod";
+import { createGenericFormData, inspectFormData } from "@/utils/data-form";
+import { ICustomError } from "@/utils/global-types";
+import { getAccessToken } from "@/lib/auth";
 
 const tag_revalidate_supplements_list_after_mutation = "supplements";
 
@@ -47,18 +50,43 @@ export async function getSupplementById(idSupplement: string) {
 export async function createSupplement(
   input: z.infer<typeof SupplementSchema>,
 ) {
-  const res = await fetchData<{ supplement: ISupplement }>({
-    url: "/supplement",
-    method: "POST",
-    body: input,
-    isMultipartFormData: true,
-    isProtected: true,
-  });
-  if (!res.success) {
-    return res.error;
+  const validatedFields = SupplementSchema.safeParse(input);
+  if (!validatedFields.success) {
+    const error: ICustomError = { message: "Fields are invalid" };
+    return error;
   }
-  revalidateTag(tag_revalidate_supplements_list_after_mutation);
-  redirect(routePaths.supplements.path);
+  const accessToken = await getAccessToken();
+  if (!accessToken) {
+    const error: ICustomError = { message: "You're unauthorized?" };
+    return error;
+  }
+  const formData = new FormData();
+  formData.append("name", validatedFields.data.name);
+  formData.append("category", validatedFields.data.category);
+  formData.append("price", validatedFields.data.price);
+  formData.append("stock", validatedFields.data.stock);
+  if (validatedFields.data.description)
+    formData.append("description", validatedFields.data.description);
+  // if (validatedFields.data.files)
+  //   validatedFields.data.files.forEach((file, index) =>
+  //     formData.append(`files`, file),
+  //   );
+  // const formData = createGenericFormData(validatedFields.data);
+  inspectFormData(formData);
+  const error: ICustomError = { message: "Sni9chou" };
+  return error;
+  // const res = await fetchData<{ supplement: ISupplement }>({
+  //   url: "/supplement",
+  //   method: "POST",
+  //   body: formData,
+  //   isMultipartFormData: true,
+  //   accessToken: accessToken,
+  // });
+  // if (!res.success) {
+  //   return res.error;
+  // }
+  // revalidateTag(tag_revalidate_supplements_list_after_mutation);
+  // redirect(routePaths.supplements.path);
 }
 
 export async function deleteSupplement(idSupplement: string) {

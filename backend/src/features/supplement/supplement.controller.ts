@@ -27,32 +27,32 @@ import { HttpStatusCodes } from "../../utils/error.util";
 export async function supplement_post_controller(
   req: Request<any, any, IRequest_supplement_post>,
   res: Response<IResponse_supplement_post>,
-  next: NextFunction
+  next: NextFunction,
 ) {
-  let inputSupplement: any = req.body;
+  let inputSupplement: IRequest_supplement_post = req.body;
   if (req.fileIdArr) inputSupplement.thumbnails = req.fileIdArr;
 
   console.log(inputSupplement);
 
   const supplement: ISupplement = await SupplementModel.create(inputSupplement);
-  res.status(HttpStatusCodes.OK).send({ supplement });
+  res.status(HttpStatusCodes.CREATED).send({ supplement });
 }
 
 export async function supplement_get_controller(
   req: Request<any, any, any, IRequest_supplement_get>,
   res: Response<IResponse_supplement_get>,
-  next: NextFunction
+  next: NextFunction,
 ) {
   if (req.query.idSupplement) {
     const supplement: ISupplement | null = await SupplementModel.findById(
-      req.query.idSupplement
+      req.query.idSupplement,
     ).populate<{ category: ICategory }>({ path: "category" });
     if (!supplement) {
       return next(
         new CustomError(
           "There is no supplement found for this id",
-          HttpStatusCodes.NOT_FOUND
-        )
+          HttpStatusCodes.NOT_FOUND,
+        ),
       );
     }
     res.status(HttpStatusCodes.OK).send({ supplement });
@@ -64,8 +64,8 @@ export async function supplement_get_controller(
       return next(
         new CustomError(
           "There are no supplements found",
-          HttpStatusCodes.NOT_FOUND
-        )
+          HttpStatusCodes.NOT_FOUND,
+        ),
       );
     }
     res.status(HttpStatusCodes.OK).send({ supplements });
@@ -79,21 +79,21 @@ export async function supplement_put_controller(
     IRequest_supplement_put_body
   >,
   res: Response<IResponse_supplement_put>,
-  next: NextFunction
+  next: NextFunction,
 ) {
   const supplementExists: ISupplement | null = await SupplementModel.findById(
-    req.params.idSupplement
+    req.params.idSupplement,
   );
   if (!supplementExists) {
     return next(
-      new CustomError("There is no supplement found for editing", 404)
+      new CustomError("There is no supplement found for editing", 404),
     );
   }
   const updatedSupplement: ISupplement | null =
     await SupplementModel.findOneAndUpdate(
       { _id: req.params.idSupplement },
       req.body,
-      { new: true }
+      { new: true },
     );
   if (!updatedSupplement) {
     return next(new CustomError("Updated supplement not found", 404));
@@ -104,25 +104,25 @@ export async function supplement_put_controller(
 export async function supplement_put_files_controller(
   req: Request<IRequest_supplement_files_put>,
   res: Response<IResponse_supplement_files_put>,
-  next: NextFunction
+  next: NextFunction,
 ) {
   const supplementExists: ISupplement | null = await SupplementModel.findById(
-    req.params.idSupplement
+    req.params.idSupplement,
   );
   if (!supplementExists) {
     return next(
-      new CustomError("There is no supplement found for editing filed", 404)
+      new CustomError("There is no supplement found for editing filed", 404),
     );
   }
   if (!req.fileIdArr) {
     return next(
-      new CustomError("No Files Id found", HttpStatusCodes.UNPROCESSABLE)
+      new CustomError("No Files Id found", HttpStatusCodes.UNPROCESSABLE),
     );
   }
   const updatedSupplementThumbnails = (await SupplementModel.findOneAndUpdate(
     { _id: req.params.idSupplement },
     { $push: { thumbnails: { $each: req.fileIdArr } } },
-    { new: true }
+    { new: true },
   )) as ISupplement;
   res
     .status(HttpStatusCodes.OK)
@@ -132,10 +132,10 @@ export async function supplement_put_files_controller(
 export async function supplement_delete_controller(
   req: Request<IRequest_supplement_delete>,
   res: Response<IResponse_supplement_delete>,
-  next: NextFunction
+  next: NextFunction,
 ) {
   const supplementExists: ISupplement | null = await SupplementModel.findById(
-    req.params.idSupplement
+    req.params.idSupplement,
   );
   if (!supplementExists) {
     return next(new CustomError("There is no supplement found to delete", 404));
@@ -147,8 +147,8 @@ export async function supplement_delete_controller(
     return next(
       new CustomError(
         "There is at least one command that is lied with this supplement",
-        HttpStatusCodes.CONFLICT
-      )
+        HttpStatusCodes.CONFLICT,
+      ),
     );
   }
   if (supplementExists.thumbnails && supplementExists.thumbnails.length > 0) {
@@ -165,17 +165,17 @@ export async function supplement_delete_controller(
 export async function supplement_delete_file_controller(
   req: Request<IRequest_supplement_file_delete>,
   res: Response<IResponse_supplement_file_delete>,
-  next: NextFunction
+  next: NextFunction,
 ) {
   const supplementExists: ISupplement | null = await SupplementModel.findById(
-    req.params.idSupplement
+    req.params.idSupplement,
   );
   if (!supplementExists) {
     return next(new CustomError("There is no supplement found to delete", 404));
   }
   await SupplementModel.findOneAndUpdate(
     { _id: req.params.idSupplement },
-    { $pull: { thumbnails: req.params.idThumbnail } }
+    { $pull: { thumbnails: req.params.idThumbnail } },
   );
   await deleteFile(req.params.idThumbnail as string);
   res

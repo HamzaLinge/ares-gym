@@ -9,6 +9,7 @@ export interface IRequest_supplement_post {
   price: number;
   stock?: number;
   description?: string;
+  thumbnails?: string[];
 }
 export interface IResponse_supplement_post {
   supplement: ISupplement;
