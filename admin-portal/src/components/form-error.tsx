@@ -9,7 +9,7 @@ type TFormError = {
 export default function FormError({ message, children }: TFormError) {
   if (!message && !children) return null;
   return (
-    <div className="bg-destructive/20 text-destructive flex w-full items-center gap-x-2 rounded-md p-3 text-sm">
+    <div className="bg-destructive/20 text-destructive flex w-full items-end gap-x-2 rounded-md p-3 text-sm">
       {message && (
         <>
           <ExclamationTriangleIcon className="h-4 w-4" />

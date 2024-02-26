@@ -142,20 +142,27 @@ export async function updateSupplement({
   redirect(routePaths.supplements.children.supplement.path(idSupplement));
 }
 
-export async function updateThumbnailsSupplement(
-  { idSupplement }: { idSupplement: string },
-  formData: FormData,
-) {
+export async function updateThumbnailsSupplement({
+  idSupplement,
+  formData,
+}: {
+  idSupplement: string;
+  formData: FormData;
+}) {
+  const accessToken = await getAccessToken();
+  if (!accessToken) {
+    const error: ICustomError = { message: "You're unauthorized?" };
+    return error;
+  }
   const res = await fetchData<{ supplement: ISupplement }>({
     url: `/supplement/files/${idSupplement}`,
     method: "PUT",
     body: formData,
     isMultipartFormData: true,
-    isProtected: true,
+    accessToken: accessToken,
   });
   if (!res.success) {
-    console.error(res);
-    return res;
+    return res.error;
   }
   revalidateTag(tag_revalidate_supplements_list_after_mutation);
   redirect(routePaths.supplements.children.supplement.path(idSupplement));
