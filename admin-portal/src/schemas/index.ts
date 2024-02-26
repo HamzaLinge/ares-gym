@@ -22,16 +22,20 @@ export const SupplementSchema = z.object({
   price: z.string().min(0, { message: "Please, enter a valid price" }),
   stock: z.string().min(0, { message: "Please, enter a valid stock" }),
   description: z.string().optional(),
-  files: z
-    .array(
-      z
-        .custom<File>()
-        .refine((file) => !file || (!!file && file.size <= 10 * 1024 * 1024), {
-          message: "Each thumbnail can be a maximum of 10MB.",
-        })
-        .refine((file) => !file || (!!file && file.type?.startsWith("image")), {
-          message: "Only images are allowed to be sent.",
-        }),
-    )
-    .optional(),
+  files: z.array(z.instanceof(File)).optional(),
 });
+// files: z
+//   .any()
+//   .refine(
+//     (file: File) => !file || (!!file && file.size <= 10 * 1024 * 1024),
+//     {
+//       message: "Each thumbnail can be a maximum of 10MB.",
+//     },
+//   )
+//   .refine(
+//     (file: File) => !file || (!!file && file.type?.startsWith("image")),
+//     {
+//       message: "Only images are allowed to be sent.",
+//     },
+//   )
+//   .optional(),

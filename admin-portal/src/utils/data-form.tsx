@@ -45,7 +45,7 @@ function appendFormData(
     formData.append(key, value);
   } else if (Array.isArray(value)) {
     value.forEach((item, index) => {
-      appendFormData(formData, `${key}[${index}]`, item);
+      appendFormData(formData, key, item);
     });
   } else if (typeof value === "object" && value !== null) {
     Object.keys(value).forEach((subKey) => {
@@ -59,7 +59,7 @@ function appendFormData(
 export function createGenericFormData(input: Record<string, unknown>) {
   const formData = new FormData();
   Object.keys(input).forEach((key) => {
-    appendFormData(formData, key, input[key]);
+    appendFormData(formData, key, input[key] as FormDataEntryValue);
   });
   return formData;
 }

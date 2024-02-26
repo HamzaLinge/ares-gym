@@ -6,6 +6,7 @@ import {
 } from "@/app/(main)/categories/_utils/helpers";
 import { ICategoryTree } from "@/app/(main)/categories/_utils/types";
 import { ISupplement } from "@/app/(main)/supplements/_utils/types";
+import ImagePicker from "@/components/custom/image-picker";
 import FormError from "@/components/form-error";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,16 +27,13 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { SupplementSchema } from "@/schemas";
+import { createGenericFormData } from "@/utils/data-form";
 import { ICustomError } from "@/utils/global-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { asUploadButton } from "@rpldy/upload-button";
-import Uploady from "@rpldy/uploady";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import ThumbnailsPicker from "./ThumbnailsPicker";
-import { inspectFormData } from "@/utils/data-form";
 
 type TFormProductProps = {
   categories: ICategoryTree[];
@@ -60,22 +58,21 @@ export default function FormSupplement({
       category: "",
       price: "0",
       stock: "0",
+      files: undefined,
     },
   });
 
   async function onSubmit(input: z.infer<typeof SupplementSchema>) {
     setError(undefined);
     startTransition(() => {
-      actionSupplement(input).then((err) => setError(err));
+      const formData = createGenericFormData(input);
+      actionSupplement(formData).then((err) => setError(err));
     });
   }
 
-  const handleSelectedFiles = (files?: File[]) => {
+  const setFormWithSelectedFiles = (files?: File[]) => {
     if (files && Array.isArray(files) && files.length > 0) {
-      files.forEach((file) => {
-        const previousFiles = form.getValues("files") || [];
-        form.setValue("files", [...previousFiles, file]);
-      });
+      form.setValue("files", files);
     }
   };
 
@@ -197,9 +194,7 @@ export default function FormSupplement({
             )}
           />
         </div>
-        <Uploady noPortal autoUpload={false} multiple>
-          <ThumbnailsPicker setValue={handleSelectedFiles} />
-        </Uploady>
+        <ImagePicker setFormWithSelectedFiles={setFormWithSelectedFiles} />
         <FormError message={error?.message} />
         <Button disabled={isPending} className="w-full">
           {isPending ? <ReloadIcon className="h-4 w-4 animate-spin" /> : "Save"}

@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "tmp/"),
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + "-" + uniqueSuffix);
+    cb(null, file.filename + "-" + uniqueSuffix);
   },
 });
 const upload = multer({
@@ -28,7 +28,7 @@ const upload = multer({
 export const singleFileMiddleware = upload.single("file");
 export const multipleFileMiddleware = upload.array(
   "files",
-  maxFileNumberAllowed
+  maxFileNumberAllowed,
 );
 
 // uploadToGridFS and streamToGridFS are utility functions to handle uploading buffers and streams to GridFS
@@ -36,7 +36,7 @@ async function uploadToGridFS(
   bucket: GridFSBucket,
   filename: string,
   buffer: Buffer,
-  metadata: IMetadataFile
+  metadata: IMetadataFile,
 ): Promise<string> {
   const uploadStream = bucket.openUploadStream(filename, { metadata });
   uploadStream.end(buffer);
@@ -50,7 +50,7 @@ export async function streamToGridFS(
   bucket: GridFSBucket,
   filename: string,
   stream: fs.ReadStream,
-  metadata: IMetadataFile
+  metadata: IMetadataFile,
 ): Promise<string> {
   const uploadStream = bucket.openUploadStream(filename, { metadata });
   stream.pipe(uploadStream);
@@ -64,7 +64,7 @@ export async function streamToGridFS(
 export async function processAndUploadFile(file: Express.Multer.File) {
   // console.log("PROCESS AND UPLOAD FILE -------------------------------------");
   const gridFSBucket = new GridFSBucket(mongoose.connection.db);
-  let fileId;
+  let fileId: string;
   const metadata = {
     contentType: file.mimetype,
     originalName: file.originalname,
@@ -96,7 +96,7 @@ export async function processAndUploadFile(file: Express.Multer.File) {
       gridFSBucket,
       file.originalname,
       readStream,
-      metadata
+      metadata,
     );
   } else if (file.mimetype === "application/pdf") {
     const readStream = fs.createReadStream(file.path);
@@ -104,13 +104,13 @@ export async function processAndUploadFile(file: Express.Multer.File) {
       gridFSBucket,
       file.originalname,
       readStream,
-      metadata
+      metadata,
     );
   } else {
     console.error("Unsupported File Type");
     throw new CustomError(
       "Unsupported file type",
-      HttpStatusCodes.UNSUPPORTED_MEDIA_TYPE
+      HttpStatusCodes.UNSUPPORTED_MEDIA_TYPE,
     );
   }
   return fileId;
@@ -120,7 +120,7 @@ export async function processAndUploadFile(file: Express.Multer.File) {
 async function deleteTemporaryFile(
   file: Express.Multer.File,
   retries = 5,
-  delay = 100
+  delay = 100,
 ) {
   try {
     await fs.remove(file.path);
@@ -141,7 +141,7 @@ async function deleteTemporaryFile(
 export const processSingleFileUpload = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   if (req.file) {
     try {
@@ -164,7 +164,7 @@ export const processSingleFileUpload = async (
 export const processMultipleFileUpload = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   if (req.files && Array.isArray(req.files)) {
     // console.log(
@@ -173,10 +173,10 @@ export const processMultipleFileUpload = async (
     const validFiles = req.files.filter((file) => file.size > 0);
     try {
       const fileIds: Awaited<string | undefined>[] = await Promise.all(
-        validFiles.map(async (file) => await processAndUploadFile(file))
+        validFiles.map(async (file) => await processAndUploadFile(file)),
       );
       const filteredFileIds = fileIds.filter(
-        (id): id is string => id !== undefined
+        (id): id is string => id !== undefined,
       );
       req.fileIdArr = filteredFileIds.length > 0 ? filteredFileIds : undefined;
     } catch (error) {
