@@ -14,6 +14,22 @@ import {
   FileTypeValidator,
 } from "use-file-picker/validators";
 
+/**
+ * `ImagePicker` is a React component for selecting images from the user's device.
+ * It provides validation for file types, sizes, and the number of files. Selected images
+ * can be previewed, cleared, or individually removed. It integrates with external forms
+ * by updating the form state with selected files through a callback.
+ *
+ * Props:
+ * @param {Function} setFormWithSelectedFiles - Callback function to update the parent form state with the selected files.
+ *
+ * @returns {React.Component} The `ImagePicker` component allows users to select, preview, and manage image files before submitting them.
+ *
+ * Usage:
+ * <ImagePicker setFormWithSelectedFiles={handleFileSelection} />
+ *
+ * Note: This component uses `useImperativeFilePicker` from `use-file-picker` for handling file selection.
+ */
 export default function ImagePicker({
   setFormWithSelectedFiles,
 }: {

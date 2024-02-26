@@ -7,27 +7,20 @@ import {
 import { CustomClassErrorApi } from "@/lib/exceptions";
 import FormSupplement from "@/app/(main)/supplements/_components/FormSupplement";
 
-interface IUpdateSupplementPage {
-  params: { id: string };
-}
-
 export default async function UpdateSupplementPage({
   params,
-}: IUpdateSupplementPage) {
-  const fetchedCategories = await getCategories();
-  if (!fetchedCategories.success) {
-    console.error(fetchedCategories);
-    throw new CustomClassErrorApi(fetchedCategories);
-  }
-  const categories = fetchedCategories.data.categoryTree;
+}: {
+  params: { id: string };
+}) {
+  const categories = await getCategories();
   const supplement = await getSupplementById(params.id);
   return (
     <section>
       <FormSupplement
-        title={`Update ${supplement.name} Supplement`}
+        title={`Update ${supplement.name.toUpperCase()} Supplement`}
         actionSupplement={updateSupplement}
         categories={categories}
-        supplement={supplement}
+        supplementToUpdate={supplement}
       />
     </section>
   );

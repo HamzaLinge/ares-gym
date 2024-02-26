@@ -48,7 +48,7 @@ export async function getSupplementById(idSupplement: string) {
 }
 
 export async function createSupplement(formData: FormData) {
-  inspectFormData(formData);
+  // inspectFormData(formData);
 
   const accessToken = await getAccessToken();
   if (!accessToken) {
@@ -70,13 +70,18 @@ export async function createSupplement(formData: FormData) {
 }
 
 export async function deleteSupplement(idSupplement: string) {
+  const accessToken = await getAccessToken();
+  if (!accessToken) {
+    const error: ICustomError = { message: "You're unauthorized?" };
+    return error;
+  }
   const res = await fetchData<{ deletedIdSupplement: string }>({
     url: `/supplement/${idSupplement}`,
     method: "DELETE",
-    isProtected: true,
+    accessToken: accessToken,
   });
   if (!res.success) {
-    return res;
+    return res.error;
   }
   revalidateTag(tag_revalidate_supplements_list_after_mutation);
   redirect(routePaths.supplements.path);
@@ -89,38 +94,52 @@ export async function deleteThumbnailSupplement({
   idSupplement: string;
   idThumbnail: string;
 }) {
+  const accessToken = await getAccessToken();
+  if (!accessToken) {
+    const error: ICustomError = { message: "You're unauthorized?" };
+    return error;
+  }
   const res = await fetchData<{ deletedIdThumbnail: string }>({
     url: `/supplement/${idSupplement}/file/${idThumbnail}`,
     method: "DELETE",
-    isProtected: true,
+    accessToken: accessToken,
   });
   if (!res.success) {
-    return res;
+    return res.error;
   }
   revalidateTag(tag_revalidate_supplements_list_after_mutation);
   redirect(routePaths.supplements.children.supplement.path(idSupplement));
 }
 
-export async function updateSupplement(
-  stateFormProduct: { idSupplement: string },
-  formData: FormData,
-) {
+export async function updateSupplement({
+  idSupplement,
+  input,
+}: {
+  idSupplement: string;
+  input: z.infer<typeof SupplementSchema>;
+}) {
+  const validatedFields = SupplementSchema.safeParse(input);
+  if (!validatedFields.success) {
+    const error: ICustomError = { message: "Fields are invalid" };
+    return error;
+  }
+  const accessToken = await getAccessToken();
+  if (!accessToken) {
+    const error: ICustomError = { message: "You're unauthorized?" };
+    return error;
+  }
   const res = await fetchData<{ supplement: ISupplement }>({
-    url: `/supplement/${stateFormProduct.idSupplement}`,
+    url: `/supplement/${idSupplement}`,
     method: "PUT",
-    body: formData,
-    isProtected: true,
+    body: validatedFields.data,
+    accessToken: accessToken,
   });
   if (!res.success) {
     console.error(res);
-    return res;
+    return res.error;
   }
   revalidateTag(tag_revalidate_supplements_list_after_mutation);
-  redirect(
-    routePaths.supplements.children.supplement.path(
-      stateFormProduct.idSupplement,
-    ),
-  );
+  redirect(routePaths.supplements.children.supplement.path(idSupplement));
 }
 
 export async function updateThumbnailsSupplement(

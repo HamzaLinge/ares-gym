@@ -38,35 +38,55 @@ import { z } from "zod";
 type TFormProductProps = {
   categories: ICategoryTree[];
   actionSupplement: (params: any) => Promise<ICustomError>;
-  supplementToEdit?: ISupplement;
+  supplementToUpdate?: ISupplement;
   title: string;
 };
 
 export default function FormSupplement({
   categories,
   actionSupplement,
-  supplementToEdit,
+  supplementToUpdate,
   title,
 }: TFormProductProps) {
   const [error, setError] = useState<ICustomError | undefined>(undefined);
   const [isPending, startTransition] = useTransition();
 
+  let defaultValues: z.infer<typeof SupplementSchema> = {
+    name: "",
+    category: "",
+    price: "0",
+    stock: "0",
+    files: undefined,
+  };
+  if (supplementToUpdate) {
+    defaultValues.name = supplementToUpdate.name;
+    defaultValues.category =
+      typeof supplementToUpdate.category === "string"
+        ? supplementToUpdate.category
+        : supplementToUpdate.category._id;
+    defaultValues.price = String(supplementToUpdate.price);
+    defaultValues.stock = String(supplementToUpdate.stock);
+  }
+
   const form = useForm<z.infer<typeof SupplementSchema>>({
     resolver: zodResolver(SupplementSchema),
-    defaultValues: {
-      name: "",
-      category: "",
-      price: "0",
-      stock: "0",
-      files: undefined,
-    },
+    defaultValues: defaultValues,
   });
 
   async function onSubmit(input: z.infer<typeof SupplementSchema>) {
     setError(undefined);
     startTransition(() => {
-      const formData = createGenericFormData(input);
-      actionSupplement(formData).then((err) => setError(err));
+      if (!supplementToUpdate) {
+        // Create new supplement
+        const formData = createGenericFormData(input);
+        actionSupplement(formData).then((err) => setError(err));
+      } else {
+        // Update supplement
+        actionSupplement({
+          idSupplement: supplementToUpdate._id,
+          input: input,
+        }).then((err) => setError(err));
+      }
     });
   }
 
@@ -194,7 +214,9 @@ export default function FormSupplement({
             )}
           />
         </div>
-        <ImagePicker setFormWithSelectedFiles={setFormWithSelectedFiles} />
+        {!supplementToUpdate && (
+          <ImagePicker setFormWithSelectedFiles={setFormWithSelectedFiles} />
+        )}
         <FormError message={error?.message} />
         <Button disabled={isPending} className="w-full">
           {isPending ? <ReloadIcon className="h-4 w-4 animate-spin" /> : "Save"}

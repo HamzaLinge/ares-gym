@@ -4,7 +4,7 @@ import { ReloadIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { IErrorAPI, ISuccessAPI } from "@/utils/global-types";
+import { ICustomError, IErrorAPI, ISuccessAPI } from "@/utils/global-types";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -21,7 +21,7 @@ type TDeleteAlert = {
   input: string | { [key: string]: string };
   deleteWhat: string;
   triggerElement: React.ReactNode;
-  deleteAction: (input: any) => Promise<IErrorAPI>;
+  deleteAction: (input: any) => Promise<ICustomError>;
 };
 
 export default function DeleteAlert({
@@ -35,11 +35,11 @@ export default function DeleteAlert({
 
   const handleDeleteAction = async () => {
     setPending(true);
-    const res = await deleteAction(input);
-    if (res && !res.success) {
+    const err = await deleteAction(input);
+    if (err) {
       toast.error("Error Deletion", {
         className: "!bg-bg-100",
-        description: res.error.message,
+        description: err.message,
       });
     } else {
       setOpen(false);
@@ -55,7 +55,7 @@ export default function DeleteAlert({
           <AlertDialogTitle>Wait, what are you doing?</AlertDialogTitle>
           <AlertDialogDescription>
             This action cannot be undone. This will permanently delete{" "}
-            <span className={"capitalize font-semibold"}>{deleteWhat}</span>.
+            <span className={"font-semibold capitalize"}>{deleteWhat}</span>.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
