@@ -55,32 +55,17 @@ export default function ImagePicker({
       new FileTypeValidator(["jpg", "png", "jpeg"]),
       new FileSizeValidator({ maxFileSize: 10 * 1024 * 1024 /* 10 MB */ }),
     ],
-    onFilesSelected: ({ plainFiles, filesContent, errors }) => {
-      // this callback is always called, even if there are errors
-      //   console.log("onFilesSelected", plainFiles, filesContent, errors);
-    },
-    onFilesRejected: ({ errors }) => {
-      // this callback is called when there were validation errors
-      //   console.log("onFilesRejected", errors);
-    },
     onFilesSuccessfullySelected: ({ plainFiles, filesContent }) => {
-      // this callback is called when there were no validation errors
-      //   console.log("onFilesSuccessfullySelected", plainFiles);
       setSelectedFiles(plainFiles);
     },
     onClear: () => {
-      // this callback is called when the selection is cleared
-      console.log("onClear");
       setSelectedFiles(undefined);
     },
     onFileRemoved: (removedFile, removedIndex) => {
-      // this callback is called when a file is removed from the list of selected files
-      // console.log("onFileRemoved", removedFile, removedIndex);
       if (selectedFiles) {
         const filteredSelectedFiles = selectedFiles.filter(
           (file, index) => index !== removedIndex,
         );
-        console.log({ filteredSelectedFiles });
         setSelectedFiles(filteredSelectedFiles);
       }
     },

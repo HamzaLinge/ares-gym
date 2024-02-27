@@ -49,4 +49,6 @@ export const errorMessageValidator = {
     `${capitalize(name1)} does not match with ${capitalize(name2)}`,
   notCommonWord: (name: string): string =>
     `Do not use a common word as the ${name}`,
+  invalidValue: (name: string): string =>
+    `Please, choose a valid value for ${capitalize(name)}`,
 };

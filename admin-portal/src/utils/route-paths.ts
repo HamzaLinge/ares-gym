@@ -20,7 +20,17 @@ export const routePaths = {
       },
     },
   },
-  commands: { title: "Commands List", path: "/commands" },
+  commands: {
+    title: "Commands List",
+    path: "/commands",
+    children: {
+      create: { title: "Order New Command", path: "/commands/create" },
+      command: {
+        title: "Order New Command",
+        path: (idCommand: string) => `/commands/${idCommand}`,
+      },
+    },
+  },
   categories: {
     title: "Categories List",
     path: "/categories",

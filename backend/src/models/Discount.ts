@@ -1,5 +1,17 @@
 import { CallbackError, Document, Model, model, Schema } from "mongoose";
 
+// export interface IDiscount extends Document {
+//   title: string;
+//   type: 'PERCENTAGE' | 'FIXED' | 'BUY_X_GET_Y_FREE';
+//   value: number; // Represents percentage for 'PERCENTAGE', fixed amount for 'FIXED', and quantity for 'BUY_X_GET_Y_FREE'
+//   dateBegin: Date;
+//   dateEnd: Date;
+//   applicableProducts?: Types.ObjectId[]; // Optional, references to products to which the discount can be applied
+//   minimumOrderValue?: number; // Optional, minimum order value before discount applies
+//   description?: string;
+//   thumbnail?: string;
+// }
+
 export interface IDiscount extends Document {
   title: string;
   percentage: number;
@@ -39,14 +51,14 @@ const discountSchema = new Schema<IDiscount, TDiscountModel>(
           date.getDate(),
           23,
           59,
-          59
+          59,
         );
       },
     },
     description: { type: String, required: false },
     thumbnail: { type: String, required: false },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 discountSchema.pre<IDiscount>(
@@ -55,12 +67,12 @@ discountSchema.pre<IDiscount>(
     this.title = this.title.toLowerCase();
     if (this.description) this.description = this.description.toLowerCase();
     next();
-  }
+  },
 );
 
 const DiscountModel = model<IDiscount, TDiscountModel>(
   "discounts",
-  discountSchema
+  discountSchema,
 );
 
 export default DiscountModel;

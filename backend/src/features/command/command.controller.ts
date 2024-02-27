@@ -17,19 +17,20 @@ import DiscountModel, { IDiscount } from "../../models/Discount";
 import SupplementModel, { ISupplement } from "../../models/Supplement";
 import { capitalize } from "../../utils/string.util";
 import { HttpStatusCodes } from "../../utils/error.util";
+import { Roles } from "../authentication/auth.type";
 
 export async function command_post_controller(
   req: Request<any, any, IRequest_command_post>,
   res: Response<IResponse_command_post>,
-  next: NextFunction
+  next: NextFunction,
 ) {
   if (req.body.discount) {
     const discount: IDiscount | null = await DiscountModel.findById(
-      req.body.discount
+      req.body.discount,
     );
     if (!discount) {
       return next(
-        new CustomError("Discount not found", HttpStatusCodes.NOT_FOUND)
+        new CustomError("Discount not found", HttpStatusCodes.NOT_FOUND),
       );
     }
     const dateNow = new Date();
@@ -39,50 +40,49 @@ export async function command_post_controller(
       return next(
         new CustomError(
           "Discount is either expired or not yet valid",
-          HttpStatusCodes.CONFLICT
-        )
+          HttpStatusCodes.CONFLICT,
+        ),
       );
     }
   }
   for (let i = 0; i < req.body.supplements.length; i++) {
     const supplement: ISupplement | null = await SupplementModel.findById(
-      req.body.supplements[i].data
+      req.body.supplements[i].data,
     );
     if (!supplement) {
       return next(
         new CustomError(
           `Supplement not found for id: ${req.body.supplements[i].data}`,
-          HttpStatusCodes.NOT_FOUND
-        )
+          HttpStatusCodes.NOT_FOUND,
+        ),
       );
     }
     if (req.body.supplements[i].quantity > supplement.stock) {
       return next(
         new CustomError(
-          `${capitalize(supplement.name)} Quantity required exceeds the stock`,
-          HttpStatusCodes.CONFLICT
-        )
+          `${capitalize(supplement.name)} quantity required exceeds the stock`,
+          HttpStatusCodes.CONFLICT,
+        ),
       );
     }
   }
   const createdCommand: ICommand = await CommandModel.create({
     user: req.user?._id,
     ...req.body,
-    status: { confirmed: false },
   });
-  const command = (await CommandModel.findById(createdCommand._id)
-    .populate<{ "supplements.data": ISupplement }>({
-      path: "supplements.data",
-    })
-    .populate<{ discount: IDiscount }>({ path: "discount" })) as ICommand;
+  // const command = (await CommandModel.findById(createdCommand._id)
+  //   .populate<{ "supplements.data": ISupplement }>({
+  //     path: "supplements.data",
+  //   })
+  //   .populate<{ discount: IDiscount }>({ path: "discount" })) as ICommand;
 
-  res.status(HttpStatusCodes.OK).send({ command });
+  res.status(HttpStatusCodes.CREATED).send({ command: createdCommand });
 }
 
 export async function command_get_controller(
   req: Request<any, any, any, IRequest_command_get>,
   res: Response<IResponse_command_get>,
-  next: NextFunction
+  next: NextFunction,
 ) {
   if (req.query.idCommand) {
     const command: ICommand | null = await CommandModel.findOne({
@@ -96,29 +96,27 @@ export async function command_get_controller(
       next(
         new CustomError(
           "There is no command found with this id",
-          HttpStatusCodes.NOT_FOUND
-        )
+          HttpStatusCodes.NOT_FOUND,
+        ),
       );
     } else {
       res.status(HttpStatusCodes.OK).send({ command });
     }
   } else {
-    const commands: ICommand[] = await CommandModel.find({
-      status: req.query.confirmed
-        ? { confirmed: req.query.confirmed }
-        : { $exists: true },
-    })
-      .populate<{ "supplements.data": ISupplement }>({
-        path: "supplements.data",
-      })
-      .populate<{ discount: IDiscount }>({ path: "discount" })
+    const filter =
+      req.user?.role === Roles.subscriber ? { user: req.user._id } : {};
+    const commands: ICommand[] = await CommandModel.find(filter)
+      // .populate<{ "supplements.data": ISupplement }>({
+      //   path: "supplements.data",
+      // })
+      // .populate<{ discount: IDiscount }>({ path: "discount" })
       .sort({ updatedAt: -1 });
     if (commands.length === 0) {
       next(
         new CustomError(
           "There are no commands found",
-          HttpStatusCodes.NOT_FOUND
-        )
+          HttpStatusCodes.NOT_FOUND,
+        ),
       );
     } else {
       res.status(HttpStatusCodes.OK).send({ commands });
@@ -129,34 +127,34 @@ export async function command_get_controller(
 export async function command_put_controller(
   req: Request<IRequest_command_put_params, any, IRequest_command_put_body>,
   res: Response<IResponse_command_put>,
-  next: NextFunction
+  next: NextFunction,
 ) {
   const commandExists: ICommand | null = await CommandModel.findById(
-    req.params.idCommand
+    req.params.idCommand,
   );
   if (!commandExists) {
     return next(
-      new CustomError("There is no command found", HttpStatusCodes.NOT_FOUND)
+      new CustomError("There is no command found", HttpStatusCodes.NOT_FOUND),
     );
   }
   if (req.body.supplements) {
     for (let i = 0; i < req.body.supplements.length; i++) {
       const supplement: ISupplement | null = await SupplementModel.findById(
-        req.body.supplements[i].data
+        req.body.supplements[i].data,
       );
       if (!supplement) {
         return next(
           new CustomError(
             `Supplement not found with id: ${req.body.supplements[i].data}`,
-            HttpStatusCodes.NOT_FOUND
-          )
+            HttpStatusCodes.NOT_FOUND,
+          ),
         );
       } else if (req.body.supplements[i].quantity > supplement.stock) {
         return next(
           new CustomError(
-            `${capitalize(supplement.name)} Quantity exceeds the stock`,
-            HttpStatusCodes.CONFLICT
-          )
+            `${capitalize(supplement.name)} quantity exceeds the stock`,
+            HttpStatusCodes.CONFLICT,
+          ),
         );
       }
     }
@@ -164,15 +162,15 @@ export async function command_put_controller(
   const updatedCommand: ICommand | null = await CommandModel.findOneAndUpdate(
     { _id: req.params.idCommand },
     req.body,
-    { new: true }
-  )
-    .populate<{ "supplements.data": ISupplement }>({
-      path: "supplements.data",
-    })
-    .populate<{ discount: IDiscount }>({ path: "discount" });
+    { new: true },
+  );
+  // .populate<{ "supplements.data": ISupplement }>({
+  //   path: "supplements.data",
+  // })
+  // .populate<{ discount: IDiscount }>({ path: "discount" });
   if (!updatedCommand) {
     next(
-      new CustomError("Updated Command not found", HttpStatusCodes.NOT_FOUND)
+      new CustomError("Updated Command not found", HttpStatusCodes.NOT_FOUND),
     );
   } else {
     res.status(HttpStatusCodes.OK).send({ command: updatedCommand });
@@ -182,17 +180,17 @@ export async function command_put_controller(
 export async function command_delete_controller(
   req: Request<IRequest_command_delete>,
   res: Response<IResponse_command_delete>,
-  next: NextFunction
+  next: NextFunction,
 ) {
   const commandExists: ICommand | null = await CommandModel.findById(
-    req.params.idCommand
+    req.params.idCommand,
   );
   if (!commandExists) {
     next(
       new CustomError(
         "There is no command found to delete",
-        HttpStatusCodes.NOT_FOUND
-      )
+        HttpStatusCodes.NOT_FOUND,
+      ),
     );
   } else {
     await CommandModel.findOneAndDelete({ _id: commandExists._id });

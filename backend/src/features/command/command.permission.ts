@@ -7,14 +7,14 @@ import {
   IRequest_command_put_body,
   IRequest_command_put_params,
 } from "./command.type";
-import CommandModel, { ICommand } from "../../models/Command";
+import CommandModel, { CommandStatus, ICommand } from "../../models/Command";
 import { Roles } from "../authentication/auth.type";
 import { HttpStatusCodes } from "../../utils/error.util";
 
 export async function command_post_permission(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   next();
 }
@@ -22,18 +22,18 @@ export async function command_post_permission(
 export async function command_get_permission(
   req: Request<any, any, any, IRequest_command_get>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
-  if (req.user?.role === Roles.subscriber) {
+  if (req.user?.role === Roles.subscriber && req.query?.idCommand) {
     const command: ICommand | null = await CommandModel.findById(
-      req.query?.idCommand
+      req.query.idCommand,
     );
     if (command && !command.user.equals(req.user?._id)) {
       next(
         new CustomError(
           "You don't have the permission to getting this command",
-          HttpStatusCodes.UNAUTHORIZED
-        )
+          HttpStatusCodes.UNAUTHORIZED,
+        ),
       );
     } else {
       next();
@@ -46,34 +46,31 @@ export async function command_get_permission(
 export async function command_put_permission(
   req: Request<IRequest_command_put_params, any, IRequest_command_put_body>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   if (req.user?.role === Roles.subscriber) {
-    if (req.body.status) {
+    if (req.body.status || req.body.dateShipped || req.body.dateDelivered) {
       next(
         new CustomError(
-          "You are not allowed to edit command status",
-          HttpStatusCodes.UNAUTHORIZED
-        )
+          "You cannot edit this command",
+          HttpStatusCodes.UNAUTHORIZED,
+        ),
       );
     }
     const command: ICommand | null = await CommandModel.findById(
-      req.params?.idCommand
+      req.params?.idCommand,
     );
-    if (command && command.status.confirmed) {
+    if (
+      command &&
+      (!command.user.equals(req.user?._id) ||
+        command.status !== CommandStatus.PENDING ||
+        command.canceled)
+    ) {
       next(
         new CustomError(
-          "The command has already been accepted",
-          HttpStatusCodes.CONFLICT
-        )
-      );
-    }
-    if (command && !command.user.equals(req.user?._id)) {
-      next(
-        new CustomError(
-          "You don't have the permission to edit this command",
-          HttpStatusCodes.UNAUTHORIZED
-        )
+          "You are not allowed to edit this command",
+          HttpStatusCodes.UNAUTHORIZED,
+        ),
       );
     }
     next();
@@ -85,31 +82,9 @@ export async function command_put_permission(
 export async function command_delete_permission(
   req: Request<IRequest_command_delete>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   if (req.user?.role === Roles.admin) {
-    return next();
-  }
-  if (req.user?.role === Roles.subscriber) {
-    const command: ICommand | null = await CommandModel.findById(
-      req.params.idCommand
-    );
-    if (command && !command.user.equals(req.user?._id)) {
-      return next(
-        new CustomError(
-          "You don't have the permission to delete this command",
-          HttpStatusCodes.UNAUTHORIZED
-        )
-      );
-    }
-    if (command && command.status.confirmed) {
-      return next(
-        new CustomError(
-          "The command has already been accepted",
-          HttpStatusCodes.CONFLICT
-        )
-      );
-    }
     next();
   }
 }

@@ -1,6 +1,6 @@
 import { Document, PopulatedDoc, Types } from "mongoose";
 
-import { ICommand } from "../../models/Command";
+import { CommandStatus, ICommand } from "../../models/Command";
 import { ISupplement } from "../../models/Supplement";
 
 // Supplement Property for Command --------------------------------------------------------------------------------
@@ -14,6 +14,7 @@ export type SupplementObject = {
  */
 export interface IRequest_command_post {
   supplements: SupplementObject[];
+  shippedAddress?: String;
   discount?: string;
   note?: string;
 }
@@ -26,7 +27,6 @@ export interface IResponse_command_post {
  */
 export interface IRequest_command_get {
   idCommand?: string;
-  confirmed?: boolean;
 }
 interface IResponse_command_getOne {
   command: ICommand;
@@ -47,10 +47,11 @@ export interface IRequest_command_put_params {
 export interface IRequest_command_put_body {
   supplements?: SupplementObject[];
   discount?: string;
-  status?: {
-    datePayment?: Date;
-    confirmed?: boolean;
-  };
+  status?: CommandStatus;
+  shippedAddress?: String;
+  dateShipped?: Date;
+  dateDelivered?: Date;
+  canceled?: { date: Date; reason?: string };
   note?: string;
 }
 export interface IResponse_command_put {

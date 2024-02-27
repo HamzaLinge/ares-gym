@@ -12,15 +12,26 @@ import { IUser } from "./User";
 import { IDiscount } from "./Discount";
 import { SupplementObject } from "../features/command/command.type";
 
+export enum CommandStatus {
+  PENDING = "PENDING",
+  CONFIRMED = "CONFIRMED",
+  SHIPPED = "SHIPPED",
+  DELIVERED = "DELIVERED",
+}
+
 export interface ICommand extends Document {
   user: PopulatedDoc<Document<Types.ObjectId> & IUser>;
   supplements: SupplementObject[];
   discount?: PopulatedDoc<Document<Types.ObjectId> & IDiscount>;
-  status: {
-    datePayment?: Date;
-    confirmed: boolean;
-  };
+  status: CommandStatus;
+  shippedAddress?: string;
+  dateShipped?: Date;
+  dateDelivered?: Date;
+  trackingNumber?: string;
   note?: string;
+  canceled?: { date: Date; reason?: string };
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 type TCommand = Model<ICommand>;
@@ -47,15 +58,21 @@ const commandSchema = new Schema<ICommand, TCommand>(
       required: false,
     },
     status: {
-      type: {
-        datePayment: { type: Date, required: false },
-        confirmed: { type: Boolean, required: true, default: false },
-      },
+      type: String,
+      enum: Object.values(CommandStatus),
+      default: CommandStatus.PENDING,
       required: true,
     },
-    note: { type: String, required: false },
+    shippedAddress: { type: String },
+    dateShipped: { type: Date },
+    dateDelivered: { type: Date },
+    trackingNumber: { type: String },
+    note: { type: String },
+    canceled: {
+      type: { date: { type: Date, required: true }, reason: { type: String } },
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 commandSchema.pre<ICommand>(
@@ -65,7 +82,7 @@ commandSchema.pre<ICommand>(
       this.note = this.note.toLowerCase();
     }
     next();
-  }
+  },
 );
 
 const CommandModel = model<ICommand, TCommand>("commands", commandSchema);

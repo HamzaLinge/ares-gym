@@ -8,7 +8,6 @@ import { ISupplement } from "@/app/(main)/supplements/_utils/types";
 import { getAccessToken } from "@/lib/auth";
 import { CustomClassErrorApi } from "@/lib/exceptions";
 import { SupplementSchema } from "@/schemas";
-import { inspectFormData } from "@/utils/data-form";
 import { fetchData } from "@/utils/fetch-data";
 import { ICustomError } from "@/utils/global-types";
 import { routePaths } from "@/utils/route-paths";

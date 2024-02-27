@@ -1,10 +1,11 @@
 import { body, param, query } from "express-validator";
 import { errorMessageValidator } from "../../utils/error.util";
+import { CommandStatus } from "../../models/Command";
 
 export const command_post_rules = [
   body("supplements")
     .isArray()
-    .withMessage(errorMessageValidator.isArray("proteins")),
+    .withMessage(errorMessageValidator.isArray("supplements")),
   body("supplements.*.data")
     .isMongoId()
     .withMessage(errorMessageValidator.isMongoId("Each supplement data")),
@@ -17,6 +18,11 @@ export const command_post_rules = [
     .isMongoId()
     .withMessage(errorMessageValidator.isMongoId("discount")),
 
+  body("shippedAddress")
+    .optional({ values: "falsy" })
+    .isString()
+    .withMessage(errorMessageValidator.isString("shipping address")),
+
   body("note")
     .optional({ values: "falsy" })
     .isString()
@@ -28,10 +34,6 @@ export const command_get_rules = [
     .optional({ values: "falsy" })
     .isMongoId()
     .withMessage(errorMessageValidator.isMongoId("id command")),
-  query("confirmed")
-    .optional({ values: "falsy" })
-    .isBoolean()
-    .withMessage(errorMessageValidator.isBool("confirmed")),
 ];
 
 export const command_put_rules = [
@@ -61,16 +63,22 @@ export const command_put_rules = [
 
   body("status")
     .optional({ values: "falsy" })
-    .isObject()
-    .withMessage(errorMessageValidator.isObject("status")),
-  body("status.datePayment")
+    .isString()
+    .withMessage(errorMessageValidator.isString("status"))
+    .isIn(Object.values(CommandStatus))
+    .withMessage(errorMessageValidator.invalidValue("status")),
+  body("shippedAddress")
+    .optional({ values: "falsy" })
+    .isString()
+    .withMessage(errorMessageValidator.isString("shipping address")),
+  body("dateShipped")
     .optional({ values: "falsy" })
     .isISO8601()
-    .withMessage(errorMessageValidator.isDate("status date payment")),
-  body("status.confirmed")
+    .withMessage(errorMessageValidator.isDate("date shipped")),
+  body("dateDelivered")
     .optional({ values: "falsy" })
-    .isBoolean()
-    .withMessage(errorMessageValidator.isBool("status confirmed")),
+    .isISO8601()
+    .withMessage(errorMessageValidator.isDate("date delivered")),
 
   body("note")
     .optional({ values: "falsy" })
