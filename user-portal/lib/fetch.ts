@@ -1,14 +1,13 @@
-import { ICustomError, IErrorAPI, ISuccessAPI } from "@/utils/global-types";
+import { ICustomError, IErrorAPI, ISuccessAPI } from "@/types/api";
 
 type THttpMethod = "GET" | "POST" | "PUT" | "DELETE";
-type THttpBody = string | FormData | Partial<Record<string, unknown>>;
+type THttpBody = FormData | Partial<Record<string, unknown>>;
 
 type TFetchDataProps = {
   url: string;
   method?: THttpMethod;
   body?: THttpBody;
   isMultipartFormData?: boolean;
-  isProtected?: boolean;
   accessToken?: string;
   tags?: string[];
   cache?: boolean;
@@ -19,7 +18,7 @@ export async function fetchData<Interface>(props: TFetchDataProps) {
   try {
     const res = await fetch(
       `${process.env.BASE_URL}/${props.url[0] === "/" ? props.url.substring(1) : props.url}`,
-      fetchOptions as any,
+      fetchOptions,
     );
 
     if (!res.ok) {
@@ -54,7 +53,7 @@ function getFetchOptions({
 }: Omit<TFetchDataProps, "url">) {
   const options: {
     method: THttpMethod;
-    body?: THttpBody;
+    body?: string | FormData;
     headers?: {
       "Content-Type"?: "application/json";
       Authorization?: string;
