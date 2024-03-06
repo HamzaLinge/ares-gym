@@ -20,10 +20,11 @@ export interface IResponse_supplement_post {
  */
 export interface IRequest_supplement_get {
   idSupplement?: string;
+  category?: string;
   name?: string;
   price?: number;
   stock?: number;
-  description?: number;
+  description?: string;
 }
 interface IResponse_supplement_getOne {
   supplement: ISupplement;

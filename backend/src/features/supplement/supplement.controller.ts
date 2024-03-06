@@ -50,14 +50,19 @@ export async function supplement_get_controller(
     if (!supplement) {
       return next(
         new CustomError(
-          "There is no supplement found for this id",
+          "There is no supplement found for this id supplement",
           HttpStatusCodes.NOT_FOUND,
         ),
       );
     }
     res.status(HttpStatusCodes.OK).send({ supplement });
   } else {
-    const supplements: ISupplement[] = await SupplementModel.find()
+    let filter: Partial<Record<string, string | number>> = {};
+    for (const [key, value] of Object.entries(req.query)) {
+      if (value) filter[key] = value;
+    }
+    console.log({ filter });
+    const supplements: ISupplement[] = await SupplementModel.find(filter)
       .populate<{ category: ICategory }>({ path: "category" })
       .sort({ updatedAt: -1 });
     if (supplements.length === 0) {

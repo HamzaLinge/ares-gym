@@ -4,3 +4,10 @@ export interface ICategoryTree {
   description?: string;
   children?: ICategoryTree[];
 }
+
+export type TCategory = {
+  _id: string;
+  name: string;
+  description?: string;
+  parent: string;
+};

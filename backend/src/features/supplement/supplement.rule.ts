@@ -44,7 +44,7 @@ export const supplement_get_rules = [
     .custom((value, { req }) => {
       if (value && req.query && Object.values(req.query).length > 1) {
         throw new Error(
-          "Id Complement cannot be supplied with other parameters"
+          "Id Complement cannot be supplied with other parameters",
         );
       }
       return true;
@@ -55,6 +55,10 @@ export const supplement_get_rules = [
     .withMessage(errorMessageValidator.isString("name"))
     .isLength({ min: 3 })
     .withMessage(errorMessageValidator.isLengthMin("name", 3)),
+  query("category")
+    .optional({ values: "falsy" })
+    .isMongoId()
+    .withMessage(errorMessageValidator.isMongoId("category")),
   query("price")
     .optional({ values: "falsy" })
     .isInt()

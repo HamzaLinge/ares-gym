@@ -1,4 +1,4 @@
-import { getCategoryLinks } from "@/actions/menu.action";
+import { getCategoryLinks } from "@/actions/menu";
 import MenuDesktop from "@/components/layout-navigation/menu/menu-desktop";
 import MenuMobile from "@/components/layout-navigation/menu/menu-mobile";
 import { TLinkNavigation } from "@/types/ui";

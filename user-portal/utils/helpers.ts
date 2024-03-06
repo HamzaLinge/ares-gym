@@ -6,7 +6,7 @@ function formatCategoryNodeToCategoryLink(
 ): TLinkNavigation {
   let formattedCategory = {
     label: category.name,
-    path: `?categoryId=${category._id}`,
+    path: `/shop?category=${category._id}`,
   };
   if (!category.children || category.children.length === 0) {
     return formattedCategory;
