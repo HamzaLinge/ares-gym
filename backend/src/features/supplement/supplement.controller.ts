@@ -23,6 +23,7 @@ import { ICategory } from "../../models/Category";
 
 import { deleteFile } from "../../utils/file.util";
 import { HttpStatusCodes } from "../../utils/error.util";
+import { getFilterAndSortBy } from "../../utils/obj.util";
 
 export async function supplement_post_controller(
   req: Request<any, any, IRequest_supplement_post>,
@@ -57,28 +58,11 @@ export async function supplement_get_controller(
     }
     res.status(HttpStatusCodes.OK).send({ supplement });
   } else {
-    let filter: Partial<
-      Record<string, string | number | Record<string, string | number>>
-    > = {};
-    for (const [key, value] of Object.entries(req.query)) {
-      if (value) {
-        if (["minPrice", "maxPrice"].includes(key)) {
-          const priceObj = filter.price
-            ? typeof filter.price === "object"
-              ? { ...filter.price }
-              : {}
-            : {};
-          if (key === "minPrice") filter.price = { ...priceObj, $gte: value };
-          if (key === "maxPrice") filter.price = { ...priceObj, $lte: value };
-        } else {
-          filter[key] = value;
-        }
-      }
-    }
-    console.log({ filter });
+    const { filter, sortBy } = getFilterAndSortBy(req.query);
+    console.log({ filter, sortBy });
     const supplements: ISupplement[] = await SupplementModel.find(filter)
       .populate<{ category: ICategory }>({ path: "category" })
-      .sort({ updatedAt: -1 });
+      .sort(sortBy);
     if (supplements.length === 0) {
       return next(
         new CustomError(

@@ -61,6 +61,10 @@ export const supplement_get_rules = [
     .optional({ values: "falsy" })
     .isInt()
     .withMessage(errorMessageValidator.isInt("max price")),
+  query("sortBy")
+    .optional({ values: "falsy" })
+    .isString()
+    .withMessage(errorMessageValidator.isString("sort by")),
   query("name")
     .optional({ values: "falsy" })
     .isString()

@@ -9,12 +9,15 @@ const tag = "supplements";
 
 export async function getSupplements(filter: Partial<Record<string, string>>) {
   const url = Object.entries(filter).reduce((accumulator, currentValue) => {
+    if (!currentValue) return accumulator;
     const hasQueryParams = /\?.+/;
     if (hasQueryParams.test(accumulator)) {
       return accumulator + `&${currentValue[0]}=${currentValue[1]}`;
     }
     return accumulator + `?${currentValue[0]}=${currentValue[1]}`;
   }, "/supplement");
+
+  console.log({ url });
 
   const res = await fetchData<{ supplements: TSupplement[] }>({
     url: url,

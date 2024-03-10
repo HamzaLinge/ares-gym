@@ -23,6 +23,7 @@ export interface IRequest_supplement_get {
   category?: string;
   minPrice?: number;
   maxPrice?: number;
+  sortBy?: string;
   name?: string;
   price?: number;
   stock?: number;
