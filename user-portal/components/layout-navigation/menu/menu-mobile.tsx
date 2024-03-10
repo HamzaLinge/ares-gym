@@ -76,7 +76,7 @@ export default function MenuMobile({ links }: { links: TLinkNavigation[] }) {
   const close = () => setOpen(false);
 
   return (
-    <Sheet key={side} open={open} onOpenChange={setOpen}>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button size={"icon"} variant="outline" className="md:hidden">
           <HamburgerMenuIcon className="h-5 w-5" />

@@ -16,8 +16,6 @@ export async function getSupplements(filter: Partial<Record<string, string>>) {
     return accumulator + `?${currentValue[0]}=${currentValue[1]}`;
   }, "/supplement");
 
-  console.log({ url });
-
   const res = await fetchData<{ supplements: TSupplement[] }>({
     url: url,
     tags: [tag],
@@ -33,4 +31,16 @@ export async function getSupplements(filter: Partial<Record<string, string>>) {
   }
 
   return res.data.supplements;
+}
+
+export async function getSupplementById(supplementId: string) {
+  const res = await fetchData<{ supplement: TSupplement }>({
+    url: `/supplement?idSupplement=${supplementId}`,
+  });
+
+  if (!res.success) {
+    console.error(res);
+    throw new CustomClassErrorApi(res);
+  }
+  return res.data.supplement;
 }

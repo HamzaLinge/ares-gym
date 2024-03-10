@@ -1,4 +1,5 @@
 import { getSupplements } from "@/actions/supplement";
+import ShopCard from "./components/ShopCard";
 
 export default async function ShopPage({
   searchParams,
@@ -6,11 +7,12 @@ export default async function ShopPage({
   searchParams: Partial<Record<string, string>>;
 }) {
   const supplements = await getSupplements(searchParams);
-  console.log({ supplements });
 
   return (
-    <section>
-      <p>Shop Page</p>
+    <section className="grid grid-cols-2 gap-x-2 gap-y-4">
+      {supplements.map((supplement) => (
+        <ShopCard key={supplement._id} supplement={supplement} />
+      ))}
     </section>
   );
 }

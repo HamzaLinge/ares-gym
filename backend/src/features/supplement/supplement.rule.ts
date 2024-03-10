@@ -49,16 +49,24 @@ export const supplement_get_rules = [
       }
       return true;
     }),
+  query("category")
+    .optional({ values: "falsy" })
+    .isMongoId()
+    .withMessage(errorMessageValidator.isMongoId("category")),
+  query("minPrice")
+    .optional({ values: "falsy" })
+    .isInt()
+    .withMessage(errorMessageValidator.isInt("min price")),
+  query("maxPrice")
+    .optional({ values: "falsy" })
+    .isInt()
+    .withMessage(errorMessageValidator.isInt("max price")),
   query("name")
     .optional({ values: "falsy" })
     .isString()
     .withMessage(errorMessageValidator.isString("name"))
     .isLength({ min: 3 })
     .withMessage(errorMessageValidator.isLengthMin("name", 3)),
-  query("category")
-    .optional({ values: "falsy" })
-    .isMongoId()
-    .withMessage(errorMessageValidator.isMongoId("category")),
   query("price")
     .optional({ values: "falsy" })
     .isInt()
