@@ -47,7 +47,7 @@ export const renderCategoryOptions = (
       return (
         <SelectGroup key={option.value}>
           <SelectItem value={option.value}>{option.label}</SelectItem>
-          <SelectGroup className={"ml-2 border-l"}>
+          <SelectGroup className={"pl-2"}>
             {renderCategoryOptions(option.children)}
           </SelectGroup>
         </SelectGroup>
@@ -70,4 +70,34 @@ export function transformCategoryTreeToSelectOption(
     label: category.name,
     children: category.children?.map(transformCategoryTreeToSelectOption),
   };
+}
+
+export const createQueryURL = (
+  input: Partial<Record<string, string | number>>,
+  pathname: string = "",
+) => {
+  if (Object.keys(input).length === 0) return "?";
+  return Object.entries(input).reduce((accumulator, currentValue) => {
+    if (!currentValue[1]) return accumulator;
+    const hasQueryParams = /\?.+/;
+    if (hasQueryParams.test(accumulator)) {
+      return accumulator + `&${currentValue[0]}=${currentValue[1]}`;
+    }
+    return accumulator + `?${currentValue[0]}=${currentValue[1]}`;
+  }, pathname);
+};
+
+export function getFileUrl(
+  idFile: string | string[] | undefined,
+  index: number = 0,
+) {
+  if (typeof idFile === "string")
+    return `${process.env.BASE_URL}/file/${idFile}`;
+  if (
+    Array.isArray(idFile) &&
+    idFile.length > 0 &&
+    typeof idFile[0] === "string"
+  )
+    return `${process.env.BASE_URL}/file/${idFile[index]}`;
+  return "/default-supplement-thumbnail.jpg";
 }

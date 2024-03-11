@@ -17,7 +17,7 @@ export async function getSupplements(filter: Partial<Record<string, string>>) {
     return accumulator + `?${currentValue[0]}=${currentValue[1]}`;
   }, "/supplement");
 
-  console.log({ url });
+  // console.log({ url });
 
   const res = await fetchData<{ supplements: TSupplement[] }>({
     url: url,

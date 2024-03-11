@@ -1,4 +1,5 @@
 import { getSupplementById } from "@/actions/supplement";
+import ThumbnailsCarousel from "@/app/shop/components/thumbnails-carousel";
 
 export default async function SupplementPage({
   params: { supplementId },
@@ -9,7 +10,10 @@ export default async function SupplementPage({
 
   return (
     <section>
-      <p>Product Page: {supplement.name}</p>
+      <div className="w-full">
+        <ThumbnailsCarousel />
+      </div>
+      <p>Supplement Page: {supplement.name}</p>
     </section>
   );
 }
