@@ -56,6 +56,8 @@ export async function supplement_get_controller(
         ),
       );
     }
+    console.log({ supplement });
+
     res.status(HttpStatusCodes.OK).send({ supplement });
   } else {
     const { filter, sortBy } = getFilterAndSortBy(req.query);
