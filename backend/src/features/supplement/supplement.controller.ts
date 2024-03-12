@@ -23,7 +23,7 @@ import { ICategory } from "../../models/Category";
 
 import { deleteFile } from "../../utils/file.util";
 import { HttpStatusCodes } from "../../utils/error.util";
-import { getFilterAndSortBy } from "../../utils/obj.util";
+import { parseQueryParams } from "../../utils/obj.util";
 
 export async function supplement_post_controller(
   req: Request<any, any, IRequest_supplement_post>,
@@ -56,15 +56,19 @@ export async function supplement_get_controller(
         ),
       );
     }
-    console.log({ supplement });
+    // console.log({ supplement });
 
     res.status(HttpStatusCodes.OK).send({ supplement });
   } else {
-    const { filter, sortBy } = getFilterAndSortBy(req.query);
-    console.log({ filter, sortBy });
+    const { filter, sortBy, skip, limit } = parseQueryParams(req.query);
+    console.log({ filter, sortBy, skip, limit });
+
     const supplements: ISupplement[] = await SupplementModel.find(filter)
       .populate<{ category: ICategory }>({ path: "category" })
-      .sort(sortBy);
+      .sort(sortBy)
+      .skip(skip)
+      .limit(limit);
+
     if (supplements.length === 0) {
       return next(
         new CustomError(
@@ -73,6 +77,7 @@ export async function supplement_get_controller(
         ),
       );
     }
+
     res.status(HttpStatusCodes.OK).send({ supplements });
   }
 }

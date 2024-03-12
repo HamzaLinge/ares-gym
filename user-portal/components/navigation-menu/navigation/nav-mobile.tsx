@@ -17,7 +17,7 @@ import {
 import { TLinkNavigation } from "@/types/ui";
 import { CaretSortIcon, HamburgerMenuIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
-import { forwardRef, useState } from "react";
+import { useState } from "react";
 
 const LinkMobileComponent = (
   props: TLinkNavigation & {
@@ -68,7 +68,7 @@ const LinkMobileComponent = (
   }
 };
 
-export default function MenuMobile({ links }: { links: TLinkNavigation[] }) {
+export default function NavMobile({ links }: { links: TLinkNavigation[] }) {
   const side = "left";
 
   const [open, setOpen] = useState(false);
@@ -78,13 +78,17 @@ export default function MenuMobile({ links }: { links: TLinkNavigation[] }) {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button size={"icon"} variant="outline" className="md:hidden">
-          <HamburgerMenuIcon className="h-5 w-5" />
+        <Button
+          size={"icon"}
+          variant="ghost"
+          className="justify-self-start lg:hidden"
+        >
+          <HamburgerMenuIcon className="h-7 w-7" />
         </Button>
       </SheetTrigger>
       <SheetContent side={side} className="w-full max-w-sm px-0">
         <SheetHeader className="p-4 pt-0">
-          <SheetTitle>Menu</SheetTitle>
+          <SheetTitle>Navigation</SheetTitle>
           <SheetDescription>Go to shop to find what you need</SheetDescription>
         </SheetHeader>
         <nav>

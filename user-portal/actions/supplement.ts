@@ -4,18 +4,14 @@ import { fetchData } from "@/lib/fetch";
 import { CustomClassErrorApi } from "@/types/api";
 import { TSupplement } from "@/types/supplement";
 import { codeStatusApi } from "@/utils/code-status-api";
+import { createQueryURL } from "@/utils/helpers";
 
 const tag = "supplements";
 
-export async function getSupplements(filter: Partial<Record<string, string>>) {
-  const url = Object.entries(filter).reduce((accumulator, currentValue) => {
-    if (!currentValue) return accumulator;
-    const hasQueryParams = /\?.+/;
-    if (hasQueryParams.test(accumulator)) {
-      return accumulator + `&${currentValue[0]}=${currentValue[1]}`;
-    }
-    return accumulator + `?${currentValue[0]}=${currentValue[1]}`;
-  }, "/supplement");
+export async function getSupplements(
+  filter: Partial<Record<string, string | number>>,
+) {
+  const url = createQueryURL(filter, "/supplement");
 
   // console.log({ url });
 

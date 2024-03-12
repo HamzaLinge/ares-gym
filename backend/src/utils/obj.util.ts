@@ -8,12 +8,20 @@ export function filterObj(obj: { [key: string]: any }) {
   return Object.fromEntries(filteredArr);
 }
 
-export function getFilterAndSortBy(query: IRequest_supplement_get) {
+export function parseQueryParams(query: IRequest_supplement_get) {
   let filter: {
     price?: { $gte?: number; $lte?: number };
     category?: string;
+    _id?: { $ne: string };
   } = {};
-  let sortBy: { updatedAt?: 1 | -1; price?: 1 | -1 } = {};
+
+  // let sortBy: { updatedAt?: 1 | -1; price?: 1 | -1 } = {};
+  let sortBy: { [key: string]: 1 | -1 } = {};
+
+  // Ensuring skip and limit are integers and within reasonable bounds
+  const skip = Math.max(0, query.skip || 0);
+  const limit = Math.min(Math.max(1, query.limit || 10), 100); // Limits between 1 and 100
+
   for (const [key, value] of Object.entries(query)) {
     switch (key) {
       case "minPrice":
@@ -26,17 +34,17 @@ export function getFilterAndSortBy(query: IRequest_supplement_get) {
         filter.category = value;
         break;
       case "sortBy":
-        switch (value) {
-          case "updatedAt":
-            sortBy.updatedAt = -1;
-            break;
-          case "price":
-            sortBy.price = 1;
-            break;
-          case "price-desc":
-            sortBy.price = -1;
-        }
+        if (typeof value !== "string") break;
+        const sortFields = value.split(",");
+        sortFields.forEach((field) => {
+          const [name, order = "asc"] = field.split("-");
+          sortBy[name] = order === "desc" ? -1 : 1;
+        });
+        break;
+      case "excludeId":
+        filter._id = { $ne: value };
+        break;
     }
   }
-  return { filter, sortBy };
+  return { filter, sortBy, skip, limit };
 }

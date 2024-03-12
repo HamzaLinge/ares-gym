@@ -1,7 +1,6 @@
 import { getSupplementById } from "@/actions/supplement";
+import RelatedSupplements from "@/app/shop/components/related-supplements";
 import ThumbnailsCarousel from "@/app/shop/components/thumbnails-carousel";
-import { Button } from "@/components/ui/button";
-import { HeartIcon } from "@radix-ui/react-icons";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -10,7 +9,16 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { HeartIcon } from "@radix-ui/react-icons";
 
 export default async function SupplementPage({
   params: { supplementId },
@@ -18,6 +26,7 @@ export default async function SupplementPage({
   params: { supplementId: string };
 }) {
   const supplement = await getSupplementById(supplementId);
+
   const [categoryId, categoryName] =
     typeof supplement.category === "string"
       ? [supplement.category, "..."]
@@ -65,7 +74,7 @@ export default async function SupplementPage({
           <HeartIcon className="h-5 w-5" />
           <span>Do you like it?</span>
         </p>
-        <Button className="w-full" size={"lg"}>
+        <Button className="h-14 w-full uppercase tracking-wide" size={"lg"}>
           Add to Chart
         </Button>
       </div>
@@ -79,10 +88,39 @@ export default async function SupplementPage({
           </TabsTrigger>
         </TabsList>
         <TabsContent value="description">
-          Make changes to your account here.
+          <Card>
+            <CardHeader>
+              <CardTitle>Description</CardTitle>
+              <CardDescription>
+                {supplement.description ? (
+                  supplement.description
+                ) : (
+                  <span>Sorry, No Description Yet</span>
+                )}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-col gap-y-2">
+                <div className="flex items-center gap-x-2">
+                  <p>Category:</p>
+                  <p>{categoryName}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
-        <TabsContent value="reviews">Change your password here.</TabsContent>
+        <TabsContent value="reviews">
+          <Card>
+            <CardHeader>
+              <CardTitle>Reviews</CardTitle>
+              <CardDescription>
+                It will be nice from you to leave a feedback
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </TabsContent>
       </Tabs>
+      <RelatedSupplements categoryId={categoryId} excludeId={supplement._id} />
     </section>
   );
 }

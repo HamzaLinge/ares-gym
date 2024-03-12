@@ -76,7 +76,7 @@ export const createQueryURL = (
   input: Partial<Record<string, string | number>>,
   pathname: string = "",
 ) => {
-  if (Object.keys(input).length === 0) return "?";
+  if (Object.keys(input).length === 0 && pathname.length === 0) return "?";
   return Object.entries(input).reduce((accumulator, currentValue) => {
     if (!currentValue[1]) return accumulator;
     const hasQueryParams = /\?.+/;

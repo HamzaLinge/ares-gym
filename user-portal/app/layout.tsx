@@ -1,4 +1,4 @@
-import LayoutNavigation from "@/components/layout-navigation";
+import LayoutNavigationMenu from "@/components/navigation-menu";
 import { cn } from "@/lib/utils";
 import "@/style/globals.css";
 import type { Metadata } from "next";
@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn("", lato.className)}>
-        <LayoutNavigation />
+        <LayoutNavigationMenu />
         <main>{children}</main>
       </body>
     </html>

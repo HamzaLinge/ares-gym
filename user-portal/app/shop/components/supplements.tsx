@@ -1,5 +1,5 @@
 import { getSupplements } from "@/actions/supplement";
-import ShopCard from "@/app/shop/components/ShopCard";
+import ShopCard from "@/app/shop/components/shop-card";
 
 export default async function Supplements({
   searchParams,

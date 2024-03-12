@@ -65,6 +65,18 @@ export const supplement_get_rules = [
     .optional({ values: "falsy" })
     .isString()
     .withMessage(errorMessageValidator.isString("sort by")),
+  query("skip")
+    .optional({ values: "falsy" })
+    .isInt()
+    .withMessage(errorMessageValidator.isInt("skip")),
+  query("limit")
+    .optional({ values: "falsy" })
+    .isInt()
+    .withMessage(errorMessageValidator.isInt("limit")),
+  query("excludeId")
+    .optional({ values: "falsy" })
+    .isMongoId()
+    .withMessage(errorMessageValidator.isMongoId("exclude Id")),
   query("name")
     .optional({ values: "falsy" })
     .isString()

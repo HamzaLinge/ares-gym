@@ -24,6 +24,9 @@ export interface IRequest_supplement_get {
   minPrice?: number;
   maxPrice?: number;
   sortBy?: string;
+  skip?: number;
+  limit?: number;
+  excludeId?: string;
   name?: string;
   price?: number;
   stock?: number;
