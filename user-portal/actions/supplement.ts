@@ -43,3 +43,22 @@ export async function getSupplementById(supplementId: string) {
   }
   return res.data.supplement;
 }
+
+export async function getSupplementsBySearchItem(searchItem: string) {
+  const res = await fetchData<{ supplements: TSupplement[] }>({
+    url: `/supplement/search?search=${searchItem}`,
+  });
+
+  if (!res.success) {
+    if (res.status === codeStatusApi.NOT_FOUND) {
+      return [];
+    } else if (res.status === codeStatusApi.BAD_REQUEST) {
+      return res.error;
+    } else {
+      console.error(res);
+      throw new CustomClassErrorApi(res);
+    }
+  }
+
+  return res.data.supplements;
+}

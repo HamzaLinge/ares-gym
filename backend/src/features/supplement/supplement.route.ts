@@ -7,6 +7,7 @@ import {
   supplement_put_rules,
   supplement_get_rules,
   supplement_post_rules,
+  supplement_get_search_rules,
 } from "./supplement.rule";
 import { validateRules } from "../../middlewares/validateRules";
 import { asyncHandler } from "../../middlewares/asyncHandler";
@@ -24,6 +25,7 @@ import {
   supplement_put_files_controller,
   supplement_get_controller,
   supplement_post_controller,
+  supplement_get_search_controller,
 } from "./supplement.controller";
 import {
   multipleFileMiddleware,
@@ -41,13 +43,19 @@ supplementRoutes.post(
   ...supplement_post_rules,
   validateRules,
   asyncHandler(supplement_post_permission),
-  asyncHandler(supplement_post_controller)
+  asyncHandler(supplement_post_controller),
 );
 supplementRoutes.get(
   "",
   supplement_get_rules,
   validateRules,
-  asyncHandler(supplement_get_controller)
+  asyncHandler(supplement_get_controller),
+);
+supplementRoutes.get(
+  "/search",
+  supplement_get_search_rules,
+  validateRules,
+  asyncHandler(supplement_get_search_controller),
 );
 supplementRoutes.put(
   "/:idSupplement",
@@ -55,7 +63,7 @@ supplementRoutes.put(
   ...supplement_put_rules,
   validateRules,
   asyncHandler(supplement_put_permission),
-  asyncHandler(supplement_put_controller)
+  asyncHandler(supplement_put_controller),
 );
 supplementRoutes.put(
   "/files/:idSupplement",
@@ -65,7 +73,7 @@ supplementRoutes.put(
   ...supplement_files_put_rules,
   validateRules,
   asyncHandler(supplement_put_files_permission),
-  asyncHandler(supplement_put_files_controller)
+  asyncHandler(supplement_put_files_controller),
 );
 supplementRoutes.delete(
   "/:idSupplement",
@@ -73,7 +81,7 @@ supplementRoutes.delete(
   ...supplement_delete_rules,
   validateRules,
   asyncHandler(supplement_delete_permission),
-  asyncHandler(supplement_delete_controller)
+  asyncHandler(supplement_delete_controller),
 );
 supplementRoutes.delete(
   "/:idSupplement/file/:idThumbnail",
@@ -81,7 +89,7 @@ supplementRoutes.delete(
   ...supplement_file_delete_rules,
   validateRules,
   asyncHandler(supplement_delete_file_permission),
-  asyncHandler(supplement_delete_file_controller)
+  asyncHandler(supplement_delete_file_controller),
 );
 
 export default supplementRoutes;

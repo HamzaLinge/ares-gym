@@ -91,13 +91,16 @@ export function getFileUrl(
   idFile: string | string[] | undefined,
   index: number = 0,
 ) {
-  if (typeof idFile === "string")
-    return `${process.env.BASE_URL}/file/${idFile}`;
+  const baseURL =
+    process.env.BASE_URL !== undefined
+      ? process.env.BASE_URL
+      : process.env.NEXT_PUBLIC_BASE_URL;
+  if (typeof idFile === "string") return `${baseURL}/file/${idFile}`;
   if (
     Array.isArray(idFile) &&
     idFile.length > 0 &&
     typeof idFile[0] === "string"
   )
-    return `${process.env.BASE_URL}/file/${idFile[index]}`;
+    return `${baseURL}/file/${idFile[index]}`;
   return "/default-supplement-thumbnail.jpg";
 }

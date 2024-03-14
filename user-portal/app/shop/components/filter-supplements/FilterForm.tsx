@@ -25,7 +25,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { FilterSupplementsSchema } from "@/schemas/supplement";
+import { FilterSupplementsSchema } from "@/schemas";
 import { ICategoryTree } from "@/types/category";
 import {
   createQueryURL,

@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import "@/style/globals.css";
 import type { Metadata } from "next";
 import { Inter, Lato } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 const lato = Lato({ weight: "400", subsets: ["latin"] });
@@ -22,6 +23,7 @@ export default function RootLayout({
       <body className={cn("", lato.className)}>
         <LayoutNavigationMenu />
         <main>{children}</main>
+        <Toaster richColors />
       </body>
     </html>
   );

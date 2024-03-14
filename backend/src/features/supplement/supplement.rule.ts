@@ -97,6 +97,16 @@ export const supplement_get_rules = [
     .withMessage(errorMessageValidator.isString("description")),
 ];
 
+export const supplement_get_search_rules = [
+  query("search")
+    .isString()
+    .withMessage(errorMessageValidator.isString("search"))
+    .isLength({ min: 3 })
+    .withMessage(errorMessageValidator.isLengthMin("search", 3))
+    .trim()
+    .escape(),
+];
+
 export const supplement_put_rules = [
   param("idSupplement")
     .notEmpty()

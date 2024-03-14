@@ -43,6 +43,16 @@ export type IResponse_supplement_get =
   | IResponse_supplement_getOAll;
 
 /**
+ GET: /supplement/search?search=
+ */
+export interface IRequest_supplement_get_search {
+  search?: string;
+}
+export interface IResponse_supplement_get_search {
+  supplements: ISupplement[];
+}
+
+/**
  PUT: /supplement/:idSupplement/
  */
 export interface IRequest_supplement_put_params {

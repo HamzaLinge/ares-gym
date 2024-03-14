@@ -6,6 +6,7 @@ import {
   IRequest_supplement_file_delete,
   IRequest_supplement_files_put,
   IRequest_supplement_get,
+  IRequest_supplement_get_search,
   IRequest_supplement_post,
   IRequest_supplement_put_body,
   IRequest_supplement_put_params,
@@ -13,16 +14,17 @@ import {
   IResponse_supplement_file_delete,
   IResponse_supplement_files_put,
   IResponse_supplement_get,
+  IResponse_supplement_get_search,
   IResponse_supplement_post,
   IResponse_supplement_put,
 } from "./supplement.type";
 
-import SupplementModel, { ISupplement } from "../../models/Supplement";
-import CommandModel, { ICommand } from "../../models/Command";
 import { ICategory } from "../../models/Category";
+import CommandModel, { ICommand } from "../../models/Command";
+import SupplementModel, { ISupplement } from "../../models/Supplement";
 
-import { deleteFile } from "../../utils/file.util";
 import { HttpStatusCodes } from "../../utils/error.util";
+import { deleteFile } from "../../utils/file.util";
 import { parseQueryParams } from "../../utils/obj.util";
 
 export async function supplement_post_controller(
@@ -80,6 +82,36 @@ export async function supplement_get_controller(
 
     res.status(HttpStatusCodes.OK).send({ supplements });
   }
+}
+
+export async function supplement_get_search_controller(
+  req: Request<any, any, any, IRequest_supplement_get_search>,
+  res: Response<IResponse_supplement_get_search>,
+  next: NextFunction,
+) {
+  if (!req.query.search) {
+    return next(
+      new CustomError(
+        "The 'search' query parameter is missing",
+        HttpStatusCodes.BAD_REQUEST,
+      ),
+    );
+  }
+
+  const supplements = await SupplementModel.find({
+    name: { $regex: req.query.search, $options: "i" },
+  });
+
+  if (!supplements || supplements.length === 0) {
+    return next(
+      new CustomError(
+        `There are no supplements found matching with '${req.query.search}'`,
+        HttpStatusCodes.NOT_FOUND,
+      ),
+    );
+  }
+
+  res.status(HttpStatusCodes.OK).send({ supplements });
 }
 
 export async function supplement_put_controller(
