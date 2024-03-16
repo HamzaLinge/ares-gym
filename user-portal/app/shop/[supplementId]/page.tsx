@@ -1,4 +1,5 @@
 import { getSupplementById } from "@/actions/supplement";
+import AddToCart from "@/app/shop/components/add-to-cart";
 import RelatedSupplements from "@/app/shop/components/related-supplements";
 import ThumbnailsCarousel from "@/app/shop/components/thumbnails-carousel";
 import {
@@ -9,7 +10,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -74,9 +74,7 @@ export default async function SupplementPage({
           <HeartIcon className="h-5 w-5" />
           <span>Do you like it?</span>
         </p>
-        <Button className="h-14 w-full uppercase tracking-wide" size={"lg"}>
-          Add to Chart
-        </Button>
+        <AddToCart supplement={supplement} />
       </div>
       <Tabs defaultValue="description" className="w-full">
         <TabsList className="w-full">
