@@ -104,3 +104,15 @@ export function getFileUrl(
     return `${baseURL}/file/${idFile[index]}`;
   return "/default-supplement-thumbnail.jpg";
 }
+
+export const formatPrice = (
+  price: number,
+  currency = "DZD",
+  locale = "fr-DZ",
+) => {
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: currency,
+    currencyDisplay: "narrowSymbol", // Options are "symbol", "narrowSymbol", "code", or "name"
+  }).format(price);
+};

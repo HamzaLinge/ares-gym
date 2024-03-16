@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { TSupplement } from "@/types/supplement";
 import Link from "next/link";
-import { getFileUrl } from "@/utils/helpers";
+import { formatPrice, getFileUrl } from "@/utils/helpers";
 
 export default function ShopCard({ supplement }: { supplement: TSupplement }) {
   return (
@@ -38,7 +38,7 @@ export default function ShopCard({ supplement }: { supplement: TSupplement }) {
         <Link href={`/shop/${supplement._id}`}>
           <h3 className="font-semibold capitalize">{supplement.name}</h3>
         </Link>
-        <p>{supplement.price} DZD</p>
+        <p>{formatPrice(supplement.price)}</p>
       </div>
     </div>
   );

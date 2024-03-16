@@ -2,7 +2,7 @@
 
 import { getSupplementsBySearchItem } from "@/actions/supplement";
 import LoadingUI from "@/components/loading-ui";
-import SearchCard from "@/components/navigation-menu/menu/search-card";
+import SearchSupplementCard from "@/components/navigation-menu/menu/search-supplement-card";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -132,7 +132,7 @@ function Search() {
               </p>
             ) : (
               supplements.map((supplement) => (
-                <SearchCard
+                <SearchSupplementCard
                   key={supplement._id}
                   supplement={supplement}
                   callback={callback}

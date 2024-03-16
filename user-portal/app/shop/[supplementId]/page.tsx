@@ -18,7 +18,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { formatPrice } from "@/utils/helpers";
 import { HeartIcon } from "@radix-ui/react-icons";
+import Link from "next/link";
 
 export default async function SupplementPage({
   params: { supplementId },
@@ -38,19 +40,25 @@ export default async function SupplementPage({
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+              <BreadcrumbLink asChild>
+                <Link href="/">Home</Link>
+              </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink href="/shop">Shop</BreadcrumbLink>
+              <BreadcrumbLink asChild>
+                <Link href="/shop">Shop</Link>
+              </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink
-                href={`/shop?category=${categoryId}`}
-                className="capitalize"
-              >
-                {categoryName}
+              <BreadcrumbLink asChild>
+                <Link
+                  href={`/shop?category=${categoryId}`}
+                  className="capitalize"
+                >
+                  {categoryName}
+                </Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
@@ -67,7 +75,7 @@ export default async function SupplementPage({
       </div>
       <div className="w-full">
         <p className="text-3xl">{supplement.name.toUpperCase()}</p>
-        <p>{supplement.price} DZD</p>
+        <p>{formatPrice(supplement.price)}</p>
       </div>
       <div className="flex w-full flex-col items-end gap-y-4">
         <p className="flex items-center gap-x-2 hover:cursor-pointer">

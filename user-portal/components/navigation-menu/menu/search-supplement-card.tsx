@@ -5,7 +5,7 @@ import { getFileUrl } from "@/utils/helpers";
 import Image from "next/image";
 import Link from "next/link";
 
-function SearchCard({
+function SearchSupplementCard({
   supplement,
   callback,
 }: {
@@ -37,4 +37,4 @@ function SearchCard({
   );
 }
 
-export default SearchCard;
+export default SearchSupplementCard;
