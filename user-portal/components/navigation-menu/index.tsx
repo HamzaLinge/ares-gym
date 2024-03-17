@@ -16,7 +16,7 @@ export default async function LayoutNavigationMenu() {
   ];
 
   return (
-    <header className="grid grid-cols-3 items-center justify-items-center gap-2 px-6 py-2 shadow-md">
+    <header className="bg-background sticky left-0 top-0 z-10 grid grid-cols-3 items-center justify-items-center gap-2 px-6 py-2 shadow-md">
       <NavMobile links={navLinks} />
       <NavMobileBottom />
       <p>Logo</p>

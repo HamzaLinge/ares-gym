@@ -25,13 +25,14 @@ function ShoppingCartSupplementCard({
           />
         </div>
       </Link>
-      <div className="flex grow items-center justify-between">
+      <div className="flex grow flex-col text-sm">
         <Link href={`/shop/${supplement._id}`} onClick={callback}>
           <h3 className="font-semibold capitalize">{supplement.name}</h3>
         </Link>
-        <p className="text-sm">
-          {supplement.quantity} x {formatPrice(supplement.price)}
-        </p>
+        <div className="flex items-center justify-between gap-x-2">
+          <p>{formatPrice(supplement.price)}</p>
+          <p>x {supplement.quantity}</p>
+        </div>
       </div>
     </div>
   );

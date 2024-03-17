@@ -1,7 +1,11 @@
+import TitlePage from "@/components/title-page";
+import CartReview from "./components/cart-review";
+
 function CheckoutPage() {
   return (
-    <section>
-      <p>Checkout Page</p>
+    <section className="space-y-6 p-2">
+      <TitlePage title="Checkout" />
+      <CartReview />
     </section>
   );
 }

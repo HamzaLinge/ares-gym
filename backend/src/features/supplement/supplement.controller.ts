@@ -63,7 +63,7 @@ export async function supplement_get_controller(
     res.status(HttpStatusCodes.OK).send({ supplement });
   } else {
     const { filter, sortBy, skip, limit } = parseQueryParams(req.query);
-    console.log({ filter, sortBy, skip, limit });
+    // console.log({ filter, sortBy, skip, limit });
 
     const supplements: ISupplement[] = await SupplementModel.find(filter)
       .populate<{ category: ICategory }>({ path: "category" })

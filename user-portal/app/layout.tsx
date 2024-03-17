@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn("", lato.className)}>
+      <body className={cn("pb-20 lg:pb-10", lato.className)}>
         <CartStoreProvider>
           <LayoutNavigationMenu />
           <main>{children}</main>
