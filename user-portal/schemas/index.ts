@@ -20,3 +20,21 @@ export const SearchSchema = z.object({
     message: "Search must be at least 3 characters.",
   }),
 });
+
+export const ShippingSchema = z.object({
+  firstName: z.string().min(1, {
+    message: "First Name must be provided.",
+  }),
+  lastName: z.string().min(1, {
+    message: "Last Name must be provided.",
+  }),
+  phone: z.string().min(8, {
+    message: "Please, enter a valid Phone Number.",
+  }),
+  wilaya: z.string().min(1, {
+    message: "Wilaya must be provided.",
+  }),
+  address: z.string().min(1, {
+    message: "Address must be provided.",
+  }),
+});

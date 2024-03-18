@@ -2,6 +2,8 @@ import { TCartSupplement } from "@/lib/store/cart-store";
 import { formatPrice, getFileUrl } from "@/utils/helpers";
 import Link from "next/link";
 import Image from "next/image";
+import CartReviewUpdate from "@/app/(purchase)/cart-review/components/cart-review-update";
+import CartReviewDelete from "@/app/(purchase)/cart-review/components/cart-review-delete";
 
 function CartReviewCard({
   cartSupplement,
@@ -24,7 +26,15 @@ function CartReviewCard({
         </div>
       </Link>
       <div className="flex grow flex-col text-sm">
-        <h3 className="font-semibold capitalize">{cartSupplement.name}</h3>
+        <div className="flex items-center justify-between gap-x-2">
+          <h3 className="grow font-semibold capitalize">
+            {cartSupplement.name}
+          </h3>
+          <div className="flex items-center gap-x-1">
+            <CartReviewDelete cartSupplement={cartSupplement} />
+            <CartReviewUpdate cartSupplement={cartSupplement} />
+          </div>
+        </div>
         <div className="flex justify-between gap-x-2">
           <p>{formatPrice(cartSupplement.price)}</p>
           <div className="flex flex-col items-end">

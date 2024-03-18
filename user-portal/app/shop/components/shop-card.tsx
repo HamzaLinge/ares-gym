@@ -10,7 +10,7 @@ export default function ShopCard({ supplement }: { supplement: TSupplement }) {
         <div className={"group relative aspect-square w-full overflow-hidden"}>
           <Image
             src={getFileUrl(supplement.thumbnails)}
-            alt={supplement.name}
+            alt={""}
             fill={true}
             style={{ objectFit: "cover" }}
             sizes={
@@ -22,7 +22,7 @@ export default function ShopCard({ supplement }: { supplement: TSupplement }) {
           />
           <Image
             src={getFileUrl(supplement.thumbnails, 1)}
-            alt={supplement.name}
+            alt={""}
             fill={true}
             style={{ objectFit: "cover" }}
             sizes={

@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/lib/store/cart-store-provider";
 import { HiOutlineShoppingCart } from "react-icons/hi";
+import { HiShoppingCart } from "react-icons/hi2";
 import {
   MdOutlineShoppingCartCheckout,
   MdCleaningServices,
@@ -82,14 +83,14 @@ function ShoppingCart() {
           </div>
           {shoppingCartSupplements.length > 0 && (
             <div className="flex w-full flex-col gap-y-2">
-              <Link href="/checkout">
+              <Link href="/cart-review">
                 <Button
                   size="lg"
                   className="w-full space-x-2"
                   onClick={() => setOpen(false)}
                 >
-                  <MdOutlineShoppingCartCheckout className="h-5 w-5" />
-                  <span>Checkout</span>
+                  <HiShoppingCart className="h-5 w-5" />
+                  <span>Cart Review</span>
                 </Button>
               </Link>
               <Button

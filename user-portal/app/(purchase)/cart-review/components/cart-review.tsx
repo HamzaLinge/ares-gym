@@ -44,6 +44,11 @@ function CartReview() {
         <span>TOTAL:</span>
         <span>{formatPrice(totalPrice)}</span>
       </p>
+      <Link href="/checkout">
+        <Button size={"lg"} className="h-14 w-full">
+          Proceed to Checkout
+        </Button>
+      </Link>
     </div>
   );
 }

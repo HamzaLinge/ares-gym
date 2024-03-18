@@ -1,13 +1,12 @@
 import TitlePage from "@/components/title-page";
 import CartReview from "./components/cart-review";
 
-function CheckoutPage() {
+function CartReviewPage() {
   return (
     <section className="space-y-6 p-2">
-      <TitlePage title="Checkout" />
       <CartReview />
     </section>
   );
 }
 
-export default CheckoutPage;
+export default CartReviewPage;
