@@ -2,6 +2,7 @@ import { Document, PopulatedDoc, Types } from "mongoose";
 
 import { CommandStatus, ICommand } from "../../models/Command";
 import { ISupplement } from "../../models/Supplement";
+import { PaymentMethod } from "../../models/Payment";
 
 // Supplement Property for Command --------------------------------------------------------------------------------
 export type SupplementObject = {
@@ -14,7 +15,15 @@ export type SupplementObject = {
  */
 export interface IRequest_command_post {
   supplements: SupplementObject[];
-  shippedAddress?: String;
+  shipping: {
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    wilaya: string;
+    address: string;
+    dateShipped?: Date;
+  };
+  payment: { method: PaymentMethod };
   discount?: string;
   note?: string;
 }

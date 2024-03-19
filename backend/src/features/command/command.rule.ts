@@ -1,6 +1,7 @@
 import { body, param, query } from "express-validator";
 import { errorMessageValidator } from "../../utils/error.util";
 import { CommandStatus } from "../../models/Command";
+import { PaymentMethod } from "../../models/Payment";
 
 export const command_post_rules = [
   body("supplements")
@@ -18,10 +19,35 @@ export const command_post_rules = [
     .isMongoId()
     .withMessage(errorMessageValidator.isMongoId("discount")),
 
-  body("shippedAddress")
-    .optional({ values: "falsy" })
+  body("shipping.firstName")
+    .isString()
+    .withMessage(errorMessageValidator.isString("shipping first name")),
+  body("shipping.lastName")
+    .isString()
+    .withMessage(errorMessageValidator.isString("shipping last name")),
+  body("shipping.phoneNumber")
+    .isString()
+    .withMessage(errorMessageValidator.isString("shipping phone number")),
+  body("shipping.wilaya")
+    .isString()
+    .withMessage(errorMessageValidator.isString("shipping wilaya")),
+  body("shipping.address")
     .isString()
     .withMessage(errorMessageValidator.isString("shipping address")),
+
+  body("payment.method")
+    .isString()
+    .withMessage(errorMessageValidator.isString("payment method"))
+    .isIn(Object.values(PaymentMethod))
+    .withMessage(
+      errorMessageValidator.isIn(
+        "payment method",
+        Object.values(PaymentMethod),
+      ),
+    ),
+  // body("payment.amount")
+  //   .isInt({ min: 1000 })
+  //   .withMessage(errorMessageValidator.isIntMin("payment amount", 1000)),
 
   body("note")
     .optional({ values: "falsy" })

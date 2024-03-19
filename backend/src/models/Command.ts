@@ -20,12 +20,18 @@ export enum CommandStatus {
 }
 
 export interface ICommand extends Document {
-  user: PopulatedDoc<Document<Types.ObjectId> & IUser>;
+  user?: PopulatedDoc<Document<Types.ObjectId> & IUser>;
   supplements: SupplementObject[];
   discount?: PopulatedDoc<Document<Types.ObjectId> & IDiscount>;
   status: CommandStatus;
-  shippedAddress?: string;
-  dateShipped?: Date;
+  shipping: {
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    wilaya: string;
+    address: string;
+    dateShipped?: Date;
+  };
   dateDelivered?: Date;
   trackingNumber?: string;
   note?: string;
@@ -38,7 +44,7 @@ type TCommand = Model<ICommand>;
 
 const commandSchema = new Schema<ICommand, TCommand>(
   {
-    user: { type: Schema.Types.ObjectId, ref: "users", required: true },
+    user: { type: Schema.Types.ObjectId, ref: "users" },
     supplements: {
       type: [
         {
@@ -55,7 +61,6 @@ const commandSchema = new Schema<ICommand, TCommand>(
     discount: {
       type: Schema.Types.ObjectId,
       ref: "discounts",
-      required: false,
     },
     status: {
       type: String,
@@ -63,8 +68,17 @@ const commandSchema = new Schema<ICommand, TCommand>(
       default: CommandStatus.PENDING,
       required: true,
     },
-    shippedAddress: { type: String },
-    dateShipped: { type: Date },
+    shipping: {
+      type: {
+        firstName: { type: String, required: true },
+        lastName: { type: String, required: true },
+        phoneNumber: { type: String, required: true },
+        wilaya: { type: String, required: true },
+        address: { type: String, required: true },
+        dateShipped: { type: Date, default: Date.now },
+      },
+      required: true,
+    },
     dateDelivered: { type: Date },
     trackingNumber: { type: String },
     note: { type: String },

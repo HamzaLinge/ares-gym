@@ -18,33 +18,20 @@ import SupplementModel, { ISupplement } from "../../models/Supplement";
 import { capitalize } from "../../utils/string.util";
 import { HttpStatusCodes } from "../../utils/error.util";
 import { Roles } from "../authentication/auth.type";
+import PaymentModel, { IPayment } from "../../models/Payment";
 
 export async function command_post_controller(
   req: Request<any, any, IRequest_command_post>,
   res: Response<IResponse_command_post>,
   next: NextFunction,
 ) {
-  if (req.body.discount) {
-    const discount: IDiscount | null = await DiscountModel.findById(
-      req.body.discount,
-    );
-    if (!discount) {
-      return next(
-        new CustomError("Discount not found", HttpStatusCodes.NOT_FOUND),
-      );
-    }
-    const dateNow = new Date();
-    const dateBegin = new Date(discount.dateBegin);
-    const dateEnd = new Date(discount.dateEnd);
-    if (dateNow < dateBegin || dateNow > dateEnd) {
-      return next(
-        new CustomError(
-          "Discount is either expired or not yet valid",
-          HttpStatusCodes.CONFLICT,
-        ),
-      );
-    }
-  }
+  let commandInputs: Partial<ICommand> = {
+    shipping: req.body.shipping,
+  };
+  let paymentInputs: Partial<IPayment> = {
+    method: req.body.payment.method,
+  };
+
   for (let i = 0; i < req.body.supplements.length; i++) {
     const supplement: ISupplement | null = await SupplementModel.findById(
       req.body.supplements[i].data,
@@ -65,16 +52,43 @@ export async function command_post_controller(
         ),
       );
     }
+    paymentInputs.amount = (paymentInputs.amount || 0) + supplement.price;
   }
-  const createdCommand: ICommand = await CommandModel.create({
-    user: req.user?._id,
-    ...req.body,
-  });
-  // const command = (await CommandModel.findById(createdCommand._id)
-  //   .populate<{ "supplements.data": ISupplement }>({
-  //     path: "supplements.data",
-  //   })
-  //   .populate<{ discount: IDiscount }>({ path: "discount" })) as ICommand;
+
+  commandInputs.supplements = req.body.supplements;
+
+  if (req.body.discount) {
+    const discount: IDiscount | null = await DiscountModel.findById(
+      req.body.discount,
+    );
+    if (!discount) {
+      return next(
+        new CustomError("Discount not found", HttpStatusCodes.NOT_FOUND),
+      );
+    }
+    const dateNow = new Date();
+    const dateBegin = new Date(discount.dateBegin);
+    const dateEnd = new Date(discount.dateEnd);
+    if (dateNow < dateBegin || dateNow > dateEnd) {
+      return next(
+        new CustomError(
+          "Discount is either expired or not yet valid",
+          HttpStatusCodes.CONFLICT,
+        ),
+      );
+    }
+    commandInputs.discount = req.body.discount;
+    paymentInputs.amount =
+      (paymentInputs.amount as number) * discount.percentage;
+  }
+
+  if (req.body.note) {
+    commandInputs.note = req.body.note;
+  }
+
+  const createdCommand: ICommand = await CommandModel.create(commandInputs);
+  paymentInputs.command = createdCommand._id;
+  await PaymentModel.create(paymentInputs);
 
   res.status(HttpStatusCodes.CREATED).send({ command: createdCommand });
 }

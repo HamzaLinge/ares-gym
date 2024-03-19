@@ -51,4 +51,6 @@ export const errorMessageValidator = {
     `Do not use a common word as the ${name}`,
   invalidValue: (name: string): string =>
     `Please, choose a valid value for ${capitalize(name)}`,
+  isIn: (name: string, values: string[]) =>
+    `${capitalize(name)} must be one of the following values: ${values.join(", ")}`,
 };

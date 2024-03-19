@@ -25,26 +25,33 @@ import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
 import { z } from "zod";
+import FormStepper from "./form-stepper";
 
 type Inputs = z.infer<typeof ShippingSchema>;
 
 const steps = [
   {
-    id: "Step 1",
     name: "Shipping",
     fields: ["firstName", "lastName", "phone", "wilaya", "address"],
   },
   {
-    id: "Step 2",
-    name: "Address",
+    name: "Billing",
     fields: [],
   },
-  { id: "Step 3", name: "Complete" },
+  { name: "Complete" },
 ];
+
+enum PaymentMethods {
+  CASH_ON_DELIVERY = "CASH_ON_DELIVERY",
+  EDAHABIA_CARD = "EDAHABIA_CARD",
+}
 
 function FormCheckout() {
   const [previousStep, setPreviousStep] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethods>(
+    PaymentMethods.CASH_ON_DELIVERY,
+  );
   const delta = currentStep - previousStep;
 
   const form = useForm<Inputs>({
@@ -52,7 +59,7 @@ function FormCheckout() {
     defaultValues: {
       firstName: "",
       lastName: "",
-      phone: "",
+      phoneNumber: "",
       wilaya: "",
       address: "",
     },
@@ -87,55 +94,16 @@ function FormCheckout() {
 
   const processForm: SubmitHandler<Inputs> = (data) => {
     console.log(data);
-    form.reset();
+    // form.reset();
   };
 
   return (
-    <div className="flex-1 space-y-12 px-10 py-4">
+    <div className="flex-1 space-y-12 overflow-hidden px-10 py-4">
       {/* Steps */}
-      <nav aria-label="Progress">
-        <ol role="list" className="flex space-x-4 md:space-x-8">
-          {steps.map((step, index) => (
-            <li key={step.name} className="md:flex-1">
-              {currentStep > index ? (
-                <div className="group flex w-full flex-col border-l-4 border-sky-600 py-2 pl-4 transition-colors md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
-                  <span className="text-sm font-medium text-sky-600 transition-colors ">
-                    {step.id}
-                  </span>
-                  <span className="text-sm font-medium">{step.name}</span>
-                </div>
-              ) : currentStep === index ? (
-                <div
-                  className="flex w-full flex-col border-l-4 border-sky-600 py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4"
-                  aria-current="step"
-                >
-                  <span className="text-sm font-medium text-sky-600">
-                    {step.id}
-                  </span>
-                  <span className="text-sm font-medium">{step.name}</span>
-                </div>
-              ) : (
-                <div className="group flex w-full flex-col border-l-4 border-gray-200 py-2 pl-4 transition-colors md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
-                  <span className="text-sm font-medium text-gray-500 transition-colors">
-                    {step.id}
-                  </span>
-                  <span className="text-sm font-medium">{step.name}</span>
-                </div>
-              )}
-            </li>
-          ))}
-        </ol>
-      </nav>
-
-      {/* mobile screen: prev and next button */}
-      <div className="flex w-full items-center justify-center gap-x-8 md:hidden">
-        <Button variant={"outline"} size="icon" onClick={prev}>
-          <HiChevronLeft className="h-7 w-7" />
-        </Button>
-        <Button variant={"outline"} size="icon" onClick={next}>
-          <HiChevronRight className="h-7 w-7" />
-        </Button>
-      </div>
+      <FormStepper
+        currentStep={currentStep}
+        steps={steps.map((step) => ({ name: step.name }))}
+      />
 
       {/* Form */}
       <Form {...form}>
@@ -186,7 +154,7 @@ function FormCheckout() {
               </div>
               <FormField
                 control={form.control}
-                name="phone"
+                name="phoneNumber"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Phone Number</FormLabel>
@@ -263,15 +231,43 @@ function FormCheckout() {
               transition={{ duration: 0.3, ease: "easeInOut" }}
             >
               <h2>Billing Information</h2>
+              <div>
+                <div className="flex items-center">
+                  <p
+                    onClick={() =>
+                      setPaymentMethod(PaymentMethods.CASH_ON_DELIVERY)
+                    }
+                  >
+                    Cash on Delivery
+                  </p>
+                  <p
+                    onClick={() =>
+                      setPaymentMethod(PaymentMethods.EDAHABIA_CARD)
+                    }
+                  >
+                    EDAHABIYA Card
+                  </p>
+                </div>
+                {paymentMethod === PaymentMethods.CASH_ON_DELIVERY && (
+                  <div>
+                    <p>You're gonna pay with cash on delivery</p>
+                  </div>
+                )}
+              </div>
             </motion.div>
           )}
         </form>
       </Form>
-      <div className="hidden w-full items-center justify-between gap-x-2 md:flex">
-        <Button variant={"outline"} size="icon" onClick={prev}>
+      <div className="flex w-full items-center justify-between gap-x-2">
+        <Button
+          variant={"outline"}
+          size="lg"
+          onClick={prev}
+          disabled={currentStep === 0}
+        >
           <HiChevronLeft className="h-7 w-7" />
         </Button>
-        <Button variant={"outline"} size="icon" onClick={next}>
+        <Button variant={"outline"} size="lg" onClick={next}>
           <HiChevronRight className="h-7 w-7" />
         </Button>
       </div>

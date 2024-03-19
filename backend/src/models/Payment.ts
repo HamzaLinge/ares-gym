@@ -17,7 +17,7 @@ export enum PaymentStatus {
 }
 
 export interface IPayment extends Document {
-  command?: PopulatedDoc<Document<Types.ObjectId> & ICommand>;
+  command: PopulatedDoc<Document<Types.ObjectId> & ICommand>;
   method: PaymentMethod;
   status: PaymentStatus;
   transactionId?: string; // This can be provided by Chargily for Edahabia payments

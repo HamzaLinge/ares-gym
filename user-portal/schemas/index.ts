@@ -28,7 +28,7 @@ export const ShippingSchema = z.object({
   lastName: z.string().min(1, {
     message: "Last Name must be provided.",
   }),
-  phone: z.string().min(8, {
+  phoneNumber: z.string().min(8, {
     message: "Please, enter a valid Phone Number.",
   }),
   wilaya: z.string().min(1, {
