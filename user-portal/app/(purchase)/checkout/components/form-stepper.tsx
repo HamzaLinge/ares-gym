@@ -4,8 +4,6 @@ type TFormStepper = {
 };
 
 function FormStepper({ currentStep = 0, steps }: TFormStepper) {
-  console.log({ currentStep });
-
   return (
     <nav aria-label="Progress">
       <ol

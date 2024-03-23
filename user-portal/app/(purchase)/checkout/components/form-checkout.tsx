@@ -18,25 +18,48 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ShippingSchema } from "@/schemas";
+import { OrderSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { GiTakeMyMoney, GiSwipeCard } from "react-icons/gi";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
 import { z } from "zod";
 import FormStepper from "./form-stepper";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { useCartStore } from "@/lib/store/cart-store-provider";
+import { formatPrice } from "@/utils/helpers";
+import { orderCommand } from "@/actions/order";
+import LoadingUI from "@/components/loading-ui";
+import { toast } from "sonner";
+import { TCommand } from "@/types/order";
+import Link from "next/link";
 
-type Inputs = z.infer<typeof ShippingSchema>;
+type Inputs = z.infer<typeof OrderSchema>;
+type FieldName = keyof Inputs;
 
 const steps = [
   {
     name: "Shipping",
-    fields: ["firstName", "lastName", "phone", "wilaya", "address"],
+    fields: [
+      "shipping.firstName",
+      "shipping.lastName",
+      "shipping.phone",
+      "shipping.wilaya",
+      "shipping.address",
+    ],
   },
   {
     name: "Billing",
-    fields: [],
   },
   { name: "Complete" },
 ];
@@ -46,30 +69,53 @@ enum PaymentMethods {
   EDAHABIA_CARD = "EDAHABIA_CARD",
 }
 
+const DELIVERY_PRICE = 600;
+
 function FormCheckout() {
+  const cartSupplements = useCartStore((state) => state.supplements);
+  const clearCartSupplements = useCartStore((state) => state.clearCart);
+
   const [previousStep, setPreviousStep] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethods>(
-    PaymentMethods.CASH_ON_DELIVERY,
-  );
   const delta = currentStep - previousStep;
 
+  const [isPending, startTransition] = useTransition();
+
+  const totalPriceSupplement = cartSupplements.reduce(
+    (accumulator, { price, quantity }) =>
+      (accumulator = accumulator + price * quantity),
+    0,
+  );
+
+  const [orderedCommand, setOrderedCommand] = useState<TCommand | null>(null);
+
   const form = useForm<Inputs>({
-    resolver: zodResolver(ShippingSchema),
+    resolver: zodResolver(OrderSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      phoneNumber: "",
-      wilaya: "",
-      address: "",
+      // supplements: orderedSupplements,
+      payment: { method: PaymentMethods.CASH_ON_DELIVERY },
+      shipping: {
+        firstName: "",
+        lastName: "",
+        phoneNumber: "",
+        wilaya: "",
+        address: "",
+      },
     },
   });
 
-  type FieldName = keyof Inputs;
+  useEffect(() => {
+    if (cartSupplements && cartSupplements.length > 0) {
+      const orderedSupplements = cartSupplements.map(({ _id, quantity }) => ({
+        data: _id,
+        quantity,
+      }));
+      form.setValue("supplements", orderedSupplements);
+    }
+  }, [cartSupplements]);
 
   const next = async () => {
     const fields = steps[currentStep].fields;
-
     const output = await form.trigger(fields as FieldName[], {
       shouldFocus: true,
     });
@@ -78,7 +124,8 @@ function FormCheckout() {
 
     if (currentStep < steps.length - 1) {
       if (currentStep === steps.length - 2) {
-        await form.handleSubmit(processForm)();
+        // await form.handleSubmit(processForm)();
+        form.handleSubmit(processForm)();
       }
       setPreviousStep(currentStep);
       setCurrentStep((step) => step + 1);
@@ -94,8 +141,21 @@ function FormCheckout() {
 
   const processForm: SubmitHandler<Inputs> = (data) => {
     console.log(data);
-    // form.reset();
+    startTransition(async () => {
+      const res = await orderCommand(data);
+      if (!res.success) {
+        toast.error(res.error.message);
+      } else {
+        setOrderedCommand(res.data.command);
+        clearCartSupplements();
+        form.reset();
+      }
+    });
   };
+
+  if (cartSupplements.length === 0) {
+    return <section>Your shopping cart is empty</section>;
+  }
 
   return (
     <div className="flex-1 space-y-12 overflow-hidden px-10 py-4">
@@ -121,7 +181,7 @@ function FormCheckout() {
               <div className="flex flex-col gap-y-2">
                 <FormField
                   control={form.control}
-                  name="firstName"
+                  name="shipping.firstName"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>First Name</FormLabel>
@@ -137,7 +197,7 @@ function FormCheckout() {
                 />
                 <FormField
                   control={form.control}
-                  name="lastName"
+                  name="shipping.lastName"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Last Name</FormLabel>
@@ -154,7 +214,7 @@ function FormCheckout() {
               </div>
               <FormField
                 control={form.control}
-                name="phoneNumber"
+                name="shipping.phoneNumber"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Phone Number</FormLabel>
@@ -172,7 +232,7 @@ function FormCheckout() {
               <div>
                 <FormField
                   control={form.control}
-                  name="wilaya"
+                  name="shipping.wilaya"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Wiliaya</FormLabel>
@@ -201,7 +261,7 @@ function FormCheckout() {
                 />
                 <FormField
                   control={form.control}
-                  name="address"
+                  name="shipping.address"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Address</FormLabel>
@@ -223,6 +283,7 @@ function FormCheckout() {
               </div>
             </motion.div>
           )}
+
           {/* Billing */}
           {currentStep === 1 && (
             <motion.div
@@ -230,44 +291,127 @@ function FormCheckout() {
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
             >
-              <h2>Billing Information</h2>
-              <div>
-                <div className="flex items-center">
-                  <p
-                    onClick={() =>
-                      setPaymentMethod(PaymentMethods.CASH_ON_DELIVERY)
-                    }
+              <h2 className="mb-2 text-base font-semibold leading-relaxed text-gray-900">
+                Billing Information
+              </h2>
+              <Tabs defaultValue="cash_on_delivery">
+                <TabsList className="flex w-full items-center">
+                  <TabsTrigger
+                    value="cash_on_delivery"
+                    className="grow space-x-2"
                   >
-                    Cash on Delivery
-                  </p>
-                  <p
-                    onClick={() =>
-                      setPaymentMethod(PaymentMethods.EDAHABIA_CARD)
-                    }
+                    <GiTakeMyMoney className="h-5 w-5" />
+                    <span>Cash</span>
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="EDAHABIYA"
+                    disabled
+                    className="grow space-x-2"
                   >
-                    EDAHABIYA Card
-                  </p>
-                </div>
-                {paymentMethod === PaymentMethods.CASH_ON_DELIVERY && (
-                  <div>
-                    <p>You're gonna pay with cash on delivery</p>
-                  </div>
-                )}
-              </div>
+                    <GiSwipeCard className="h-5 w-5" />
+                    <span>Edahabiya</span>
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent value="cash_on_delivery">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Cash on Delivery</CardTitle>
+                      <CardDescription>
+                        You will have to hand over the agreed sum to the
+                        deliveryman who will bring your order to you.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="w-full space-y-1">
+                        <p className="flex items-center justify-between gap-x-1">
+                          <span className="text-sm">Supplement Prices:</span>
+                          <span className="text-sm font-medium">
+                            {formatPrice(totalPriceSupplement)}
+                          </span>
+                        </p>
+                        <p className="flex items-center justify-between gap-x-1">
+                          <span className="text-sm">Delivery Price:</span>
+                          <span className="text-sm font-medium">
+                            {formatPrice(DELIVERY_PRICE)}
+                          </span>
+                        </p>
+                      </div>
+                    </CardContent>
+                    <CardFooter>
+                      <p className="flex w-full items-center justify-between gap-x-1">
+                        <span className="text-sm">Total:</span>
+                        <span className="text-sm font-semibold">
+                          {formatPrice(totalPriceSupplement + DELIVERY_PRICE)}
+                        </span>
+                      </p>
+                    </CardFooter>
+                  </Card>
+                </TabsContent>
+                <TabsContent value="EDAHABIYA">
+                  Change your password here.
+                </TabsContent>
+              </Tabs>
             </motion.div>
+          )}
+
+          {/* Complete */}
+          {currentStep === 2 && (
+            <div>
+              {isPending ? (
+                <LoadingUI />
+              ) : (
+                orderedCommand && (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Order Completed</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div>
+                        <p className="flex w-full items-center justify-between gap-x-1">
+                          <span>Tracking Number:</span>
+                          <span>{orderedCommand.trackingNumber}</span>
+                        </p>
+                        <p className="flex w-full items-center justify-between gap-x-1">
+                          <span>Status:</span>
+                          <span>{orderedCommand.status}</span>
+                        </p>
+                      </div>
+                    </CardContent>
+                    <CardFooter>
+                      <Link href="/shop">
+                        <Button
+                          variant="outline"
+                          size={"lg"}
+                          className="w-full"
+                        >
+                          Go to Shop
+                        </Button>
+                      </Link>
+                    </CardFooter>
+                  </Card>
+                )
+              )}
+            </div>
           )}
         </form>
       </Form>
+
+      {/* Navigation */}
       <div className="flex w-full items-center justify-between gap-x-2">
         <Button
           variant={"outline"}
           size="lg"
           onClick={prev}
-          disabled={currentStep === 0}
+          disabled={currentStep === 0 || isPending}
         >
           <HiChevronLeft className="h-7 w-7" />
         </Button>
-        <Button variant={"outline"} size="lg" onClick={next}>
+        <Button
+          variant={"outline"}
+          size="lg"
+          onClick={next}
+          disabled={isPending}
+        >
           <HiChevronRight className="h-7 w-7" />
         </Button>
       </div>

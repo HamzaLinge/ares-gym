@@ -21,20 +21,31 @@ export const SearchSchema = z.object({
   }),
 });
 
-export const ShippingSchema = z.object({
-  firstName: z.string().min(1, {
-    message: "First Name must be provided.",
+export const OrderSchema = z.object({
+  supplements: z.array(
+    z.object({
+      data: z.string(),
+      quantity: z.number(),
+    }),
+  ),
+  shipping: z.object({
+    firstName: z.string().min(1, {
+      message: "First Name is required.",
+    }),
+    lastName: z.string().min(1, {
+      message: "Last Name is required.",
+    }),
+    phoneNumber: z.string().min(8, {
+      message: "Please, enter a valid Phone Number.",
+    }),
+    wilaya: z.string().min(1, {
+      message: "Wilaya is required.",
+    }),
+    address: z.string().min(1, {
+      message: "Address is required.",
+    }),
   }),
-  lastName: z.string().min(1, {
-    message: "Last Name must be provided.",
-  }),
-  phoneNumber: z.string().min(8, {
-    message: "Please, enter a valid Phone Number.",
-  }),
-  wilaya: z.string().min(1, {
-    message: "Wilaya must be provided.",
-  }),
-  address: z.string().min(1, {
-    message: "Address must be provided.",
-  }),
+  payment: z.object({ method: z.enum(["CASH_ON_DELIVERY", "EDAHABIYA_CARD"]) }),
+  discount: z.string().optional(),
+  note: z.string().optional(),
 });

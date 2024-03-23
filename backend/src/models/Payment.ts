@@ -1,4 +1,12 @@
-import { Document, model, Model, PopulatedDoc, Schema, Types } from "mongoose";
+import {
+  CallbackError,
+  Document,
+  model,
+  Model,
+  PopulatedDoc,
+  Schema,
+  Types,
+} from "mongoose";
 
 import { ICommand } from "./Command";
 
@@ -6,8 +14,9 @@ import { ICommand } from "./Command";
 export enum PaymentMethod {
   CASH_ON_DELIVERY = "CASH_ON_DELIVERY",
   EDAHABIA_CARD = "EDAHABIA_CARD", // Using Chargily for processing
-  // Add more methods here as needed
 }
+
+export const DELIVERY_PRICE = 600;
 
 // Enum for Payment Status
 export enum PaymentStatus {
@@ -50,6 +59,17 @@ const paymentSchema = new Schema<IPayment, TPayment>(
     additionalInfo: { type: Schema.Types.Mixed }, // Flexible field for any method-specific data
   },
   { timestamps: true },
+);
+
+// Add DELIVERY_PRICE to `amount` when cash on delivery is chosen
+paymentSchema.pre<IPayment>(
+  "save",
+  async function (next: (error?: CallbackError) => void) {
+    if (this.method === PaymentMethod.CASH_ON_DELIVERY) {
+      this.amount = this.amount + DELIVERY_PRICE;
+    }
+    next();
+  },
 );
 
 const PaymentModel = model<IPayment, TPayment>("payments", paymentSchema);

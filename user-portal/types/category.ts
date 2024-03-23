@@ -9,5 +9,5 @@ export type TCategory = {
   _id: string;
   name: string;
   description?: string;
-  parent: string;
+  parent?: string;
 };

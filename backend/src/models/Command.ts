@@ -7,6 +7,7 @@ import {
   Schema,
   Types,
 } from "mongoose";
+import { v4 as uuidv4 } from "uuid";
 
 import { IUser } from "./User";
 import { IDiscount } from "./Discount";
@@ -33,7 +34,7 @@ export interface ICommand extends Document {
     dateShipped?: Date;
   };
   dateDelivered?: Date;
-  trackingNumber?: string;
+  trackingNumber: string;
   note?: string;
   canceled?: { date: Date; reason?: string };
   createdAt: Date;
@@ -80,7 +81,7 @@ const commandSchema = new Schema<ICommand, TCommand>(
       required: true,
     },
     dateDelivered: { type: Date },
-    trackingNumber: { type: String },
+    trackingNumber: { type: String, required: true, default: uuidv4 },
     note: { type: String },
     canceled: {
       type: { date: { type: Date, required: true }, reason: { type: String } },

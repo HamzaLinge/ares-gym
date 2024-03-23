@@ -14,11 +14,6 @@ export const command_post_rules = [
     .isInt({ min: 1 })
     .withMessage(errorMessageValidator.isIntMin("Each supplement quantity", 0)),
 
-  body("discount")
-    .optional({ values: "falsy" })
-    .isMongoId()
-    .withMessage(errorMessageValidator.isMongoId("discount")),
-
   body("shipping.firstName")
     .isString()
     .withMessage(errorMessageValidator.isString("shipping first name")),
@@ -45,10 +40,12 @@ export const command_post_rules = [
         Object.values(PaymentMethod),
       ),
     ),
-  // body("payment.amount")
-  //   .isInt({ min: 1000 })
-  //   .withMessage(errorMessageValidator.isIntMin("payment amount", 1000)),
 
+  body("discount")
+    .optional({ values: "falsy" })
+    .isMongoId()
+    .withMessage(errorMessageValidator.isMongoId("discount")),
+    
   body("note")
     .optional({ values: "falsy" })
     .isString()

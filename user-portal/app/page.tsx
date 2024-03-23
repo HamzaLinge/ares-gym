@@ -1,6 +1,6 @@
 export default function Home() {
   return (
-    <section>
+    <section className="p-2">
       <p>Home page</p>
     </section>
   );

@@ -30,8 +30,17 @@ export async function command_post_controller(
   };
   let paymentInputs: Partial<IPayment> = {
     method: req.body.payment.method,
+    amount: 0,
   };
 
+  if (!req.body.supplements || req.body.supplements.length === 0) {
+    return next(
+      new CustomError(
+        `There are no supplements provided`,
+        HttpStatusCodes.BAD_REQUEST,
+      ),
+    );
+  }
   for (let i = 0; i < req.body.supplements.length; i++) {
     const supplement: ISupplement | null = await SupplementModel.findById(
       req.body.supplements[i].data,
@@ -86,8 +95,10 @@ export async function command_post_controller(
     commandInputs.note = req.body.note;
   }
 
+  // console.log({ commandInputs });
   const createdCommand: ICommand = await CommandModel.create(commandInputs);
   paymentInputs.command = createdCommand._id;
+  // console.log({ paymentInputs });
   await PaymentModel.create(paymentInputs);
 
   res.status(HttpStatusCodes.CREATED).send({ command: createdCommand });
