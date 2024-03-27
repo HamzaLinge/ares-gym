@@ -20,10 +20,13 @@ import ShoppingCartSupplementCard from "./shopping-cart-supplement-card";
 import { useState } from "react";
 import Link from "next/link";
 import { formatPrice } from "@/utils/helpers";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 function ShoppingCart() {
   const side = "right";
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
   const { shoppingCartSupplements, clearCart } = useCartStore((state) => ({
     shoppingCartSupplements: state.supplements,
     clearCart: state.clearCart,
@@ -37,7 +40,14 @@ function ShoppingCart() {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant={"ghost"} size={"icon"} className="relative">
+        <Button
+          variant={"ghost"}
+          size={"icon"}
+          className={cn(
+            "relative",
+            pathname.startsWith("/checkout") && "hidden",
+          )}
+        >
           <HiOutlineShoppingCart className="h-7 w-7" />
           <span className="absolute bottom-0 right-0 translate-x-2/3 ">
             ({shoppingCartSupplements.length})

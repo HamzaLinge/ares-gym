@@ -4,15 +4,30 @@ import NavDesktop from "@/components/navigation-menu/navigation/nav-desktop";
 import NavMobile from "@/components/navigation-menu/navigation/nav-mobile";
 import NavMobileBottom from "@/components/navigation-menu/navigation/nav-mobile-bottom";
 import { TLinkNavigation } from "@/types/ui";
+import {
+  HiOutlineHome,
+  HiOutlineShoppingBag,
+  HiOutlineUserGroup,
+  HiOutlineInformationCircle,
+} from "react-icons/hi2";
 
 export default async function LayoutNavigationMenu() {
   const categoryLinks = await getCategoryLinks();
 
   const navLinks: TLinkNavigation[] = [
-    { label: "Home", path: "/" },
-    { label: "Shop", path: "/shop", children: categoryLinks },
-    { label: "About Us", path: "/about-us" },
-    { label: "Contact Us", path: "/contact-us" },
+    { label: "Home", path: "/", Icon: HiOutlineHome },
+    {
+      label: "Shop",
+      path: "/shop",
+      Icon: HiOutlineShoppingBag,
+      children: categoryLinks,
+    },
+    { label: "About Us", path: "/about-us", Icon: HiOutlineUserGroup },
+    {
+      label: "Contact Us",
+      path: "/contact-us",
+      Icon: HiOutlineInformationCircle,
+    },
   ];
 
   return (
@@ -20,7 +35,7 @@ export default async function LayoutNavigationMenu() {
       <NavMobile links={navLinks} />
       <NavMobileBottom />
       <p>Logo</p>
-      <NavDesktop />
+      {/* <NavDesktop links={navLinks} /> */}
       <MenuMobile />
     </header>
   );
