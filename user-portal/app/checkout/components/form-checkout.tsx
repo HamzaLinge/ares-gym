@@ -43,6 +43,7 @@ import LoadingUI from "@/components/loading-ui";
 import { toast } from "sonner";
 import { TCommand } from "@/types/order";
 import Link from "next/link";
+import { HiMiniShoppingBag } from "react-icons/hi2";
 
 type Inputs = z.infer<typeof OrderSchema>;
 type FieldName = keyof Inputs;
@@ -154,7 +155,19 @@ function FormCheckout() {
   };
 
   if (cartSupplements.length === 0) {
-    return <section>Your shopping cart is empty</section>;
+    return (
+      <div className="flex w-full flex-col items-center justify-center gap-y-8 p-10">
+        <p className="bg-muted rounded p-4 italic">
+          Hm! you didn't pick any supplement yet.
+        </p>
+        <Link href="/shop">
+          <Button size={"lg"} className="flex items-center gap-x-2">
+            <HiMiniShoppingBag className="h-6 w-6" />
+            <p>Go to Shop</p>
+          </Button>
+        </Link>
+      </div>
+    );
   }
 
   return (

@@ -35,97 +35,101 @@ export default async function SupplementPage({
       : [supplement.category._id, supplement.category.name];
 
   return (
-    <section className="space-y-6 p-2">
-      <div>
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link href="/">Home</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link href="/shop">Shop</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link
-                  href={`/shop?category=${categoryId}`}
-                  className="capitalize"
-                >
-                  {categoryName}
-                </Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage className="capitalize">
-                {supplement.name}
-              </BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+    <section className="space-y-8 p-8">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/">Home</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/shop">Shop</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link
+                href={`/shop?category=${categoryId}`}
+                className="capitalize"
+              >
+                {categoryName}
+              </Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage className="capitalize">
+              {supplement.name}
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+      <div className="flex flex-col gap-y-6 md:flex-row md:gap-x-8">
+        <div className="w-full md:max-w-md">
+          <ThumbnailsCarousel thumbnails={supplement.thumbnails} />
+        </div>
+        <div className="space-y-8 md:grow">
+          <div className="w-full">
+            <p className="text-3xl uppercase">{supplement.name}</p>
+            <p>{formatPrice(supplement.price)}</p>
+          </div>
+          <div className="flex w-full flex-col items-center gap-y-4 md:max-w-sm">
+            <p className="flex items-center gap-x-2 self-end hover:cursor-pointer">
+              <HeartIcon className="h-5 w-5" />
+              <span>Do you like it?</span>
+            </p>
+            <AddToCart supplement={supplement} />
+          </div>
+        </div>
       </div>
-      <div className="w-full">
-        <ThumbnailsCarousel thumbnails={supplement.thumbnails} />
-      </div>
-      <div className="w-full">
-        <p className="text-3xl">{supplement.name.toUpperCase()}</p>
-        <p>{formatPrice(supplement.price)}</p>
-      </div>
-      <div className="flex w-full flex-col items-end gap-y-4">
-        <p className="flex items-center gap-x-2 hover:cursor-pointer">
-          <HeartIcon className="h-5 w-5" />
-          <span>Do you like it?</span>
-        </p>
-        <AddToCart supplement={supplement} />
-      </div>
-      <Tabs defaultValue="description" className="w-full">
-        <TabsList className="w-full">
-          <TabsTrigger value="description" className="grow">
-            Description
-          </TabsTrigger>
-          <TabsTrigger value="reviews" className="grow">
-            Reviews
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="description">
-          <Card>
-            <CardHeader>
-              <CardTitle>Description</CardTitle>
-              <CardDescription>
-                {supplement.description ? (
-                  supplement.description
-                ) : (
-                  <span>Sorry, No Description Yet</span>
-                )}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-col gap-y-2">
-                <div className="flex items-center gap-x-2">
-                  <p>Category:</p>
-                  <p>{categoryName}</p>
+      <div className="flex w-full items-center justify-center">
+        <Tabs defaultValue="description" className="w-full md:max-w-3xl">
+          <TabsList className="w-full">
+            <TabsTrigger value="description" className="grow">
+              Description
+            </TabsTrigger>
+            <TabsTrigger value="reviews" className="grow">
+              Reviews
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="description">
+            <Card>
+              <CardHeader>
+                <CardTitle>Description</CardTitle>
+                <CardDescription>
+                  {supplement.description ? (
+                    supplement.description
+                  ) : (
+                    <span>Sorry, No Description Yet</span>
+                  )}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col gap-y-2">
+                  <div className="flex items-center gap-x-2">
+                    <p>Category:</p>
+                    <p>{categoryName}</p>
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        <TabsContent value="reviews">
-          <Card>
-            <CardHeader>
-              <CardTitle>Reviews</CardTitle>
-              <CardDescription>
-                It will be nice from you to leave a feedback
-              </CardDescription>
-            </CardHeader>
-          </Card>
-        </TabsContent>
-      </Tabs>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="reviews">
+            <Card>
+              <CardHeader>
+                <CardTitle>Reviews</CardTitle>
+                <CardDescription>
+                  It will be nice from you to leave a feedback
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
       <RelatedSupplements categoryId={categoryId} excludeId={supplement._id} />
     </section>
   );

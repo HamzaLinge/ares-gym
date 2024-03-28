@@ -26,11 +26,11 @@ import { TSupplement } from "@/types/supplement";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { HiOutlineSearch } from "react-icons/hi";
+import { BsSearch } from "react-icons/bs";
+import { HiOutlineXMark } from "react-icons/hi2";
+import { MdOutlineSearchOff } from "react-icons/md";
 import { toast } from "sonner";
 import { z } from "zod";
-import { MdOutlineSearchOff } from "react-icons/md";
-import { HiOutlineXMark } from "react-icons/hi2";
 
 function Search() {
   const side = "top";
@@ -80,19 +80,16 @@ function Search() {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button variant={"ghost"} size={"icon"}>
-          <HiOutlineSearch className="h-7 w-7" />
+          <BsSearch className="h-6 w-6" />
         </Button>
       </SheetTrigger>
       <SheetContent side={side} className="h-5/6 space-y-2">
         <SheetHeader>
-          <SheetTitle>You want to find a particular complement?</SheetTitle>
+          <SheetTitle>You want to find any particular complement?</SheetTitle>
         </SheetHeader>
-        <div className="w-full space-y-6">
+        <div className="flex w-full flex-col gap-y-8">
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex w-full items-center gap-x-2"
-            >
+            <form onSubmit={form.handleSubmit(onSubmit)}>
               <FormField
                 control={form.control}
                 name="search"
@@ -100,7 +97,7 @@ function Search() {
                   <FormItem className="grow">
                     <FormLabel>Search</FormLabel>
                     <FormControl>
-                      <div className="flex items-center gap-x-2">
+                      <div className="flex w-full items-center gap-x-2">
                         <div className="relative grow">
                           <Input placeholder="Omega..." {...field} />
                           <HiOutlineXMark
@@ -109,7 +106,7 @@ function Search() {
                           />
                         </div>
                         <Button type="submit" variant={"ghost"} size={"icon"}>
-                          <HiOutlineSearch className="h-6 w-6" />
+                          <BsSearch className="h-6 w-6" />
                         </Button>
                       </div>
                     </FormControl>

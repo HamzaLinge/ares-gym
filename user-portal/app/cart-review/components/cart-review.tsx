@@ -1,11 +1,11 @@
 "use client";
 
+import CartReviewCard from "@/app/cart-review/components/cart-review-card";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/lib/store/cart-store-provider";
+import { formatPrice } from "@/utils/helpers";
 import Link from "next/link";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
-import CartReviewCard from "./cart-review-card";
-import { formatPrice } from "@/utils/helpers";
 
 function CartReview() {
   const shoppingCartSupplements = useCartStore((state) => state.supplements);

@@ -9,7 +9,7 @@ export default async function Supplements({
   const supplements = await getSupplements(searchParams);
 
   return (
-    <section className="grid grid-cols-2 gap-x-2 gap-y-4">
+    <section className="grid flex-1 grid-cols-2 gap-x-2 gap-y-4 md:grid-cols-3 lg:grid-cols-4">
       {supplements.map((supplement) => (
         <ShopCard key={supplement._id} supplement={supplement} />
       ))}

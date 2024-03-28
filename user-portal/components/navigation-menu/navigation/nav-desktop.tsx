@@ -23,7 +23,7 @@ export default function NavDesktop({ links }: { links: TLinkNavigation[] }) {
                 active={pathname === item.path}
                 className={navigationMenuTriggerStyle()}
               >
-                <span className="font-semibold capitalize">{item.label}</span>
+                <span className="capitalize">{item.label}</span>
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>

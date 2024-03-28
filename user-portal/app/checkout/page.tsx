@@ -1,4 +1,4 @@
-import FormCheckout from "./components/form-checkout";
+import FormCheckout from "@/app/checkout/components/form-checkout";
 
 function CheckoutPage() {
   return (

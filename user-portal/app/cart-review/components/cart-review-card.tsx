@@ -2,8 +2,8 @@ import { TCartSupplement } from "@/lib/store/cart-store";
 import { formatPrice, getFileUrl } from "@/utils/helpers";
 import Link from "next/link";
 import Image from "next/image";
-import CartReviewUpdate from "@/app/(purchase)/cart-review/components/cart-review-update";
-import CartReviewDelete from "@/app/(purchase)/cart-review/components/cart-review-delete";
+import CartReviewUpdate from "@/app/cart-review/components/cart-review-update";
+import CartReviewDelete from "@/app/cart-review/components/cart-review-delete";
 
 function CartReviewCard({
   cartSupplement,

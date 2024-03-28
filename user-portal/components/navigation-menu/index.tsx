@@ -4,6 +4,7 @@ import NavDesktop from "@/components/navigation-menu/navigation/nav-desktop";
 import NavMobile from "@/components/navigation-menu/navigation/nav-mobile";
 import NavMobileBottom from "@/components/navigation-menu/navigation/nav-mobile-bottom";
 import { TLinkNavigation } from "@/types/ui";
+import Image from "next/image";
 import {
   HiOutlineHome,
   HiOutlineShoppingBag,
@@ -15,18 +16,26 @@ export default async function LayoutNavigationMenu() {
   const categoryLinks = await getCategoryLinks();
 
   const navLinks: TLinkNavigation[] = [
-    { label: "Home", path: "/", Icon: HiOutlineHome },
+    {
+      label: "Home",
+      path: "/",
+      // Icon: HiOutlineHome
+    },
     {
       label: "Shop",
       path: "/shop",
-      Icon: HiOutlineShoppingBag,
+      // Icon: HiOutlineShoppingBag,
       children: categoryLinks,
     },
-    { label: "About Us", path: "/about-us", Icon: HiOutlineUserGroup },
+    {
+      label: "About Us",
+      path: "/about-us",
+      // Icon: HiOutlineUserGroup
+    },
     {
       label: "Contact Us",
       path: "/contact-us",
-      Icon: HiOutlineInformationCircle,
+      // Icon: HiOutlineInformationCircle,
     },
   ];
 
@@ -34,8 +43,13 @@ export default async function LayoutNavigationMenu() {
     <header className="bg-background sticky left-0 top-0 z-10 grid grid-cols-3 items-center justify-items-center gap-2 px-6 py-2 shadow-md">
       <NavMobile links={navLinks} />
       <NavMobileBottom />
-      <p>Logo</p>
-      {/* <NavDesktop links={navLinks} /> */}
+      <Image
+        src={"/ares-food-supplement-logo.png"}
+        alt={""}
+        width={70}
+        height={10}
+      />
+      <NavDesktop links={navLinks} />
       <MenuMobile />
     </header>
   );

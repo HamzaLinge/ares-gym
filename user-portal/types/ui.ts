@@ -1,7 +1,7 @@
 import { IconType } from "react-icons/lib";
 
 export type TLinkNavigation = {
-  Icon: IconType;
+  Icon?: IconType;
   label: string;
   path: string;
   children?: TLinkNavigation[];

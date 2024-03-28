@@ -1,5 +1,4 @@
-import TitlePage from "@/components/title-page";
-import CartReview from "./components/cart-review";
+import CartReview from "@/app/cart-review/components/cart-review";
 
 function CartReviewPage() {
   return (

@@ -11,7 +11,7 @@ export default async function ShopPage({
   searchParams: Partial<Record<string, string>>;
 }) {
   return (
-    <section className="space-y-6 p-2 pt-4">
+    <section className="flex-1 space-y-6 p-6 pt-4 md:px-12 lg:px-40">
       <TitlePage title="Shop" />
       <Suspense fallback={<LoadingUI />}>
         <FilterSupplements />

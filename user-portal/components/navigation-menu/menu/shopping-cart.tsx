@@ -2,8 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/lib/store/cart-store-provider";
-import { HiOutlineShoppingCart } from "react-icons/hi";
-import { HiShoppingCart } from "react-icons/hi2";
+import { HiOutlineShoppingCart, HiShoppingCart } from "react-icons/hi2";
+
 import {
   MdOutlineShoppingCartCheckout,
   MdCleaningServices,
@@ -48,7 +48,11 @@ function ShoppingCart() {
             pathname.startsWith("/checkout") && "hidden",
           )}
         >
-          <HiOutlineShoppingCart className="h-7 w-7" />
+          {shoppingCartSupplements.length === 0 ? (
+            <HiOutlineShoppingCart className="h-6 w-6" />
+          ) : (
+            <HiShoppingCart className="h-6 w-6" />
+          )}
           <span className="absolute bottom-0 right-0 translate-x-2/3 ">
             ({shoppingCartSupplements.length})
           </span>
@@ -74,7 +78,7 @@ function ShoppingCart() {
             <div className="flex w-full flex-col gap-y-2">
               {shoppingCartSupplements.length === 0 ? (
                 <div className="flex w-full justify-center">
-                  <p className="italic">No supplements added</p>
+                  <p className="italic">Hm! No supplements added yet.</p>
                 </div>
               ) : (
                 shoppingCartSupplements.map((supplement) => (
@@ -86,10 +90,12 @@ function ShoppingCart() {
                 ))
               )}
             </div>
-            <div className="flex items-center justify-end gap-x-4 border-t py-2">
-              <p>TOTAL:</p>
-              <p className="font-semibold">{formatPrice(totalPrice)}</p>
-            </div>
+            {shoppingCartSupplements.length > 0 && (
+              <div className="flex items-center justify-end gap-x-4 border-t py-2">
+                <p>TOTAL:</p>
+                <p className="font-semibold">{formatPrice(totalPrice)}</p>
+              </div>
+            )}
           </div>
           {shoppingCartSupplements.length > 0 && (
             <div className="flex w-full flex-col gap-y-2">
