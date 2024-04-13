@@ -9,6 +9,7 @@ import { HiOutlineShoppingBag } from "react-icons/hi2";
 
 function CartReview() {
   const shoppingCartSupplements = useCartStore((state) => state.supplements);
+
   if (shoppingCartSupplements.length === 0) {
     return (
       <div className="flex w-full flex-col items-center justify-center gap-y-2">
@@ -31,8 +32,8 @@ function CartReview() {
   );
 
   return (
-    <div className="flex flex-col gap-y-6">
-      <div className="space-y-4">
+    <div className="flex w-full max-w-4xl flex-col gap-y-10">
+      <div className="space-y-4 divide-y">
         {shoppingCartSupplements.map((cartSupplement) => (
           <CartReviewCard
             key={cartSupplement._id}

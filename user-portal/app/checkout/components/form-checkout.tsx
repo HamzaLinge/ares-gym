@@ -154,7 +154,7 @@ function FormCheckout() {
     });
   };
 
-  if (cartSupplements.length === 0) {
+  if (cartSupplements.length === 0 && !orderedCommand) {
     return (
       <div className="flex w-full flex-col items-center justify-center gap-y-8 p-10">
         <p className="bg-muted rounded p-4 italic">
@@ -171,7 +171,7 @@ function FormCheckout() {
   }
 
   return (
-    <div className="flex-1 space-y-12 overflow-hidden px-10 py-4">
+    <div className="w-full max-w-4xl flex-1 space-y-12 overflow-hidden px-10 py-4">
       {/* Steps */}
       <FormStepper
         currentStep={currentStep}
@@ -319,10 +319,10 @@ function FormCheckout() {
                   <TabsTrigger
                     value="EDAHABIYA"
                     disabled
-                    className="grow space-x-2"
+                    className="grow space-x-2 hover:cursor-not-allowed"
                   >
                     <GiSwipeCard className="h-5 w-5" />
-                    <span>Edahabiya</span>
+                    <span>Edahabiya - Coming Soon</span>
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent value="cash_on_delivery">
@@ -376,22 +376,28 @@ function FormCheckout() {
                 orderedCommand && (
                   <Card>
                     <CardHeader>
-                      <CardTitle>Order Completed</CardTitle>
+                      <CardTitle>Congratulations!</CardTitle>
+                      <CardDescription>
+                        <p>
+                          We will call you as soon as possible to confirm your
+                          order.
+                        </p>
+                        <p>
+                          Please, retain your tracking number for future
+                          reference.
+                        </p>
+                      </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <div>
+                      <div className="space-y-8">
                         <p className="flex w-full items-center justify-between gap-x-1">
                           <span>Tracking Number:</span>
                           <span>{orderedCommand.trackingNumber}</span>
                         </p>
-                        <p className="flex w-full items-center justify-between gap-x-1">
-                          <span>Status:</span>
-                          <span>{orderedCommand.status}</span>
-                        </p>
                       </div>
                     </CardContent>
-                    <CardFooter>
-                      <Link href="/shop">
+                    <CardFooter className="flex w-full items-center justify-center">
+                      <Link href="/shop" className="w-full max-w-lg">
                         <Button
                           variant="outline"
                           size={"lg"}
@@ -415,7 +421,7 @@ function FormCheckout() {
           variant={"outline"}
           size="lg"
           onClick={prev}
-          disabled={currentStep === 0 || isPending}
+          disabled={currentStep === 0 || isPending || !!orderedCommand}
         >
           <HiChevronLeft className="h-7 w-7" />
         </Button>
@@ -423,7 +429,7 @@ function FormCheckout() {
           variant={"outline"}
           size="lg"
           onClick={next}
-          disabled={isPending}
+          disabled={isPending || !!orderedCommand}
         >
           <HiChevronRight className="h-7 w-7" />
         </Button>

@@ -5,12 +5,6 @@ import NavMobile from "@/components/navigation-menu/navigation/nav-mobile";
 import NavMobileBottom from "@/components/navigation-menu/navigation/nav-mobile-bottom";
 import { TLinkNavigation } from "@/types/ui";
 import Image from "next/image";
-import {
-  HiOutlineHome,
-  HiOutlineShoppingBag,
-  HiOutlineUserGroup,
-  HiOutlineInformationCircle,
-} from "react-icons/hi2";
 
 export default async function LayoutNavigationMenu() {
   const categoryLinks = await getCategoryLinks();
@@ -19,23 +13,19 @@ export default async function LayoutNavigationMenu() {
     {
       label: "Home",
       path: "/",
-      // Icon: HiOutlineHome
     },
     {
       label: "Shop",
       path: "/shop",
-      // Icon: HiOutlineShoppingBag,
       children: categoryLinks,
     },
     {
       label: "About Us",
       path: "/about-us",
-      // Icon: HiOutlineUserGroup
     },
     {
       label: "Contact Us",
       path: "/contact-us",
-      // Icon: HiOutlineInformationCircle,
     },
   ];
 
